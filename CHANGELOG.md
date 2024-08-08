@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
  
 ### Added
-   
+* add `show`option to show the code block in terminal
+ 
 ### Changed
  
 ### Fixed
