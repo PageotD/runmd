@@ -27,9 +27,9 @@ setup(
     description='A CLI tool to run or list code blocks from Markdown files.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    author='Your Name',
-    author_email='your.email@example.com',
-    url='https://github.com/yourusername/yourproject',
+    author='Damien Pageot',
+    author_email='damien.pageot+runmd@gmail.com',
+    url='https://github.com/pageotd/runmd',
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
