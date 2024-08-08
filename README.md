@@ -21,7 +21,8 @@ cd yourproject
 
 Then install:
 ```sh
-pip install .
+python setup.py sdist
+pip install sdist/runmd-0.1.0.tar.gz
 ```
 
 

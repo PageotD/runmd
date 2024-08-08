@@ -13,7 +13,7 @@ def post_install():
 
 setup(
     name='runmd',
-    version='0.1',
+    version='0.1.0',
     package_dir={'': 'src'},  # Tell setuptools to look for packages in the src directory
     packages=find_packages(where='src'),  # Find packages in src
     install_requires=[
