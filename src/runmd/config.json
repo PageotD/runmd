@@ -1,0 +1,32 @@
+{
+    "sh": {
+        "command": "bash",
+        "options": [
+            "-c"
+        ]
+    },
+    "python": {
+        "command": "python3",
+        "options": [
+            "-c"
+        ]
+    },
+    "ruby": {
+        "command": "ruby",
+        "options": [
+            "-e"
+        ]
+    },
+    "javascript": {
+        "command": "node",
+        "options": [
+            "-e"
+        ]
+    },
+    "perl": {
+        "command": "perl",
+        "options": [
+            "-e"
+        ]
+    }
+}
