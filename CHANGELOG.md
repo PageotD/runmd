@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * add config file validation
 
 ### Changed
- 
+* add type hints to functions
+
 ### Fixed
 * prevent running code block for not configured languages

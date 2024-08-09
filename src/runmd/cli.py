@@ -5,7 +5,7 @@ import subprocess
 import re
 
 
-def load_config(config_path):
+def load_config(config_path: str) -> dict:
     """
     Load and validate the configuration file.
 
@@ -29,7 +29,7 @@ def load_config(config_path):
     return config
 
 
-def validate_config(config):
+def validate_config(config: dict) -> None:
     """
     Validate the configuration to ensure it contains required fields.
 
@@ -48,7 +48,7 @@ def validate_config(config):
                 raise ValueError(f"Config for language '{lang}' is missing '{key}' field.")
 
 
-def get_default_config_path():
+def get_default_config_path() -> str:
     """
     Return the path to the default configuration file.
 
@@ -58,7 +58,7 @@ def get_default_config_path():
     return os.path.expanduser("~/.config/runmd/config.json")
 
 
-def get_languages(config):
+def get_languages(config: dict) -> list:
     """
     Return the list of configured scripting languages.
 
@@ -71,7 +71,7 @@ def get_languages(config):
     return list(config.keys())
 
 
-def parse_markdown(file_path, languages):
+def parse_markdown(file_path: str, languages: list) -> tuple:
     """
     Parse the Markdown file to extract code blocks with names.
 
@@ -95,7 +95,7 @@ def parse_markdown(file_path, languages):
     return code_blocks
 
 
-def list_code_blocks(code_blocks):
+def list_code_blocks(code_blocks: tuple) -> None:
     """
     List all code block names along with their language.
 
@@ -110,7 +110,7 @@ def list_code_blocks(code_blocks):
             print(f"\u0020\u0020\033[0;31m-\033[0;0m {name} (\033[0;31m{lang}: not configured\033[0;0m)")
 
 
-def show_code_block(name, lang, code):
+def show_code_block(name: str, lang: str, code: str) -> None:
     """
     Display the code block contents.
 
@@ -123,7 +123,7 @@ def show_code_block(name, lang, code):
     print(code)
 
 
-def run_code_block(name, lang, code, config):
+def run_code_block(name: str, lang: str, code: str, config: dict) -> None:
     """
     Execute the specified code block using the configuration.
 
@@ -157,7 +157,7 @@ def run_code_block(name, lang, code, config):
         print(f"Error: Code block '{name}' failed with exception: {e}")
 
 
-def process_markdown_files(directory, command, block_name=None, config=None):
+def process_markdown_files(directory: str, command: str, block_name: str=None, config: dict=None) -> None:
     """
     Process all Markdown files in the given directory.
 
@@ -205,7 +205,7 @@ def process_markdown_files(directory, command, block_name=None, config=None):
             print(f"Skipping non-Markdown file: {file}")
 
 
-def main():
+def main() -> None:
     """
     Main function to parse arguments and execute commands.
     """
