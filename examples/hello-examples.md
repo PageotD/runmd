@@ -2,11 +2,6 @@
 
 This Markdown file contains examples of executable code blocks for various scripting languages. Use these examples to understand how to run code blocks with the runmd tool. Ensure that you have the appropriate interpreters installed on your machine before running these code blocks.
 
-```zsh {name=fake-zsh}
-# run with runmd run fake-zsh
-echo "Hello from zsh!"
-```
-
 ### Bash
 
 ```sh {name=hello-bash}
