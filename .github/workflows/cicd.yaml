@@ -64,7 +64,7 @@ jobs:
           name: dist
           path: dist
       - name: List dist directory
-        run: ls -R bin/
+        run: ls -R dist/
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
