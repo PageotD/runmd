@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * move functions related to configuration to config.py
 * move parse_markdown function to parser.py
 * move run_code_block function to runner.py
+* move process_markdown_files function to process.py
 
 ### Fixed
 * prevent running code block for not configured languages
