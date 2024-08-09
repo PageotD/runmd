@@ -15,13 +15,15 @@ def get_default_config_path():
     return os.path.expanduser('~/.config/runmd/config.json')
 
 def parse_markdown(file_path):
-    """Parse the Markdown file to extract code blocks with names."""
+    """
+    Parse the Markdown file to extract code blocks with names.
+    """
     code_blocks = []
     with open(file_path, 'r') as file:
         content = file.read()
 
     # Regex to match code blocks with names
-    pattern = re.compile(r'```(sh|python|ruby|javascript|perl) \{name=(.*?)\}\n(.*?)\n```', re.DOTALL)
+    pattern = re.compile(r'```(\w+) \{name=(.*?)\}\n(.*?)\n```', re.DOTALL)
     matches = pattern.findall(content)
 
     for lang, name, code in matches:
@@ -29,11 +31,14 @@ def parse_markdown(file_path):
     
     return code_blocks
 
-def list_code_blocks(code_blocks):
+def list_code_blocks(code_blocks, languages):
     """List all the code block names."""
     print("\033[0;31m\u26AC\033[0;0m Available code block names:")
-    for name, _, _ in code_blocks:
-        print(f"\u0020\u0020\033[0;31m-\033[0;0m {name}")
+    for name, lang, _ in code_blocks:
+        if lang in languages:
+            print(f"\u0020\u0020\033[0;31m-\033[0;0m {name} ({lang})")
+        else:
+            print(f"\u0020\u0020\033[0;31m-\033[0;0m {name} (\033[0;31m{lang}: not configured\033[0;0m)")
 
 def show_code_block(name, lang, code, config):
     print(f"\n\033[1;33m> Showing: {name} ({lang})\033[0;0m")
@@ -64,15 +69,28 @@ def run_code_block(name, lang, code, config):
         print(f"Error: Code block '{name}' failed with exception: {e}")
 
 def process_markdown_files(directory, command, block_name=None, config=None):
-    """Process all Markdown files in the given directory (not subdirectories)."""
+    """
+    Process all Markdown files in the given directory.
+    """
+
+    # Extract configurated languages
+    languages = list(config.keys())
+
+    # Loop over files in the directory
     for file in os.listdir(directory):
+
+        # Look for markdown files
         if file.endswith(".md"):
+
+            # Get the file path
             file_path = os.path.join(directory, file)
             print(f"\033[0;31m\u26AC\033[0;0m Processing file: {file_path}")
+
+            # Parse the file
             code_blocks = parse_markdown(file_path)
             
             if command == 'ls':
-                list_code_blocks(code_blocks)
+                list_code_blocks(code_blocks, languages)
             elif command == 'show':
                 for name, lang, code in code_blocks:
                     if name == block_name:
@@ -110,6 +128,7 @@ def main():
     
     config_path = args.config if args.config else get_default_config_path()
     config = load_config(config_path)
+
     process_markdown_files(args.dir, args.command, args.name, config)
 
 if __name__ == '__main__':
