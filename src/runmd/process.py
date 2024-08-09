@@ -80,6 +80,21 @@ def show_command(code_blocks: list, block_name: str) -> None:
     if not found:
         print(f"Error: Code block with name '{block_name}' not found.")
 
+def show_code_block(name, lang, code):
+    """
+    Display the code block contents.
+    Args:
+        name (str): Name of the code block.
+        lang (str): Language of the code block.
+        code (str): Code block content.
+    """
+    print(f"\n\033[1;33m> Showing: {name} ({lang})\033[0;0m")
+    try:
+        print(code)
+    except Exception as e:
+        print(f"Error: Code block '{name}' failed with exception: {e}")
+    print(code)
+
 def run_command(code_blocks: list, block_name: str, config: dict) -> None:
     """
     Handle the 'run' command to execute code blocks.
