@@ -34,7 +34,7 @@ def parse_markdown(file_path, languages):
     
     return code_blocks
 
-def list_code_blocks(code_blocks, languages):
+def list_code_blocks(code_blocks):
     """List all the code block names."""
     print("\033[0;31m\u26AC\033[0;0m Available code block names:")
     for name, lang, _, runnable in code_blocks:
@@ -90,12 +90,12 @@ def process_markdown_files(directory, command, block_name=None, config=None):
             print(f"\033[0;31m\u26AC\033[0;0m Processing file: {file_path}")
 
             # Parse the file
-            code_blocks = parse_markdown(file_path)
+            code_blocks = parse_markdown(file_path, languages)
             
             if command == 'ls':
-                list_code_blocks(code_blocks, languages)
+                list_code_blocks(code_blocks)
             elif command == 'show':
-                for name, lang, code in code_blocks:
+                for name, lang, code, _ in code_blocks:
                     if name == block_name:
                         show_code_block(name, lang, code, config)
             elif command == 'run':
@@ -105,10 +105,14 @@ def process_markdown_files(directory, command, block_name=None, config=None):
                             run_code_block(name, lang, code, config)
                         else:
                             print(f"Error: {lang} is not configured. Please add {lang} to config file to run this code block.")
+                        break
                 elif block_name:
-                    for name, lang, code in code_blocks:
+                    for name, lang, code, runnable in code_blocks:
                         if name == block_name:
-                            run_code_block(name, lang, code, config)
+                            if runnable:
+                                run_code_block(name, lang, code, config)
+                            else:
+                                print(f"Error: {lang} is not configured. Please add {lang} to config file to run this code block.")
                             break
                     else:
                         print(f"Error: Code block with name '{block_name}' not found.")
