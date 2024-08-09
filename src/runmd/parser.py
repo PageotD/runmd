@@ -1,6 +1,7 @@
 import re
 
-def parse_markdown(file_path, languages):
+
+def parse_markdown(file_path: str, languages: list) -> tuple:
     """
     Parse the Markdown file to extract code blocks with names.
 
@@ -12,7 +13,9 @@ def parse_markdown(file_path, languages):
         list: List of tuples containing code block information.
     """
     code_blocks = []
-    pattern = re.compile(rf"```({('|').join(languages)}) \{{name=(.*?)\}}\n(.*?)\n```", re.DOTALL)
+    pattern = re.compile(
+        rf"```({('|').join(languages)}) \{{name=(.*?)\}}\n(.*?)\n```", re.DOTALL
+    )
 
     try:
         with open(file_path, "r") as file:

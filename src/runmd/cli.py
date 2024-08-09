@@ -6,6 +6,7 @@ import re
 
 from .config import load_config, get_default_config_path, get_languages
 from .parser import parse_markdown
+from .runner import run_code_block
 
 def list_code_blocks(code_blocks: tuple) -> None:
     """
@@ -35,43 +36,6 @@ def show_code_block(name: str, lang: str, code: str) -> None:
     """
     print(f"\n\033[1;33m> Showing: {name} ({lang})\033[0;0m")
     print(code)
-
-
-def run_code_block(name: str, lang: str, code: str, config: dict) -> None:
-    """
-    Execute the specified code block using the configuration.
-
-    Args:
-        name (str): Name of the code block.
-        lang (str): Language of the code block.
-        code (str): Code block content.
-        config (dict): Configuration dictionary.
-    """
-    print(f"\n\033[1;33m> Running: {name} ({lang})\033[0;0m")
-    try:
-        if lang in config:
-            command = config[lang]["command"]
-            options = config[lang]["options"]
-
-            process = subprocess.Popen(
-                [command] + options + [code],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            stdout, stderr = process.communicate()
-
-            if process.returncode != 0:
-                print(
-                    f"Error: Code block '{name}' failed with exit code {process.returncode}"
-                )
-                print(f"Stderr: {stderr.decode()}")
-            else:
-                print(stdout.decode())
-        else:
-            print(f"Error: Unsupported language '{lang}' for code block '{name}'")
-    except Exception as e:
-        print(f"Error: Code block '{name}' failed with exception: {e}")
-
 
 def process_markdown_files(
     directory: str, command: str, block_name: str = None, config: dict = None

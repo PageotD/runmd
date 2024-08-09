@@ -15,8 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 * add type hints to functions
-* move functions related to configuration in config.py
+* move functions related to configuration to config.py
 * move parse_markdown function to parser.py
+* move run_code_block function to runner.py
 
 ### Fixed
 * prevent running code block for not configured languages
