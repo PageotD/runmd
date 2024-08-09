@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 * add type hints to functions
+* move functions related to configuration in config.py
 
 ### Fixed
 * prevent running code block for not configured languages
