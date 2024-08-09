@@ -5,25 +5,46 @@ import subprocess
 import sys
 import re
 
+
 def load_config(config_path):
-    """Load the configuration file."""
-    with open(config_path, 'r') as file:
-        return json.load(file)
+    """Load and validate the configuration file."""
+    if not os.path.exists(config_path):
+        raise FileNotFoundError(f"Configuration file not found at {config_path}")
+    
+    with open(config_path, "r") as file:
+        config = json.load(file)
+    
+    validate_config(config)
+    return config
+
+def validate_config(config):
+    """Validate the configuration to ensure it contains required fields."""
+    required_keys = ["command", "options"]
+    for lang, settings in config.items():
+        if not isinstance(settings, dict):
+            raise ValueError(f"Config for language '{lang}' should be a dictionary.")
+        for key in required_keys:
+            if key not in settings:
+                raise ValueError(f"Config for language '{lang}' is missing '{key}' field.")
 
 def get_default_config_path():
     """Return the path to the default configuration file."""
-    return os.path.expanduser('~/.config/runmd/config.json')
+    return os.path.expanduser("~/.config/runmd/config.json")
+
+def get_languages(config):
+    """Return the list of the configured scripting languages."""
+    return list(config.keys())
 
 def parse_markdown(file_path, languages):
     """
     Parse the Markdown file to extract code blocks with names.
     """
     code_blocks = []
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         content = file.read()
 
     # Regex to match code blocks with names
-    pattern = re.compile(r'```(\w+) \{name=(.*?)\}\n(.*?)\n```', re.DOTALL)
+    pattern = re.compile(r"```(\w+) \{name=(.*?)\}\n(.*?)\n```", re.DOTALL)
     matches = pattern.findall(content)
 
     for lang, name, code in matches:
@@ -31,8 +52,9 @@ def parse_markdown(file_path, languages):
             code_blocks.append((name.strip(), lang, code.strip(), True))
         else:
             code_blocks.append((name.strip(), lang, code.strip(), False))
-    
+
     return code_blocks
+
 
 def list_code_blocks(code_blocks):
     """List all the code block names."""
@@ -41,14 +63,18 @@ def list_code_blocks(code_blocks):
         if runnable:
             print(f"\u0020\u0020\033[0;31m-\033[0;0m {name} ({lang})")
         else:
-            print(f"\u0020\u0020\033[0;31m-\033[0;0m {name} (\033[0;31m{lang}: not configured\033[0;0m)")
+            print(
+                f"\u0020\u0020\033[0;31m-\033[0;0m {name} (\033[0;31m{lang}: not configured\033[0;0m)"
+            )
 
-def show_code_block(name, lang, code, config):
+
+def show_code_block(name, lang, code):
     print(f"\n\033[1;33m> Showing: {name} ({lang})\033[0;0m")
     try:
         print(code)
     except Exception as e:
         print(f"Error: Code block '{name}' failed with exception: {e}")
+
 
 def run_code_block(name, lang, code, config):
     """Execute the specified code block using configuration."""
@@ -58,11 +84,17 @@ def run_code_block(name, lang, code, config):
             command = config[lang]["command"]
             options = config[lang]["options"]
 
-            process = subprocess.Popen([command] + options + [code], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            process = subprocess.Popen(
+                [command] + options + [code],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
             stdout, stderr = process.communicate()
-            
+
             if process.returncode != 0:
-                print(f"Error: Code block '{name}' failed with exit code {process.returncode}")
+                print(
+                    f"Error: Code block '{name}' failed with exit code {process.returncode}"
+                )
                 print(f"Stderr: {stderr.decode()}")
             else:
                 print(stdout.decode())
@@ -70,6 +102,7 @@ def run_code_block(name, lang, code, config):
             print(f"Error: Unsupported language '{lang}' for code block '{name}'")
     except Exception as e:
         print(f"Error: Code block '{name}' failed with exception: {e}")
+
 
 def process_markdown_files(directory, command, block_name=None, config=None):
     """
@@ -91,20 +124,22 @@ def process_markdown_files(directory, command, block_name=None, config=None):
 
             # Parse the file
             code_blocks = parse_markdown(file_path, languages)
-            
-            if command == 'ls':
+
+            if command == "ls":
                 list_code_blocks(code_blocks)
-            elif command == 'show':
+            elif command == "show":
                 for name, lang, code, _ in code_blocks:
                     if name == block_name:
                         show_code_block(name, lang, code, config)
-            elif command == 'run':
-                if block_name == 'all':
+            elif command == "run":
+                if block_name == "all":
                     for name, lang, code, runnable in code_blocks:
                         if runnable:
                             run_code_block(name, lang, code, config)
                         else:
-                            print(f"Error: {lang} is not configured. Please add {lang} to config file to run this code block.")
+                            print(
+                                f"Error: {lang} is not configured. Please add {lang} to config file to run this code block."
+                            )
                         break
                 elif block_name:
                     for name, lang, code, runnable in code_blocks:
@@ -112,34 +147,52 @@ def process_markdown_files(directory, command, block_name=None, config=None):
                             if runnable:
                                 run_code_block(name, lang, code, config)
                             else:
-                                print(f"Error: {lang} is not configured. Please add {lang} to config file to run this code block.")
+                                print(
+                                    f"Error: {lang} is not configured. Please add {lang} to config file to run this code block."
+                                )
                             break
                     else:
                         print(f"Error: Code block with name '{block_name}' not found.")
                 else:
                     print("Error: You must provide a code block name or 'all' to run.")
 
+
 def main():
-    parser = argparse.ArgumentParser(description='Run or list code blocks from Markdown files in the directory.')
-    parser.add_argument('command', choices=['run', 'ls', 'show'], help='Command to run, list or show code blocks.')
-    parser.add_argument('name', nargs='?', help='Name of the code block to run (or "all" to run all code blocks).')
-    parser.add_argument('--dir', default='.', help='Directory to scan for Markdown files.')
-    parser.add_argument('--config', default=None, help='Path to the configuration file.')
+    parser = argparse.ArgumentParser(
+        description="Run or list code blocks from Markdown files in the directory."
+    )
+    parser.add_argument(
+        "command",
+        choices=["run", "ls", "show"],
+        help="Command to run, list or show code blocks.",
+    )
+    parser.add_argument(
+        "name",
+        nargs="?",
+        help='Name of the code block to run (or "all" to run all code blocks).',
+    )
+    parser.add_argument(
+        "--dir", default=".", help="Directory to scan for Markdown files."
+    )
+    parser.add_argument(
+        "--config", default=None, help="Path to the configuration file."
+    )
 
     args = parser.parse_args()
-    
-    if args.command == 'run' and not args.name:
+
+    if args.command == "run" and not args.name:
         print("Error: You must provide a code block name or 'all' to run.")
         return
-    
-    if args.command == 'show' and not args.name:
+
+    if args.command == "show" and not args.name:
         print("Error: You must provide a code block name or 'all' to run.")
         return
-    
+
     config_path = args.config if args.config else get_default_config_path()
     config = load_config(config_path)
 
     process_markdown_files(args.dir, args.command, args.name, config)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
