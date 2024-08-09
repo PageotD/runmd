@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  
 ### Added
 * add `show`option to show the code block in terminal
-* show `<lang>: not configured` next to the code block name
+* show `(<lang>)` or `(<lang>: not configured)` next to the code block name
 
 ### Changed
  

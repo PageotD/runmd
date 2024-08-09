@@ -14,7 +14,7 @@ def get_default_config_path():
     """Return the path to the default configuration file."""
     return os.path.expanduser('~/.config/runmd/config.json')
 
-def parse_markdown(file_path):
+def parse_markdown(file_path, languages):
     """
     Parse the Markdown file to extract code blocks with names.
     """
@@ -27,15 +27,18 @@ def parse_markdown(file_path):
     matches = pattern.findall(content)
 
     for lang, name, code in matches:
-        code_blocks.append((name.strip(), lang, code.strip()))
+        if lang in languages:
+            code_blocks.append((name.strip(), lang, code.strip(), True))
+        else:
+            code_blocks.append((name.strip(), lang, code.strip(), False))
     
     return code_blocks
 
 def list_code_blocks(code_blocks, languages):
     """List all the code block names."""
     print("\033[0;31m\u26AC\033[0;0m Available code block names:")
-    for name, lang, _ in code_blocks:
-        if lang in languages:
+    for name, lang, _, runnable in code_blocks:
+        if runnable:
             print(f"\u0020\u0020\033[0;31m-\033[0;0m {name} ({lang})")
         else:
             print(f"\u0020\u0020\033[0;31m-\033[0;0m {name} (\033[0;31m{lang}: not configured\033[0;0m)")
@@ -97,8 +100,11 @@ def process_markdown_files(directory, command, block_name=None, config=None):
                         show_code_block(name, lang, code, config)
             elif command == 'run':
                 if block_name == 'all':
-                    for name, lang, code in code_blocks:
-                        run_code_block(name, lang, code, config)
+                    for name, lang, code, runnable in code_blocks:
+                        if runnable:
+                            run_code_block(name, lang, code, config)
+                        else:
+                            print(f"Error: {lang} is not configured. Please add {lang} to config file to run this code block.")
                 elif block_name:
                     for name, lang, code in code_blocks:
                         if name == block_name:
