@@ -1,10 +1,10 @@
 # RunMD: A CLI Tool for Executing Code Blocks in Markdown Files
 
-RunMD is a command-line tool designed to extract and execute code blocks from Markdown files. This tool can be particularly useful for managing and running code snippets embedded in documentation.
+RunMD is a command-line tool designed to extract and execute code blocks from Markdown files. It's particularly useful for managing and running code snippets embedded in documentation or notes.
 
-RunMD is developed in Python and use only modules from the Python's standard library, so there's no dependence on third-party modules.
-
-> **⚠ RunMD is not a notebook like [Jupyter](https://jupyter.org/) or [Zepplin](https://zeppelin.apache.org/), each code block is independant from the others.**
+> **⚠** RunMD is intended for use with scripting languages only (e.g., Shell, Python, Ruby, JavaScript). It does not support compiled languages (e.g., C, C++, Java) as it cannot handle compilation and execution steps.
+>
+> **⚠** RunMD is different from interactive notebooks like [Jupyter](https://jupyter.org/) or [Zepplin](https://zeppelin.apache.org/). Each code block is independent and executed separately.
 
 ## Prerequisites
 
@@ -15,32 +15,31 @@ Before you begin, ensure you have the following installed:
 
 ## Installation
 
-### Using pip
-...
+### 1. Clone the repository to your local machine:
 
-### From sources
-First, clone the repository to your local machine:
-
-```sh
-git clone https://github.com/yourusername/yourproject.git
-cd yourproject
+```sh {name=runmd-clone}
+git clone https://github.com/PageotD/runmd.git
+cd runmd
 ```
 
-Then install:
-```sh
-python setup.py sdist
+### 2. Install Build Dependencies
+```sh {name=runmd-pip}
+pip install build
+```
+
+### 3. Build and Install RunMD
+```sh {name=runmd-build-install}
+python -m build
 pip install sdist/runmd-0.1.0.tar.gz
 ```
 
+## Usage
 
-### Usage
+Once installed, you can use the runmd command to interact with your Markdown files.
 
+### Add executable code block
 
-After installing the tool, you can use the `runmd` command to interact with your Markdown files.
-
-#### Add executable code block
-
-To add an executable `sh` code block to your markdown file
+To add an executable code block to your Markdown file, use the following syntax:
 
 ```markdown
 # My executable code block
@@ -50,22 +49,22 @@ To add an executable `sh` code block to your markdown file
     ```
 ```
 
-#### List Code Blocks
+### List Code Blocks
 
-To list all code block names in Markdown files within the current directory and subdirectories:
+To list all code block names in Markdown files within the current directory:
 
 ```sh
 runmd ls
 ```
 
-#### Show a Specific Code Block
-To show a specific code block in terminal
+### Show a Specific Code Block
+To display the content of a specific code block:
 
 ```sh
 runmd show <code-block-name>
 ```
 
-#### Run a Specific Code Block
+### Run a Specific Code Block
 
 To execute a specific code block by name:
 
@@ -73,8 +72,36 @@ To execute a specific code block by name:
 runmd run <code-block-name>
 ```
 
-#### Run all code blocks
+### Run all code blocks
+
+To execute all code blocks in Markdown files within the current directory:
 
 ```sh
 runmd run all
 ```
+
+## Configuration
+
+You can customize how different scripting languages are executed by creating a configuration file at ~/.config/runmd/config.json. Here’s an example configuration:
+
+```json
+{
+    "sh": {
+        "command": "bash",
+        "options": ["-c"]
+    },
+    "python": {
+        "command": "python",
+        "options": []
+    },
+    "ruby": {
+        "command": "ruby",
+        "options": []
+    }
+}
+```
+
+## Troubleshooting
+
+* **No Output**: Ensure the Markdown code blocks are correctly formatted and the specified commands are valid for the environment.
+* **Permission Denied**: Check if you have the required permissions to execute the commands in the code blocks.
