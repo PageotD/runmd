@@ -4,7 +4,7 @@ import json
 import subprocess
 import re
 
-from .config import load_config, get_default_config_path, get_languages
+from .config import load_config, get_default_config_path, copy_config
 from .process import process_markdown_files
 
 def main() -> None:
@@ -16,7 +16,7 @@ def main() -> None:
     )
     parser.add_argument(
         "command",
-        choices=["run", "ls", "show"],
+        choices=["run", "ls", "show", "init"],
         help="Command to run, list or show code blocks.",
     )
     parser.add_argument(
@@ -33,6 +33,10 @@ def main() -> None:
 
     args = parser.parse_args()
 
+    if args.command == 'init':
+        copy_config()
+        return
+    
     if args.command in ["run", "show"] and not args.name:
         print("Error: You must provide a code block name or 'all' to run/show.")
         return

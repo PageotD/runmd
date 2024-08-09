@@ -1,6 +1,26 @@
 import os
 import json
+import shutil
+import pkg_resources
 
+def copy_config():
+    """Copy the default config to the user's configuration directory."""
+    try:
+        config_source = pkg_resources.resource_filename('runmd', 'config.json')
+    except Exception as e:
+        print(f"Error locating the config file: {e}")
+        return
+
+    config_dest = os.path.expanduser('~/.config/runmd/config.json')
+    
+    if not os.path.exists(os.path.dirname(config_dest)):
+        os.makedirs(os.path.dirname(config_dest))
+        
+    if not os.path.exists(config_dest):
+        shutil.copy(config_source, config_dest)
+        print(f"Configuration file copied to {config_dest}.")
+    else:
+        print(f"Configuration file already exists at {config_dest}.")
 
 def load_config(config_path: str) -> dict:
     """

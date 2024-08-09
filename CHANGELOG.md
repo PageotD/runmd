@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * add `show`option to show the code block in terminal
 * show `(<lang>)` or `(<lang>: not configured)` next to the code block name
 * add config file validation
-
+* add init command and copy_config function to copy the config file to destination
 
 ### Changed
 * add type hints to functions
