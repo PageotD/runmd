@@ -5,6 +5,12 @@
             "-c"
         ]
     },
+    "bash": {
+        "command": "bash",
+        "options": [
+            "-c"
+        ]
+    },
     "python": {
         "command": "python3",
         "options": [
