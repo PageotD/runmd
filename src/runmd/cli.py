@@ -2,23 +2,43 @@ import argparse
 import os
 import json
 import subprocess
-import sys
 import re
 
 
 def load_config(config_path):
-    """Load and validate the configuration file."""
+    """
+    Load and validate the configuration file.
+
+    Args:
+        config_path (str): Path to the configuration file.
+
+    Returns:
+        dict: Loaded configuration dictionary.
+
+    Raises:
+        FileNotFoundError: If the configuration file is not found.
+        ValueError: If the configuration file is invalid.
+    """
     if not os.path.exists(config_path):
         raise FileNotFoundError(f"Configuration file not found at {config_path}")
-    
+
     with open(config_path, "r") as file:
         config = json.load(file)
-    
+
     validate_config(config)
     return config
 
+
 def validate_config(config):
-    """Validate the configuration to ensure it contains required fields."""
+    """
+    Validate the configuration to ensure it contains required fields.
+
+    Args:
+        config (dict): Configuration dictionary to validate.
+
+    Raises:
+        ValueError: If the configuration is missing required fields or has invalid types.
+    """
     required_keys = ["command", "options"]
     for lang, settings in config.items():
         if not isinstance(settings, dict):
@@ -27,57 +47,92 @@ def validate_config(config):
             if key not in settings:
                 raise ValueError(f"Config for language '{lang}' is missing '{key}' field.")
 
+
 def get_default_config_path():
-    """Return the path to the default configuration file."""
+    """
+    Return the path to the default configuration file.
+
+    Returns:
+        str: Default configuration file path.
+    """
     return os.path.expanduser("~/.config/runmd/config.json")
 
+
 def get_languages(config):
-    """Return the list of the configured scripting languages."""
+    """
+    Return the list of configured scripting languages.
+
+    Args:
+        config (dict): Configuration dictionary.
+
+    Returns:
+        list: List of languages configured in the config.
+    """
     return list(config.keys())
+
 
 def parse_markdown(file_path, languages):
     """
     Parse the Markdown file to extract code blocks with names.
+
+    Args:
+        file_path (str): Path to the Markdown file.
+        languages (list): List of valid languages.
+
+    Returns:
+        list: List of tuples containing code block information.
     """
     code_blocks = []
     with open(file_path, "r") as file:
         content = file.read()
 
-    # Regex to match code blocks with names
-    pattern = re.compile(r"```(\w+) \{name=(.*?)\}\n(.*?)\n```", re.DOTALL)
+    pattern = re.compile(rf"```({('|').join(languages)}) \{{name=(.*?)\}}\n(.*?)\n```", re.DOTALL)
     matches = pattern.findall(content)
 
     for lang, name, code in matches:
-        if lang in languages:
-            code_blocks.append((name.strip(), lang, code.strip(), True))
-        else:
-            code_blocks.append((name.strip(), lang, code.strip(), False))
+        code_blocks.append((name.strip(), lang, code.strip(), lang in languages))
 
     return code_blocks
 
 
 def list_code_blocks(code_blocks):
-    """List all the code block names."""
+    """
+    List all code block names along with their language.
+
+    Args:
+        code_blocks (list): List of tuples containing code block information.
+    """
     print("\033[0;31m\u26AC\033[0;0m Available code block names:")
     for name, lang, _, runnable in code_blocks:
         if runnable:
             print(f"\u0020\u0020\033[0;31m-\033[0;0m {name} ({lang})")
         else:
-            print(
-                f"\u0020\u0020\033[0;31m-\033[0;0m {name} (\033[0;31m{lang}: not configured\033[0;0m)"
-            )
+            print(f"\u0020\u0020\033[0;31m-\033[0;0m {name} (\033[0;31m{lang}: not configured\033[0;0m)")
 
 
 def show_code_block(name, lang, code):
+    """
+    Display the code block contents.
+
+    Args:
+        name (str): Name of the code block.
+        lang (str): Language of the code block.
+        code (str): Code block content.
+    """
     print(f"\n\033[1;33m> Showing: {name} ({lang})\033[0;0m")
-    try:
-        print(code)
-    except Exception as e:
-        print(f"Error: Code block '{name}' failed with exception: {e}")
+    print(code)
 
 
 def run_code_block(name, lang, code, config):
-    """Execute the specified code block using configuration."""
+    """
+    Execute the specified code block using the configuration.
+
+    Args:
+        name (str): Name of the code block.
+        lang (str): Language of the code block.
+        code (str): Code block content.
+        config (dict): Configuration dictionary.
+    """
     print(f"\n\033[1;33m> Running: {name} ({lang})\033[0;0m")
     try:
         if lang in config:
@@ -92,9 +147,7 @@ def run_code_block(name, lang, code, config):
             stdout, stderr = process.communicate()
 
             if process.returncode != 0:
-                print(
-                    f"Error: Code block '{name}' failed with exit code {process.returncode}"
-                )
+                print(f"Error: Code block '{name}' failed with exit code {process.returncode}")
                 print(f"Stderr: {stderr.decode()}")
             else:
                 print(stdout.decode())
@@ -107,22 +160,20 @@ def run_code_block(name, lang, code, config):
 def process_markdown_files(directory, command, block_name=None, config=None):
     """
     Process all Markdown files in the given directory.
+
+    Args:
+        directory (str): Directory to scan for Markdown files.
+        command (str): Command to execute ('run', 'ls', or 'show').
+        block_name (str, optional): Name of the code block to process. Defaults to None.
+        config (dict, optional): Configuration dictionary. Defaults to None.
     """
+    languages = get_languages(config)
 
-    # Extract configurated languages
-    languages = list(config.keys())
-
-    # Loop over files in the directory
     for file in os.listdir(directory):
-
-        # Look for markdown files
         if file.endswith(".md"):
-
-            # Get the file path
             file_path = os.path.join(directory, file)
             print(f"\033[0;31m\u26AC\033[0;0m Processing file: {file_path}")
 
-            # Parse the file
             code_blocks = parse_markdown(file_path, languages)
 
             if command == "ls":
@@ -130,34 +181,34 @@ def process_markdown_files(directory, command, block_name=None, config=None):
             elif command == "show":
                 for name, lang, code, _ in code_blocks:
                     if name == block_name:
-                        show_code_block(name, lang, code, config)
+                        show_code_block(name, lang, code)
             elif command == "run":
                 if block_name == "all":
                     for name, lang, code, runnable in code_blocks:
                         if runnable:
                             run_code_block(name, lang, code, config)
                         else:
-                            print(
-                                f"Error: {lang} is not configured. Please add {lang} to config file to run this code block."
-                            )
-                        break
+                            print(f"Error: {lang} is not configured. Please add {lang} to the config file to run this code block.")
                 elif block_name:
                     for name, lang, code, runnable in code_blocks:
                         if name == block_name:
                             if runnable:
                                 run_code_block(name, lang, code, config)
                             else:
-                                print(
-                                    f"Error: {lang} is not configured. Please add {lang} to config file to run this code block."
-                                )
+                                print(f"Error: {lang} is not configured. Please add {lang} to the config file to run this code block.")
                             break
                     else:
                         print(f"Error: Code block with name '{block_name}' not found.")
                 else:
                     print("Error: You must provide a code block name or 'all' to run.")
+        else:
+            print(f"Skipping non-Markdown file: {file}")
 
 
 def main():
+    """
+    Main function to parse arguments and execute commands.
+    """
     parser = argparse.ArgumentParser(
         description="Run or list code blocks from Markdown files in the directory."
     )
@@ -180,12 +231,8 @@ def main():
 
     args = parser.parse_args()
 
-    if args.command == "run" and not args.name:
-        print("Error: You must provide a code block name or 'all' to run.")
-        return
-
-    if args.command == "show" and not args.name:
-        print("Error: You must provide a code block name or 'all' to run.")
+    if args.command in ["run", "show"] and not args.name:
+        print("Error: You must provide a code block name or 'all' to run/show.")
         return
 
     config_path = args.config if args.config else get_default_config_path()
