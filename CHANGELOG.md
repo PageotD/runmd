@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * show `(<lang>)` or `(<lang>: not configured)` next to the code block name
 * add config file validation
 
+
 ### Changed
 * add type hints to functions
 * move functions related to configuration to config.py
