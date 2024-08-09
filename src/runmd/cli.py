@@ -5,33 +5,7 @@ import subprocess
 import re
 
 from .config import load_config, get_default_config_path, get_languages
-
-
-def parse_markdown(file_path: str, languages: list) -> tuple:
-    """
-    Parse the Markdown file to extract code blocks with names.
-
-    Args:
-        file_path (str): Path to the Markdown file.
-        languages (list): List of valid languages.
-
-    Returns:
-        list: List of tuples containing code block information.
-    """
-    code_blocks = []
-    with open(file_path, "r") as file:
-        content = file.read()
-
-    pattern = re.compile(
-        rf"```({('|').join(languages)}) \{{name=(.*?)\}}\n(.*?)\n```", re.DOTALL
-    )
-    matches = pattern.findall(content)
-
-    for lang, name, code in matches:
-        code_blocks.append((name.strip(), lang, code.strip(), lang in languages))
-
-    return code_blocks
-
+from .parser import parse_markdown
 
 def list_code_blocks(code_blocks: tuple) -> None:
     """
