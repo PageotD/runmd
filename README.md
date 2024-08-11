@@ -30,8 +30,14 @@ pip install build
 ### 3. Build and Install RunMD
 ```sh {name=runmd-build-install}
 python -m build
-pip install sdist/runmd-0.1.0.tar.gz
+pip install dist/runmd-0.1.0-py3-none-any.whl
 ```
+
+### 4. Initialize
+```sh {name=runmd-initialize}
+runmd init
+```
+
 
 ## Usage
 

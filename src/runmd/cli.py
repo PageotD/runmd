@@ -16,7 +16,7 @@ def main() -> None:
     )
     parser.add_argument(
         "command",
-        choices=["run", "list", "show", "init"],
+        choices=["run", "list", "show", "source", "init"],
         help="Command to run, list or show code blocks.",
     )
     parser.add_argument(
@@ -39,6 +39,13 @@ def main() -> None:
     if args.command == 'init':
         copy_config()
         return
+    
+    if args.command == 'source':
+        # if no args -> list all sources id - alias - file path
+        # if int/id -> put source with that id to default/current file to process
+        # if --add: add source if no --alias alias = filename if filename exist raise error and sa need for an alias
+        # if --del: del source by id
+        pass
     
     # Convert list of 'KEY=value' strings to a dictionary
     env_vars = {}
