@@ -1,7 +1,8 @@
 import subprocess
 import sys
+import os
 
-def run_code_block(name: str, lang: str, code: str, config: dict):
+def run_code_block(name: str, lang: str, code: str, config: dict, env_vars: dict):
     """
     Execute the specified code block using configuration.
 
@@ -24,6 +25,11 @@ def run_code_block(name: str, lang: str, code: str, config: dict):
     command = settings.get("command")
     options = settings.get("options", [])
 
+    # Merge the provided environment variables with the current environment
+    env = os.environ.copy()
+    if env_vars:
+        env.update(env_vars)
+
     if not command:
         print(f"Error: No command specified for language '{lang}'")
         return
@@ -33,6 +39,7 @@ def run_code_block(name: str, lang: str, code: str, config: dict):
         # Windows-specific handling
         process = subprocess.Popen(
             [command] + options + [code],
+            env=env,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -43,6 +50,7 @@ def run_code_block(name: str, lang: str, code: str, config: dict):
         # Unix-like systems handling
         process = subprocess.Popen(
             [command] + options + [code],
+            env=env,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

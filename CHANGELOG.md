@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  
 ## [unreleased]
 
+### Added
+* add support for environment variables
+
 ## [0.1.0] - 2024-08-09
  
 ### Added

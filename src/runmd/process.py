@@ -3,7 +3,7 @@ from .config import get_languages
 from .parser import parse_markdown
 from .runner import run_code_block
 
-def process_markdown_files(directory: str, command: str, block_name: str=None, config: str=None) -> None:
+def process_markdown_files(directory: str, command: str, block_name: str=None, config: str=None, env_vars: dict=None) -> None:
     """
     Process all Markdown files in the given directory.
 
@@ -42,7 +42,7 @@ def process_markdown_files(directory: str, command: str, block_name: str=None, c
             elif command == "show":
                 show_command(code_blocks, block_name)
             elif command == "run":
-                run_command(code_blocks, block_name, config)
+                run_command(code_blocks, block_name, config, env_vars)
 
 def list_command(code_blocks: tuple) -> None:
     """
@@ -95,7 +95,7 @@ def show_code_block(name, lang, code):
         print(f"Error: Code block '{name}' failed with exception: {e}")
     print(code)
 
-def run_command(code_blocks: list, block_name: str, config: dict) -> None:
+def run_command(code_blocks: list, block_name: str, config: dict, env_vars: dict) -> None:
     """
     Handle the 'run' command to execute code blocks.
 
@@ -110,7 +110,7 @@ def run_command(code_blocks: list, block_name: str, config: dict) -> None:
     if block_name == "all":
         for name, lang, code, runnable in code_blocks:
             if runnable:
-                run_code_block(name, lang, code, config)
+                run_code_block(name, lang, code, config, env_vars)
             else:
                 print(f"Error: Language '{lang}' is not configured. Skipping code block '{name}'.")
     elif block_name:
@@ -118,7 +118,7 @@ def run_command(code_blocks: list, block_name: str, config: dict) -> None:
         for name, lang, code, runnable in code_blocks:
             if name == block_name:
                 if runnable:
-                    run_code_block(name, lang, code, config)
+                    run_code_block(name, lang, code, config, env_vars)
                 else:
                     print(f"Error: Language '{lang}' is not configured. Skipping code block '{name}'.")
                 found = True

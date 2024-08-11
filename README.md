@@ -72,6 +72,14 @@ To execute a specific code block by name:
 runmd run <code-block-name>
 ```
 
+### Run a Specific Code Block with nvironment variable
+
+To execute a specific code block by name:
+
+```sh
+runmd run <code-block-name> --env <KEY1>=<VALUE1> <KEY2=VALUE2>
+```
+
 ### Run all code blocks
 
 To execute all code blocks in Markdown files within the current directory:
