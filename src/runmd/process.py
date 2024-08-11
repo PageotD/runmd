@@ -3,7 +3,7 @@ from .config import get_languages
 from .parser import parse_markdown
 from .runner import run_code_block
 
-def process_markdown_files(directory: str, command: str, block_name: str=None, config: str=None, env_vars: dict=None) -> None:
+def process_markdown_files(filepath: str, command: str, block_name: str=None, config: str=None, env_vars: dict=None) -> None:
     """
     Process all Markdown files in the given directory.
 
@@ -24,25 +24,38 @@ def process_markdown_files(directory: str, command: str, block_name: str=None, c
     # Extract configured languages
     languages = get_languages(config) if config else []
 
-    # Iterate over files in the directory
-    for file_name in os.listdir(directory):
-        if file_name.endswith(".md"):
-            file_path = os.path.join(directory, file_name)
-            print(f"\033[0;31m\u26AC\033[0;0m Processing file: {file_path}")
+    # Check if filepath is provided
+    if filepath is not None:
+        # Check if file exists
+        if not os.path.isfile(filepath):
+            print(f"Error: {filepath} does not exist")
+            return
+    else:
+        # Check for Markdown files in the current directory
+        countmd = 0
+        for filename in os.listdir("."):
+            if filename.endswith(".md"):
+                countmd += 1
+                if countmd > 1:
+                    print("Error: Too many MD files. Please specify the one to use with the --file option.")
+                    return
+        # Handle the case where no Markdown files are found
+        if countmd == 0:
+            print("Error: No Markdown files found in the current directory.")
 
-            try:
-                code_blocks = parse_markdown(file_path, languages)
-            except Exception as e:
-                print(f"Error: Failed to parse file '{file_path}' with exception: {e}")
-                continue
+    try:
+        code_blocks = parse_markdown(filepath, languages)
 
-            # Handle commands
-            if command == "ls":
-                list_command(code_blocks)
-            elif command == "show":
-                show_command(code_blocks, block_name)
-            elif command == "run":
-                run_command(code_blocks, block_name, config, env_vars)
+    except Exception as e:
+        print(f"Error: Failed to parse file '{filepath}' with exception: {e}")
+
+    # Handle commands
+    if command == "ls":
+        list_command(code_blocks)
+    elif command == "show":
+        show_command(code_blocks, block_name)
+    elif command == "run":
+        run_command(code_blocks, block_name, config, env_vars)
 
 def list_command(code_blocks: tuple) -> None:
     """

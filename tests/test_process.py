@@ -1,4 +1,6 @@
 import unittest
+import tempfile
+import os
 from unittest.mock import patch
 from runmd.process import process_markdown_files, list_command, show_command, run_command
 
@@ -77,14 +79,23 @@ class TestRunmdProcess(unittest.TestCase):
             ('block2', 'java', 'System.out.println("Hello World");', False),
         ]
 
-        # Test the 'ls' command
-        process_markdown_files('fake_directory', 'ls', config={'python': {'command': 'python', 'options': []}})
-        mock_list_command.assert_called_once_with(mock_parse_markdown.return_value)
+        # Create a temporary file to simulate 'file1.md'
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.md') as temp_file:
+            temp_file_path = temp_file.name
 
-        # Test the 'show' command
-        process_markdown_files('fake_directory', 'show', 'block1', config={'python': {'command': 'python', 'options': []}})
-        mock_show_command.assert_called_once_with(mock_parse_markdown.return_value, 'block1')
+        try:
+            # Test the 'ls' command
+            process_markdown_files(temp_file_path, 'ls', config={'python': {'command': 'python', 'options': []}})
+            mock_list_command.assert_called_once_with(mock_parse_markdown.return_value)
 
-        # Test the 'run' command
-        #process_markdown_files('fake_directory', 'run', 'block1', config={'python': {'command': 'python', 'options': []}})
-        #mock_run_command.assert_called_once_with(mock_parse_markdown.return_value, 'all', {'python': {'command': 'python', 'options': []}})
+            # Test the 'show' command
+            process_markdown_files(temp_file_path, 'show', 'block1', config={'python': {'command': 'python', 'options': []}})
+            mock_show_command.assert_called_once_with(mock_parse_markdown.return_value, 'block1')
+
+            # Test the 'run' command
+            #process_markdown_files(temp_file_path, 'run', 'block1', config={'python': {'command': 'python', 'options': []}})
+            #mock_run_command.assert_called_once_with(mock_parse_markdown.return_value, 'block1', {'python': {'command': 'python', 'options': []}})
+            
+        finally:
+            # Clean up the temporary file
+            os.remove(temp_file_path)

@@ -25,7 +25,7 @@ def main() -> None:
         help='Name of the code block to run (or "all" to run all code blocks).',
     )
     parser.add_argument(
-        "--dir", default=".", help="Directory to scan for Markdown files."
+        "--file", default=None, help="Path to the markdown file to process."
     )
     parser.add_argument(
         "--config", default=None, help="Path to the configuration file."
@@ -53,7 +53,7 @@ def main() -> None:
     config_path = args.config if args.config else get_default_config_path()
     config = load_config(config_path)
 
-    process_markdown_files(args.dir, args.command, args.name, config, env_vars)
+    process_markdown_files(args.file, args.command, args.name, config, env_vars)
 
 
 if __name__ == "__main__":

@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 * add support for environment variables
+* add --file option to specifiy the markdown file to process
+
+### Removed
+* remove --dir option since it creates too much complexity for very small benefits
 
 ## [0.1.0] - 2024-08-09
  
