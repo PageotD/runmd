@@ -17,8 +17,8 @@ def process_markdown_files(filepath: str, command: str, block_name: str=None, co
         None
     """
     # Validate command input
-    if command not in {"ls", "show", "run"}:
-        print(f"Error: Invalid command '{command}'. Expected 'ls', 'show', or 'run'.")
+    if command not in {"list", "show", "run"}:
+        print(f"Error: Invalid command '{command}'. Expected 'list', 'show', or 'run'.")
         return
 
     # Extract configured languages
@@ -50,7 +50,7 @@ def process_markdown_files(filepath: str, command: str, block_name: str=None, co
         print(f"Error: Failed to parse file '{filepath}' with exception: {e}")
 
     # Handle commands
-    if command == "ls":
+    if command == "list":
         list_command(code_blocks)
     elif command == "show":
         show_command(code_blocks, block_name)

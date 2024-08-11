@@ -85,7 +85,7 @@ class TestRunmdProcess(unittest.TestCase):
 
         try:
             # Test the 'ls' command
-            process_markdown_files(temp_file_path, 'ls', config={'python': {'command': 'python', 'options': []}})
+            process_markdown_files(temp_file_path, 'list', config={'python': {'command': 'python', 'options': []}})
             mock_list_command.assert_called_once_with(mock_parse_markdown.return_value)
 
             # Test the 'show' command

@@ -54,7 +54,7 @@ To add an executable code block to your Markdown file, use the following syntax:
 To list all code block names in Markdown files within the current directory:
 
 ```sh
-runmd ls
+runmd list
 ```
 
 ### Show a Specific Code Block

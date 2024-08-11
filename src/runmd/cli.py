@@ -16,7 +16,7 @@ def main() -> None:
     )
     parser.add_argument(
         "command",
-        choices=["run", "ls", "show", "init"],
+        choices=["run", "list", "show", "init"],
         help="Command to run, list or show code blocks.",
     )
     parser.add_argument(
