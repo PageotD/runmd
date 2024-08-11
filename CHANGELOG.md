@@ -6,11 +6,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
-## [unreleased]
+## [0.2.0] - 2024-08-11
 
 ### Added
 * add support for environment variables
 * add --file option to specifiy the markdown file to process
+
+### Changed
+* change `ls` command to `list` for homogeneity
 
 ### Removed
 * remove --dir option since it creates too much complexity for very small benefits
