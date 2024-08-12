@@ -1,7 +1,6 @@
 import re
 
-
-def parse_markdown(file_path: str, languages: list) -> tuple:
+def parse_markdown(file_path: str, languages: list, blocklist: list) -> list:
     """
     Parse the Markdown file to extract code blocks with names.
 
@@ -12,10 +11,10 @@ def parse_markdown(file_path: str, languages: list) -> tuple:
     Returns:
         list: List of tuples containing code block information.
     """
-    code_blocks = []
     pattern = re.compile(
         rf"```({('|').join(languages)}) \{{name=(.*?)\}}\n(.*?)\n```", re.DOTALL
     )
+
 
     try:
         with open(file_path, "r") as file:
@@ -23,9 +22,16 @@ def parse_markdown(file_path: str, languages: list) -> tuple:
 
         matches = pattern.findall(content)
         for lang, name, code in matches:
-            code_blocks.append((name.strip(), lang, code.strip(), lang in languages))
+            #code_blocks.append((name.strip(), lang, code.strip(), lang in languages))
+            blocklist.append({
+                "name": name.strip(),
+                "file": file_path,
+                "lang": lang,
+                "code": code.strip(),
+                "exec": lang in languages
+            })
 
     except Exception as e:
         print(f"Error reading file {file_path}: {e}")
 
-    return code_blocks
+    return blocklist

@@ -5,7 +5,7 @@ import subprocess
 import re
 
 from .config import load_config, get_default_config_path, copy_config
-from .process import process_markdown_files
+from .process import process_markdown_files, list_command, show_command, run_command
 
 def main() -> None:
     """
@@ -16,7 +16,7 @@ def main() -> None:
     )
     parser.add_argument(
         "command",
-        choices=["run", "list", "show", "source", "init"],
+        choices=["run", "list", "show", "init"],
         help="Command to run, list or show code blocks.",
     )
     parser.add_argument(
@@ -40,13 +40,6 @@ def main() -> None:
         copy_config()
         return
     
-    if args.command == 'source':
-        # if no args -> list all sources id - alias - file path
-        # if int/id -> put source with that id to default/current file to process
-        # if --add: add source if no --alias alias = filename if filename exist raise error and sa need for an alias
-        # if --del: del source by id
-        pass
-    
     # Convert list of 'KEY=value' strings to a dictionary
     env_vars = {}
     for env in args.env:
@@ -60,7 +53,14 @@ def main() -> None:
     config_path = args.config if args.config else get_default_config_path()
     config = load_config(config_path)
 
-    process_markdown_files(args.file, args.command, args.name, config, env_vars)
+    blocklist = process_markdown_files(args.file, config)
+
+    if args.command == "list":
+        list_command(blocklist)
+    elif args.command == "show":
+        show_command(blocklist, args.name)
+    elif args.command == "run":
+        run_command(blocklist, args.name, config, env_vars)
 
 
 if __name__ == "__main__":
