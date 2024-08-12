@@ -64,7 +64,7 @@ def list_command(blocklist: list) -> None:
         print(f"{block['name'].ljust(name_width)} {block['lang'].ljust(lang_width)} {file_str.ljust(file_width)}")
 
 
-def show_command(blokclist: list, block_name: str) -> None:
+def show_command(blocklist: list, block_name: str) -> None:
     """
     Handle the 'show' command to display a specific code block.
 
@@ -75,7 +75,7 @@ def show_command(blokclist: list, block_name: str) -> None:
     Returns:
         None
     """
-    for block in blokclist:
+    for block in blocklist:
         if block['name'] == block_name:
             show_code_block(block['name'], block['lang'], block['code'])
             return

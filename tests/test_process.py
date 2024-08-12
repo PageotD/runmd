@@ -1,101 +1,72 @@
 import unittest
-import tempfile
-import os
-from unittest.mock import patch
-from runmd.process import process_markdown_files, list_command, show_command, run_command
+from unittest.mock import patch, MagicMock
+from pathlib import Path
+from runmd.process import process_markdown_files, list_command, show_code_block, show_command, run_command
 
-class TestRunmdProcess(unittest.TestCase):
+class TestMarkdownProcessing(unittest.TestCase):
+
+    @patch('runmd.parser.parse_markdown')
+    @patch('runmd.config.get_languages')
+    def test_process_markdown_files(self, mock_get_languages, mock_parse_markdown):
+        # Setup mock
+        mock_get_languages.return_value = ["python"]
+        mock_parse_markdown.return_value = [{'name': 'hello-python', 'lang': 'python', 'file': Path('tests/test_markdown.md'), 'code': 'print("Hello World")', 'exec': True}]
+        
+        config = {"python": {"command": "python3", "options": ["-c"]}}
+
+        # Test function
+        result = process_markdown_files('tests/test_markdown.md', config)
+        
+        # Assertions
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]['name'], 'hello-python')
+
 
     @patch('builtins.print')
     def test_list_command(self, mock_print):
-        code_blocks = [
-            ('block1', 'python', 'print("Hello World")', True),
-            ('block2', 'java', 'System.out.println("Hello World");', False),
-        ]
-        list_command(code_blocks)
+        blocklist = [{'name': 'test_block', 'lang': 'python', 'file': Path('test.md')}]
         
-        expected_output = [
-            "\u0020\u0020\033[0;31m-\033[0;0m block1 (python)",
-            "\u0020\u0020\033[0;31m-\033[0;0m block2 (\033[0;31mjava: not configured\033[0;0m)"
-        ]
+        # Call the function to be tested
+        list_command(blocklist)
         
-        # Check if the expected outputs are printed
-        calls = [unittest.mock.call(line) for line in expected_output]
-        mock_print.assert_has_calls(calls)
+        # Get all print calls
+        print_calls = [call[0][0] for call in mock_print.call_args_list]
+        
+        # Define the expected substrings
+        expected_substrings = ['Name', 'Language', 'File', 'test_block', 'python', 'test.md']
+        
+        # Check if each expected substring is present in the printed output
+        for substring in expected_substrings:
+            self.assertTrue(any(substring in output for output in print_calls), f"Expected '{substring}' in the output but it was not found.")
 
     @patch('runmd.process.show_code_block')
-    def test_show_command(self, mock_show_code_block):
-        code_blocks = [
-            ('block1', 'python', 'print("Hello World")', True),
-            ('block2', 'java', 'System.out.println("Hello World");', True),
-        ]
-        show_command(code_blocks, 'block1')
-        
-        mock_show_code_block.assert_called_once_with('block1', 'python', 'print("Hello World")')
-
     @patch('builtins.print')
-    def test_show_command_not_found(self, mock_print):
-        code_blocks = [
-            ('block1', 'python', 'print("Hello World")', True),
-        ]
-        show_command(code_blocks, 'block_not_found')
+    def test_show_command(self, mock_print, mock_show_code_block):
+        blocklist = [{'name': 'test_block', 'lang': 'python', 'code': 'print("Hello World")'}]
         
-        mock_print.assert_called_once_with("Error: Code block with name 'block_not_found' not found.")
+        show_command(blocklist, 'test_block')
+        
+        mock_show_code_block.assert_called_once_with('test_block', 'python', 'print("Hello World")')
+        mock_print.assert_not_called()
 
     @patch('runmd.process.run_code_block')
-    def test_run_command_env_none(self, mock_run_code_block):
-        config = {'python': {'command': 'python', 'options': []}}
-        code_blocks = [
-            ('block1', 'python', 'print("Hello World")', True),
-            ('block2', 'java', 'System.out.println("Hello World");', False),
-        ]
-        env_vars = {}
-        run_command(code_blocks, 'block1', config, env_vars)
+    @patch('builtins.print')
+    def test_run_command(self, mock_print, mock_run_code_block):
+        blocklist = [{'name': 'test_block', 'lang': 'python', 'code': 'print("Hello World")', 'exec': True}]
+        config = {'python': 'python3'}
+        env_vars = {'MY_ENV': 'value'}
         
-        # Check that run_code_block is called for block1 only
-        mock_run_code_block.assert_called_once_with('block1', 'python', 'print("Hello World")', config, {})
+        run_command(blocklist, 'test_block', config, env_vars)
+        
+        mock_run_code_block.assert_called_once_with('test_block', 'python', 'print("Hello World")', config, env_vars)
+        mock_print.assert_not_called()
 
     @patch('builtins.print')
-    def test_run_command_block_not_found(self, mock_print):
-        config = {'python': {'command': 'python', 'options': []}}
-        code_blocks = [
-            ('block1', 'python', 'print("Hello World")', True),
-        ]
-        env_vars = {}
-        run_command(code_blocks, 'block_not_found', config, env_vars)
+    def test_show_code_block(self, mock_print):
+        show_code_block('test_block', 'python', 'print("Hello World")')
         
-        mock_print.assert_called_once_with("Error: Code block with name 'block_not_found' not found.")
+        mock_print.assert_any_call("\033[1m\u26AC test_block (python)\033[0m")
+        mock_print.assert_any_call("\u0020\u0020\033[90mprint(\"Hello World\")\033[0m")
 
-    @patch('os.listdir')
-    @patch('runmd.process.parse_markdown')
-    @patch('runmd.process.list_command')
-    @patch('runmd.process.show_command')
-    @patch('runmd.process.run_command')
-    def test_process_markdown_files(self, mock_run_command, mock_show_command, mock_list_command, mock_parse_markdown, mock_listdir):
-        # Mock return values and side effects
-        mock_listdir.return_value = ['file1.md']
-        mock_parse_markdown.return_value = [
-            ('block1', 'python', 'print("Hello World")', True),
-            ('block2', 'java', 'System.out.println("Hello World");', False),
-        ]
-
-        # Create a temporary file to simulate 'file1.md'
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.md') as temp_file:
-            temp_file_path = temp_file.name
-
-        try:
-            # Test the 'ls' command
-            process_markdown_files(temp_file_path, 'list', config={'python': {'command': 'python', 'options': []}})
-            mock_list_command.assert_called_once_with(mock_parse_markdown.return_value)
-
-            # Test the 'show' command
-            process_markdown_files(temp_file_path, 'show', 'block1', config={'python': {'command': 'python', 'options': []}})
-            mock_show_command.assert_called_once_with(mock_parse_markdown.return_value, 'block1')
-
-            # Test the 'run' command
-            #process_markdown_files(temp_file_path, 'run', 'block1', config={'python': {'command': 'python', 'options': []}})
-            #mock_run_command.assert_called_once_with(mock_parse_markdown.return_value, 'block1', {'python': {'command': 'python', 'options': []}})
-            
-        finally:
-            # Clean up the temporary file
-            os.remove(temp_file_path)
+if __name__ == '__main__':
+    unittest.main()

@@ -6,9 +6,10 @@ class TestRunmdParser(unittest.TestCase):
     def test_parse_markdown(self):
         file_path = "tests/test_markdown.md"
         languages = ["python", "ruby"]
+        blocklist = []
         expected = [
-            ('hello-python', 'python', '# run with runmd run hello-python\nprint("Hello from Python!")', True), 
-            ('hello-ruby', 'ruby', '# run with runmd run hello-ruby\nputs "Hello from Ruby!"', True)
+            {'name': 'hello-python', 'file': file_path, 'lang':'python', 'code': '# run with runmd run hello-python\nprint("Hello from Python!")', 'exec': True}, 
+            {'name': 'hello-ruby', 'file': file_path, 'lang': 'ruby', 'code': '# run with runmd run hello-ruby\nputs "Hello from Ruby!"', 'exec': True}
             ]
-        code_blocks = parse_markdown(file_path, languages)
-        self.assertListEqual(code_blocks, expected)
+        blocklist = parse_markdown(file_path, languages, blocklist)
+        self.assertListEqual(blocklist, expected)
