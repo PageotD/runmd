@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
+## [0.3.0] - 2024-08-12
+
+### Changed
+* cli and all functions in process.py have been refactored to gain in lisibility and usability
+
 ## [0.2.0] - 2024-08-11
 
 ### Added
