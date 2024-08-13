@@ -8,8 +8,8 @@ class TestRunmdParser(unittest.TestCase):
         languages = ["python", "ruby"]
         blocklist = []
         expected = [
-            {'name': 'hello-python', 'file': file_path, 'lang':'python', 'code': '# run with runmd run hello-python\nprint("Hello from Python!")', 'exec': True}, 
-            {'name': 'hello-ruby', 'file': file_path, 'lang': 'ruby', 'code': '# run with runmd run hello-ruby\nputs "Hello from Ruby!"', 'exec': True}
+            {'name': 'hello-python', 'tag': 'sometag', 'file': file_path, 'lang':'python', 'code': '# run with runmd run hello-python\nprint("Hello from Python!")', 'exec': True}, 
+            {'name': 'hello-ruby', 'tag': '', 'file': file_path, 'lang': 'ruby', 'code': '# run with runmd run hello-ruby\nputs "Hello from Ruby!"', 'exec': True}
             ]
         blocklist = parse_markdown(file_path, languages, blocklist)
         self.assertListEqual(blocklist, expected)

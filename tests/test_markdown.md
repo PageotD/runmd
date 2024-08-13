@@ -2,7 +2,7 @@
 
 ### hello-python
 
-```python {name=hello-python}
+```python {name=hello-python, tag=sometag}
 # run with runmd run hello-python
 print("Hello from Python!")
 ```
