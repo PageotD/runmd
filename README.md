@@ -49,7 +49,7 @@ To add an executable code block to your Markdown file, use the following syntax:
 
 ```markdown
 # My executable code block
-    ```sh {name=export-echo}
+    ```sh {name=export-echo,tag=example}
     EXPORT MYSTR="a simple export and echo"
     echo $MYSTR
     ```
@@ -76,6 +76,22 @@ To execute a specific code block by name:
 
 ```sh
 runmd run <code-block-name>
+```
+
+### Run all code blocks with a given tag
+
+To execute a specific code block by name:
+
+```sh
+runmd run @<tag>
+```
+
+### Run all code blocks
+
+To execute a specific code block by name:
+
+```sh
+runmd run all
 ```
 
 ### Run a Specific Code Block with nvironment variable
