@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased] - 2024-08-13
 
+### Added 
+* add `tag` attribute
+
 ### Changed
 * rework on runner.py to print STDERR outputs in terminal
 * refactor cli.py for lisibility and control

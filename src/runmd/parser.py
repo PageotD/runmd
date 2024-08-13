@@ -12,7 +12,7 @@ def parse_markdown(file_path: str, languages: list, blocklist: list) -> list:
         list: List of tuples containing code block information.
     """
     pattern = re.compile(
-        rf"```({('|').join(languages)}) \{{name=(.*?)\}}\n(.*?)\n```", re.DOTALL
+        rf"```({('|').join(languages)}) \{{name=(.*?)(?:,\s*tag=(.*?))?\}}\s*([\s\S]*?)\s*```", re.DOTALL
     )
 
 
@@ -21,10 +21,11 @@ def parse_markdown(file_path: str, languages: list, blocklist: list) -> list:
             content = file.read()
 
         matches = pattern.findall(content)
-        for lang, name, code in matches:
+        for lang, name, tag, code in matches:
             #code_blocks.append((name.strip(), lang, code.strip(), lang in languages))
             blocklist.append({
                 "name": name.strip(),
+                "tag": tag,
                 "file": file_path,
                 "lang": lang,
                 "code": code.strip(),

@@ -2,7 +2,7 @@ import subprocess
 import sys
 import os
 
-def run_code_block(name: str, lang: str, code: str, config: dict, env_vars: dict):
+def run_code_block(name: str, lang: str, code: str, tag: str, config: dict, env_vars: dict):
     """
     Execute the specified code block using configuration.
 
@@ -15,7 +15,7 @@ def run_code_block(name: str, lang: str, code: str, config: dict, env_vars: dict
     Returns:
         None
     """
-    print(f"\n\033[1;33m> Running: {name} ({lang})\033[0;0m")
+    print(f"\n\033[1;33m> Running: {name} ({lang}) {tag}\033[0;0m")
 
     if lang not in config:
         print(f"Error: Unsupported language '{lang}' for code block '{name}'")
