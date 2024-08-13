@@ -34,43 +34,42 @@ def run_code_block(name: str, lang: str, code: str, config: dict, env_vars: dict
         print(f"Error: No command specified for language '{lang}'")
         return
 
-    # Prepare command and arguments based on platform
-    if sys.platform == "win32":
-        # Windows-specific handling
-        process = subprocess.Popen(
-            [command] + options + [code],
-            env=env,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            shell=True,  # Windows requires shell=True to run commands
-            text=True,
-        )
-    else:
-        # Unix-like systems handling
-        process = subprocess.Popen(
-            [command] + options + [code],
-            env=env,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-        )
-
     try:
-        # Execute the code block
-        stdout, stderr = process.communicate(input=code, timeout=60)
-
-        if process.returncode != 0:
-            print(
-                f"Error: Code block '{name}' failed with exit code {process.returncode}"
+        # Prepare command and arguments based on platform
+        if sys.platform == "win32":
+            # Windows-specific handling
+            process = subprocess.Popen(
+                [command] + options + [code],
+                env=env,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                shell=True,  # Windows requires shell=True to run commands
             )
-            print(f"Stderr: {stderr}")
-        else:
-            print(stdout)
 
-    except subprocess.TimeoutExpired:
-        print(f"Error: Code block '{name}' timed out.")
-        process.kill()
+            while True:
+                output = process.stdout.readline().rstrip().decode('utf-8')
+                if output == '' and process.poll() is not None:
+                    break
+                if output:
+                    print(output.strip())
+
+        else:
+            # Unix-like systems handling
+            process = subprocess.Popen(
+                [command] + options + [code],
+                env=env,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+            )
+           
+            while True:
+                output = process.stdout.readline().rstrip().decode('utf-8')
+                if output == '' and process.poll() is not None:
+                    break
+                if output:
+                    print(output.strip())
+
     except Exception as e:
         print(f"Error: Code block '{name}' failed with exception: {e}")
