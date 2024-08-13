@@ -114,7 +114,7 @@ def run_command(blocklist: list, block_name: str, config: dict, env_vars: dict) 
 
     block_count = 0
     for block in blocklist:
-        if block_name == "all" or block_name == block['name']:
+        if block_name == "all" or block_name == block['name'] or '@'+block['tag'] == block_name:
             if block['exec']:
                 run_code_block(block['name'], block['lang'], block['code'], block['tag'],config, env_vars)
                 block_count +=1

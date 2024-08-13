@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added 
 * add `tag` attribute
+* add the possibility to run all code blocks with a given tag using `runmd run @<tag>`
 
 ### Changed
 * rework on runner.py to print STDERR outputs in terminal
