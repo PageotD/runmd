@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 * rework on runner.py to print STDERR outputs in terminal
+* refactor cli.py for lisibility and control
 
 ## [0.3.0] - 2024-08-12
 
