@@ -29,6 +29,12 @@
             "-e"
         ]
     },
+    "js": {
+        "command": "node",
+        "options": [
+            "-e"
+        ]
+    },
     "perl": {
         "command": "perl",
         "options": [
