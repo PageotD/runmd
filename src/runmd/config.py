@@ -1,26 +1,47 @@
+"""
+config.py
+
+Description:
+The `config.py` module handles configuration-related tasks for the 'runmd' package. It includes
+functionalities to copy a default configuration file to the user's home directory, load and 
+validate the configuration file, and retrieve information about configured scripting languages.
+
+Functions:
+- copy_config: Copies the default configuration file to the user's configuration directory if it 
+  does not already exist.
+- load_config: Loads and validates the configuration file from a specified path.
+- validate_config: Validates the configuration dictionary to ensure it contains required fields 
+  and has correct types.
+- get_default_config_path: Returns the path to the default configuration file for 'runmd'.
+- get_languages: Returns a list of languages configured in the provided configuration dictionary.
+
+"""
+
 import os
 import json
 import shutil
 import pkg_resources
 
+
 def copy_config():
     """Copy the default config to the user's configuration directory."""
     try:
-        config_source = pkg_resources.resource_filename('runmd', 'config.json')
+        config_source = pkg_resources.resource_filename("runmd", "config.json")
     except Exception as e:
         print(f"Error locating the config file: {e}")
         return
 
-    config_dest = os.path.expanduser('~/.config/runmd/config.json')
-    
+    config_dest = os.path.expanduser("~/.config/runmd/config.json")
+
     if not os.path.exists(os.path.dirname(config_dest)):
         os.makedirs(os.path.dirname(config_dest))
-        
+
     if not os.path.exists(config_dest):
         shutil.copy(config_source, config_dest)
         print(f"Configuration file copied to {config_dest}.")
     else:
         print(f"Configuration file already exists at {config_dest}.")
+
 
 def load_config(config_path: str) -> dict:
     """
