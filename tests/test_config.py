@@ -4,6 +4,10 @@ from runmd.config import copy_config, load_config, validate_config, get_default_
 
 class TestRunmdConfig(unittest.TestCase):
 
+    # --------------------------------------------------
+    # >> COPY_CONFIG
+    # --------------------------------------------------
+
     @patch('pkg_resources.resource_filename')
     @patch('os.path.exists')
     @patch('shutil.copy')
@@ -30,7 +34,7 @@ class TestRunmdConfig(unittest.TestCase):
     def test_copy_config_already_exists(self, mock_print, mock_copy, mock_makedirs, mock_exists, mock_resource_filename):
         # Setup mocks
         mock_resource_filename.return_value = "mock_source_path/config.json"
-        mock_exists.side_effect = lambda path: True  # Simulate that destination exists
+        mock_exists.side_effect = lambda path: True
 
         with patch('os.path.expanduser', return_value="mock_dest_path/config.json"):
             copy_config()

@@ -4,7 +4,7 @@ import json
 import subprocess
 import re
 
-from .config import load_config, get_default_config_path, copy_config
+from .config import load_config, validate_config, get_default_config_path, copy_config
 from .process import process_markdown_files, list_command, show_command, run_command
 
 def main(command_line=None) -> None:
@@ -45,6 +45,9 @@ def main(command_line=None) -> None:
     if not os.path.exists(config_path):
         copy_config()
     config = load_config(config_path)
+
+    # Validate configuration
+    validate_config(config)
 
     # Get code block list
     if args.command in ['run', 'show', 'list']:
