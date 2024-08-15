@@ -1,5 +1,6 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, mock_open
+import json
 from runmd.config import copy_config, load_config, validate_config, get_default_config_path, get_languages
 
 class TestRunmdConfig(unittest.TestCase):
@@ -63,6 +64,38 @@ class TestRunmdConfig(unittest.TestCase):
         mock_copy.assert_not_called()
         mock_print.assert_called_once_with("Error locating the config file: File not found")
 
+    # --------------------------------------------------
+    # >> LOAD_CONFIG
+    # --------------------------------------------------
+
+    @patch("builtins.open", new_callable=mock_open, read_data='{"key": "value"}')
+    @patch("os.path.exists", return_value=True)
+    def test_load_config_success(self, mock_exists, mock_open):
+        """Test successful loading of a valid config file."""
+        config_path = "mock_config_path/config.json"
+        expected_config = {"key": "value"}
+        
+        config = load_config(config_path)
+        
+        # Verify the correct file path was used
+        mock_open.assert_called_once_with(config_path, "r")
+        # Verify that the configuration dictionary is as expected
+        self.assertEqual(config, expected_config)
+
+    @patch("os.path.exists", return_value=False)
+    def test_load_config_file_not_found(self, mock_exists):
+        """Test behavior when the configuration file does not exist."""
+        config_path = "mock_config_path/config.json"
+        
+        with self.assertRaises(FileNotFoundError) as context:
+            load_config(config_path)
+        
+        # Verify the error message
+        self.assertEqual(str(context.exception), f"Configuration file not found at {config_path}")
+   
+    # --------------------------------------------------
+    # >> VALIDATE_CONFIG
+    # --------------------------------------------------
 
     def test_validate_config_valid(self):
         config = {
