@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### [unreleased] - YYYY-MM-DD
 
 ### Changed
-* move valid_config from load_config to cli.py
+* move call to valid_config() from load_config() to cli.py
 
 ## [0.4.0] - 2024-08-13
 
