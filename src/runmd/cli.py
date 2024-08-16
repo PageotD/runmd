@@ -25,17 +25,17 @@ def main(command_line=None) -> None:
     run_parser = subparsers.add_parser('run', help='Run code blocks in the source file')
     run_parser.add_argument('blockname', nargs='?', default=None, help='Name of the code block to run or "all" to run all blocks')
     run_parser.add_argument('--env', nargs='*', default=[], help='Environment variables to set during execution')
-    run_parser.add_argument('--file', nargs=1, default=None, help='Path to the markdown file to process')
+    run_parser.add_argument('--file', nargs='?', default=None, help='Path to the markdown file to process')
 
     # Subparser for the 'show' command
     show_parser = subparsers.add_parser('show', help='Show code blocks from the source file')
     show_parser.add_argument('blockname', nargs='?', help='Name of the code block to show')
-    show_parser.add_argument('--file', nargs=1, default=None, help='Path to the markdown file to process')
+    show_parser.add_argument('--file', nargs='?', default=None, help='Path to the markdown file to process')
 
     # Subparser for the 'list' command
     list_parser = subparsers.add_parser('list', help='List code blocks in the source file')
     list_parser.add_argument('tag', nargs='?', help='Optional tag to filter the list of code blocks')
-    list_parser.add_argument('--file', nargs=1, default=None, help='Path to the markdown file to process')
+    list_parser.add_argument('--file', nargs='?', default=None, help='Path to the markdown file to process')
 
     # Parse the command-line arguments
     args = parser.parse_args(command_line)
@@ -51,6 +51,7 @@ def main(command_line=None) -> None:
 
     # Get code block list
     if args.command in ['run', 'show', 'list']:
+        print(args.file)
         blocklist = process_markdown_files(args.file, config)
 
     # Handle run command

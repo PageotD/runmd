@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 * move call to valid_config() from load_config() to cli.py
 
+### Fixed 
+* fix error related to the --file option
+
 ## [0.4.0] - 2024-08-13
 
 ### Added 

@@ -10,7 +10,7 @@ def process_markdown_files(inputfilepath: str, config: str=None) -> list:
     Process all Markdown files in the given directory.
 
     Args:
-        directory (str): Directory to scan for Markdown files.
+        inputfilepath (str): filepath to the markwon file to process
         config (dict): Configuration dictionary containing commands and options.
 
     Returns:
