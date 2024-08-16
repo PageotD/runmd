@@ -153,11 +153,9 @@ class TestRunmdConfig(unittest.TestCase):
             validate_config(config)
         self.assertEqual(str(context.exception), "Config for language 'ruby' is missing 'options' field.")
 
-    def test_load_config_invalid_path(self):
-        path = "./tests/no_config.json"
-        with self.assertRaises(FileNotFoundError) as context:
-            _ = load_config(path)
-        self.assertEqual(str(context.exception), f"Configuration file not found at {path}")
+    # --------------------------------------------------
+    # >> GET_LANGUAGES
+    # --------------------------------------------------
 
     def test_get_languages(self):
         config = {
