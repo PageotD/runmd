@@ -51,7 +51,6 @@ def main(command_line=None) -> None:
 
     # Get code block list
     if args.command in ['run', 'show', 'list']:
-        print(args.file)
         blocklist = process_markdown_files(args.file, config)
 
     # Handle run command

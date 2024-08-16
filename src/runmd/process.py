@@ -123,4 +123,4 @@ def run_command(blocklist: list, block_name: str, config: dict, env_vars: dict) 
                 block_count +=1
     
     if block_name != "all" and block_count == 0:
-        print(f"Error: Code block with name '{block['name']}' not found.")
+        print(f"Error: Code block with name '{block_name}' not found.")

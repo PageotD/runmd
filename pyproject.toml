@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "runmd"
-version = "0.4.1"
+version = "0.4.2"
 requires-python = ">=3.6"
 authors = [{ name = "Damien Pageot", email = "damien.pageot+runmd@gmail.com" }]
 description = "A CLI tool to run or list code blocks from Markdown files."

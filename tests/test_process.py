@@ -5,6 +5,10 @@ from runmd.process import process_markdown_files, list_command, show_code_block,
 
 class TestMarkdownProcessing(unittest.TestCase):
 
+    # --------------------------------------------------
+    # >> PROCESS_MARKDOWN_FILE
+    # --------------------------------------------------
+
     @patch('runmd.parser.parse_markdown')
     @patch('runmd.config.get_languages')
     def test_process_markdown_files(self, mock_get_languages, mock_parse_markdown):
@@ -21,6 +25,9 @@ class TestMarkdownProcessing(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0]['name'], 'hello-python')
 
+    # --------------------------------------------------
+    # >> LIST_COMMAND
+    # --------------------------------------------------
 
     @patch('builtins.print')
     def test_list_command(self, mock_print):
@@ -39,6 +46,10 @@ class TestMarkdownProcessing(unittest.TestCase):
         for substring in expected_substrings:
             self.assertTrue(any(substring in output for output in print_calls), f"Expected '{substring}' in the output but it was not found.")
 
+    # --------------------------------------------------
+    # >> SHOW_COMMAND
+    # --------------------------------------------------
+
     @patch('runmd.process.show_code_block')
     @patch('builtins.print')
     def test_show_command(self, mock_print, mock_show_code_block):
@@ -48,6 +59,19 @@ class TestMarkdownProcessing(unittest.TestCase):
         
         mock_show_code_block.assert_called_once_with('test_block', 'python', 'print("Hello World")', 'sometag')
         mock_print.assert_not_called()
+
+    @patch('runmd.process.show_code_block')
+    @patch('builtins.print')
+    def test_show_command_invalid_block_name(self, mock_print, mock_show_code_block):
+        blocklist = [{'name': 'test_block', 'tag': 'sometag', 'lang': 'python', 'code': 'print("Hello World")'}]
+
+        show_command(blocklist, 'fake_block')
+        
+        mock_print.assert_any_call("Error: Code block with name 'fake_block' not found.")
+
+    # --------------------------------------------------
+    # >> RUN_COMMAND
+    # --------------------------------------------------
 
     @patch('runmd.process.run_code_block')
     @patch('builtins.print')
@@ -60,6 +84,20 @@ class TestMarkdownProcessing(unittest.TestCase):
         
         mock_run_code_block.assert_called_once_with('test_block', 'python', 'print("Hello World")', 'sometag', config, env_vars)
         mock_print.assert_not_called()
+
+    @patch('builtins.print')
+    def test_run_command_invalid_block_name(self, mock_print):
+        blocklist = [{'name': 'test_block',  'tag': 'sometag', 'lang': 'python', 'code': 'print("Hello World")', 'exec': True}]
+        config = {'python': 'python3'}
+        env_vars = {'MY_ENV': 'value'}
+        
+        run_command(blocklist, 'fake_block', config, env_vars)
+        
+        mock_print.assert_any_call("Error: Code block with name 'fake_block' not found.")
+
+    # --------------------------------------------------
+    # >> SHOW_CODE_BLOCK
+    # --------------------------------------------------
 
     @patch('builtins.print')
     def test_show_code_block(self, mock_print):
