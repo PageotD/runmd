@@ -37,39 +37,25 @@ def run_code_block(name: str, lang: str, code: str, tag: str, config: dict, env_
     try:
         # Prepare command and arguments based on platform
         if sys.platform == "win32":
-            # Windows-specific handling
-            process = subprocess.Popen(
-                [command] + options + [code],
-                env=env,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                shell=True,  # Windows requires shell=True to run commands
-            )
-
-            while True:
-                output = process.stdout.readline().rstrip().decode('utf-8')
-                if output == '' and process.poll() is not None:
-                    break
-                if output:
-                    print(output.strip())
-
+            active_shell = True
         else:
-            # Unix-like systems handling
-            process = subprocess.Popen(
-                [command] + options + [code],
-                env=env,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-            )
-           
-            while True:
-                output = process.stdout.readline().rstrip().decode('utf-8')
-                if output == '' and process.poll() is not None:
-                    break
-                if output:
-                    print(output.strip())
+            active_shell = False
+
+        process = subprocess.Popen(
+            [command] + options + [code],
+            env=env,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=active_shell
+        )
+        
+        while True:
+            output = process.stdout.readline().rstrip().decode('utf-8')
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                print(output.strip())
 
     except Exception as e:
         print(f"Error: Code block '{name}' failed with exception: {e}")
