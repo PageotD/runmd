@@ -1,8 +1,5 @@
 import argparse
 import os
-import json
-import subprocess
-import re
 
 from .config import load_config, validate_config, get_default_config_path, copy_config
 from .process import process_markdown_files, list_command, show_command, run_command
@@ -41,10 +38,9 @@ def main(command_line=None) -> None:
     args = parser.parse_args(command_line)
 
     # Load configuration file
-    config_path = get_default_config_path()
-    if not os.path.exists(config_path):
+    if not os.path.exists(get_default_config_path()):
         copy_config()
-    config = load_config(config_path)
+    config = load_config()
 
     # Validate configuration
     validate_config(config)

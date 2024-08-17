@@ -1,8 +1,9 @@
 import subprocess
 import sys
 import os
+import configparser
 
-def run_code_block(name: str, lang: str, code: str, tag: str, config: dict, env_vars: dict):
+def run_code_block(name: str, lang: str, code: str, tag: str, config: configparser.ConfigParser, env_vars: dict):
     """
     Execute the specified code block using configuration.
 
@@ -17,13 +18,16 @@ def run_code_block(name: str, lang: str, code: str, tag: str, config: dict, env_
     """
     print(f"\n\033[1;33m> Running: {name} ({lang}) {tag}\033[0;0m")
 
-    if lang not in config:
-        print(f"Error: Unsupported language '{lang}' for code block '{name}'")
-        return
+    #if lang not in config:
+    #    print(f"Error: Unsupported language '{lang}' for code block '{name}'")
+    #    return
 
-    settings = config[lang]
-    command = settings.get("command")
-    options = settings.get("options", [])
+    for section in config.sections():
+        if section.startswith('lang.'):
+            section_aliases = config[section].get('aliases', '')
+            if lang in section_aliases:
+                command = config[section].get('command', '').split()
+                options = config[section].get('options', '').split()
 
     # Merge the provided environment variables with the current environment
     env = os.environ.copy()
@@ -42,14 +46,14 @@ def run_code_block(name: str, lang: str, code: str, tag: str, config: dict, env_
             active_shell = False
 
         process = subprocess.Popen(
-            [command] + options + [code],
+            command + options + [code],
             env=env,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             shell=active_shell
         )
-        
+
         while True:
             output = process.stdout.readline().rstrip().decode('utf-8')
             if output == '' and process.poll() is not None:

@@ -6,10 +6,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [0.5.0] - 2024-08-17
+
+### Added
+* add function dedicated to language settings validation
 
 ### Changed
 * remove duplicated code in runner.py
+* drop config.json for config.ini
 
 ## [0.4.2] - 2024-08-16
 

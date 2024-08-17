@@ -4,7 +4,7 @@ This Markdown file contains examples of executable code blocks for various scrip
 
 ### Bash
 
-```sh {name=hello-bash, tag=script}
+```bash {name=hello-bash, tag=script}
 # run with runmd run hello-bash
 echo "Hello from bash!"
 ```

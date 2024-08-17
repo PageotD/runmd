@@ -2,24 +2,31 @@ import unittest
 from unittest.mock import patch, MagicMock
 from pathlib import Path
 from runmd.process import process_markdown_files, list_command, show_code_block, show_command, run_command
+import configparser
 
 class TestMarkdownProcessing(unittest.TestCase):
+
+    def setUp(self):
+        self.config = configparser.ConfigParser()
 
     # --------------------------------------------------
     # >> PROCESS_MARKDOWN_FILE
     # --------------------------------------------------
 
     @patch('runmd.parser.parse_markdown')
-    @patch('runmd.config.get_languages')
+    @patch('runmd.config.get_all_aliases')
     def test_process_markdown_files(self, mock_get_languages, mock_parse_markdown):
         # Setup mock
         mock_get_languages.return_value = ["python"]
         mock_parse_markdown.return_value = [{'name': 'hello-python', 'tag': 'sometag','lang': 'python', 'file': Path('tests/test_markdown.md'), 'code': 'print("Hello World")', 'exec': True}]
         
-        config = {"python": {"command": "python3", "options": ["-c"]}}
+        self.config.add_section('lang.python')
+        self.config.set('lang.python', 'aliases', 'py, python')
+        self.config.set('lang.python', 'command', 'python3')
+        self.config.set('lang.python', 'options', '-c')
 
         # Test function
-        result = process_markdown_files('tests/test_markdown.md', config)
+        result = process_markdown_files('tests/test_markdown.md', self.config)
         
         # Assertions
         self.assertEqual(len(result), 1)
@@ -77,21 +84,29 @@ class TestMarkdownProcessing(unittest.TestCase):
     @patch('builtins.print')
     def test_run_command(self, mock_print, mock_run_code_block):
         blocklist = [{'name': 'test_block',  'tag': 'sometag', 'lang': 'python', 'code': 'print("Hello World")', 'exec': True}]
-        config = {'python': 'python3'}
         env_vars = {'MY_ENV': 'value'}
         
-        run_command(blocklist, 'test_block', config, env_vars)
+        self.config.add_section('lang.python')
+        self.config.set('lang.python', 'aliases', 'py, python')
+        self.config.set('lang.python', 'command', 'python3')
+        self.config.set('lang.python', 'options', '-c')
+
+        run_command(blocklist, 'test_block', self.config, env_vars)
         
-        mock_run_code_block.assert_called_once_with('test_block', 'python', 'print("Hello World")', 'sometag', config, env_vars)
+        mock_run_code_block.assert_called_once_with('test_block', 'python', 'print("Hello World")', 'sometag', self.config, env_vars)
         mock_print.assert_not_called()
 
     @patch('builtins.print')
     def test_run_command_invalid_block_name(self, mock_print):
         blocklist = [{'name': 'test_block',  'tag': 'sometag', 'lang': 'python', 'code': 'print("Hello World")', 'exec': True}]
-        config = {'python': 'python3'}
         env_vars = {'MY_ENV': 'value'}
-        
-        run_command(blocklist, 'fake_block', config, env_vars)
+
+        self.config.add_section('lang.python')
+        self.config.set('lang.python', 'aliases', 'py, python')
+        self.config.set('lang.python', 'command', 'python3')
+        self.config.set('lang.python', 'options', '-c')
+
+        run_command(blocklist, 'fake_block', self.config, env_vars)
         
         mock_print.assert_any_call("Error: Code block with name 'fake_block' not found.")
 

@@ -1,11 +1,12 @@
 import os
-from .config import get_languages
+from .config import get_all_aliases
 from .parser import parse_markdown
 from .runner import run_code_block
+import configparser
 
 from pathlib import Path
 
-def process_markdown_files(inputfilepath: str, config: str=None) -> list:
+def process_markdown_files(inputfilepath: str, config: configparser.ConfigParser) -> list:
     """
     Process all Markdown files in the given directory.
 
@@ -18,7 +19,7 @@ def process_markdown_files(inputfilepath: str, config: str=None) -> list:
     """
 
     # Extract configured languages
-    languages = get_languages(config) if config else []
+    languages = get_all_aliases(config)
 
     # Initialize blocklist
     blocklist = []
