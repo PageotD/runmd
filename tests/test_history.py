@@ -6,7 +6,7 @@ import datetime
 import tempfile
 
 # Import the functions to test
-from runmd.history import get_history_path, read_history, write_history, update_history, print_history
+from runmd.history import get_history_path, read_history, write_history, update_history, print_history, clean_command
 
 class TestHistoryFunctions(unittest.TestCase):
 
@@ -29,5 +29,12 @@ class TestHistoryFunctions(unittest.TestCase):
         mock_print.assert_any_call("1 2024-01-01T12:00:00 run example.md")
         mock_print.assert_any_call("2 2024-01-01T12:05:00 run another.md")
 
+    def test_clean_command(self):
+        command = "some/path/to/runmd/executable/runmd run someblock --file somefile"
+        expected = "runmd run someblock --file somefile"
+
+        result = clean_command(command)
+        self.assertEqual(result, expected)
+        
 if __name__ == '__main__':
     unittest.main()
