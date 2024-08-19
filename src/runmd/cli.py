@@ -1,11 +1,13 @@
 import argparse
 import os
+import sys
 from pathlib import Path
 from typing import Optional
 import configparser
 
 from .config import load_config, validate_config, get_default_config_path, copy_config
 from .process import process_markdown_files, list_command, show_command, run_command
+from .history import read_history, write_history, update_history, print_history
 
 RUNCMD = 'run'
 SHOWCMD = 'show'
@@ -54,7 +56,7 @@ def cliargs() -> argparse.ArgumentParser:
 
     # Subparser for the 'hist' command
     hist_parser = subparsers.add_parser(HISTCMD, help='Display the runmd command history')
-    hist_parser.add_argument('--clear', help='Clear the history list')
+    hist_parser.add_argument('--clear', action="store_true", help='Clear the history list')
 
     return parser
 
@@ -69,6 +71,11 @@ def execute_command(args: argparse.Namespace, config: configparser.ConfigParser)
         args (argparse.Namespace): The parsed command-line arguments.
         config (dict): The configuration object loaded from the config file.
     """
+    # Read history
+    histsize = config['DEFAULT'].getint('histsize', 100)
+    history = read_history()
+    usercmd = ' '.join(sys.argv)
+
     # Get code block list if the command is one of the recognized commands
     if args.command in [RUNCMD, SHOWCMD, LISTCMD]:
         blocklist = process_markdown_files(args.file, config)
@@ -78,19 +85,32 @@ def execute_command(args: argparse.Namespace, config: configparser.ConfigParser)
         # Convert list of 'KEY=value' strings to a dictionary of environment variables
         env_vars = {key: value for env in args.env for key, value in [env.split('=', 1)]}
         run_command(blocklist, args.blockname, config, env_vars)
+        history = update_history(history, histsize, usercmd)
 
     # Handle the 'list' command
     elif args.command == LISTCMD:
         list_command(blocklist, args.tag)
+        history = update_history(history, histsize, usercmd)
 
     # Handle the 'show' command
     elif args.command == SHOWCMD and args.blockname:
         show_command(blocklist, args.blockname)
+        history = update_history(history, histsize, usercmd)
+
+    # Handle the 'hist' command
+    elif args.command == HISTCMD:
+        if args.clear:
+            history = []
+        else:
+            print_history(history)
 
     # If no blockname is provided for 'run' or 'show', raise an error
     if args.command in [RUNCMD, SHOWCMD] and not args.blockname:
         print("Error: You must provide a code block name or 'all' to run/show.")
 
+    # Write history
+    write_history(history)
+    
 def main(command_line: Optional[list[str]] = None) -> None:
     """
     Main entry point for the runmd CLI tool.

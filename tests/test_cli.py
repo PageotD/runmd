@@ -48,5 +48,28 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(args.tag, '@tag')
         self.assertEqual(args.file, 'test.md')
 
+    def test_cliargs_hist_command(self):
+        """
+        Test that the CLI arguments for the 'hist' command are parsed correctly.
+        """
+        parser = cliargs()
+        args = parser.parse_args(['hist'])
+        
+        # Check parsed arguments
+        self.assertEqual(args.command, 'hist')
+        self.assertFalse(args.clear)
+
+    def test_cliargs_hist_command_clear(self):
+        """
+        Test that the CLI arguments for the 'hist' command are parsed correctly.
+        """
+        parser = cliargs()
+        args = parser.parse_args(['hist', '--clear'])
+        
+        # Check parsed arguments
+        self.assertEqual(args.command, 'hist')
+        self.assertTrue(args.clear)
+
+
 if __name__ == '__main__':
     unittest.main()
