@@ -56,6 +56,7 @@ def cliargs() -> argparse.ArgumentParser:
 
     # Subparser for the 'hist' command
     hist_parser = subparsers.add_parser(HISTCMD, help='Display the runmd command history')
+    hist_parser.add_argument('id', nargs='?', default=None, help='ID of the command to run from history')
     hist_parser.add_argument('--clear', action="store_true", help='Clear the history list')
 
     return parser
@@ -75,6 +76,12 @@ def execute_command(args: argparse.Namespace, config: configparser.ConfigParser)
     histsize = config['DEFAULT'].getint('histsize', 100)
     history = read_history()
     usercmd = ' '.join(sys.argv)
+
+    if args.command == HISTCMD and args.id:
+        oldcmd = history[int(args.id)]['command'].split(' ')
+        # Reparse
+        parser = cliargs()
+        args = parser.parse_args(oldcmd[1:])
 
     # Get code block list if the command is one of the recognized commands
     if args.command in [RUNCMD, SHOWCMD, LISTCMD]:
@@ -110,7 +117,7 @@ def execute_command(args: argparse.Namespace, config: configparser.ConfigParser)
 
     # Write history
     write_history(history)
-    
+
 def main(command_line: Optional[list[str]] = None) -> None:
     """
     Main entry point for the runmd CLI tool.
