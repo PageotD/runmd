@@ -10,6 +10,7 @@ from .process import process_markdown_files, list_command, show_command, run_com
 RUNCMD = 'run'
 SHOWCMD = 'show'
 LISTCMD = 'list'
+HISTCMD = 'hist'
 
 def cliargs() -> argparse.ArgumentParser:
     """
@@ -48,8 +49,12 @@ def cliargs() -> argparse.ArgumentParser:
 
     # Subparser for the 'list' command
     list_parser = subparsers.add_parser(LISTCMD, help='List code blocks in the source file')
-    list_parser.add_argument('tag', nargs='?', help='Optional tag to filter the list of code blocks')
+    list_parser.add_argument('tag', nargs='?', default=None, help='Optional tag to filter the list of code blocks')
     list_parser.add_argument('--file', nargs='?', default=None, help='Path to the markdown file to process')
+
+    # Subparser for the 'hist' command
+    hist_parser = subparsers.add_parser(HISTCMD, help='Display the runmd command history')
+    hist_parser.add_argument('--clear', help='Clear the history list')
 
     return parser
 
@@ -76,7 +81,7 @@ def execute_command(args: argparse.Namespace, config: configparser.ConfigParser)
 
     # Handle the 'list' command
     elif args.command == LISTCMD:
-        list_command(blocklist)
+        list_command(blocklist, args.tag)
 
     # Handle the 'show' command
     elif args.command == SHOWCMD and args.blockname:

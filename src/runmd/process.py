@@ -39,7 +39,7 @@ def process_markdown_files(inputfilepath: str, config: configparser.ConfigParser
     
     return blocklist
 
-def list_command(blocklist: list) -> None:
+def list_command(blocklist: list, tag: str) -> None:
     """
     List all code block names along with their language.
 
@@ -59,11 +59,16 @@ def list_command(blocklist: list) -> None:
     # Print separator
     print("-" * (name_width + lang_width + file_width + tag_width))
 
+    tagsearch = None
+    if tag is not None and tag.startswith('@'):
+        tagsearch = tag.replace('@', '')
+
     # Print each block
     for block in blocklist:
-        # Convert PosixPath to string for formatting
-        file_str = str(block['file'])
-        print(f"{block['name'].ljust(name_width)} {block['lang'].ljust(lang_width)} {file_str.ljust(file_width)} {block['tag'].ljust(name_width)}")
+        if tagsearch is None or block['tag'] == tagsearch:
+            # Convert PosixPath to string for formatting
+            file_str = str(block['file'])
+            print(f"{block['name'].ljust(name_width)} {block['lang'].ljust(lang_width)} {file_str.ljust(file_width)} {block['tag'].ljust(name_width)}")
 
 
 def show_command(blocklist: list, block_name: str) -> None:

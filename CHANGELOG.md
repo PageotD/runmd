@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 * huge refactoring of cli.py
 
+### Fixed
+* tag option is now working with list command
+
 ## [0.5.0] - 2024-08-17
 
 ### Added

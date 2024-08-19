@@ -36,5 +36,17 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(args.blockname, 'my_block')
         self.assertEqual(args.file, 'test.md')
 
+    def test_cliargs_list_command(self):
+        """
+        Test that the CLI arguments for the 'list' command are parsed correctly.
+        """
+        parser = cliargs()
+        args = parser.parse_args(['list', '@tag', '--file', 'test.md'])
+        
+        # Check parsed arguments
+        self.assertEqual(args.command, 'list')
+        self.assertEqual(args.tag, '@tag')
+        self.assertEqual(args.file, 'test.md')
+
 if __name__ == '__main__':
     unittest.main()
