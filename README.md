@@ -38,10 +38,23 @@ pip install dist/runmd-<version>-py3-none-any.whl
 runmd init
 ```
 
-
 ## Usage
 
 Once installed, you can use the runmd command to interact with your Markdown files.
+
+| Command | Description |
+|------|------|
+| run | Run a selected code block |
+| show | Print the content of the selected code block |
+| list | List available code blocks |
+
+| Flag | Description |
+|------|------|
+| --file | Name of the markdown file to work with |
+| --env | Pass environment variables |
+
+
+
 
 ### Add executable code block
 
