@@ -53,8 +53,61 @@ Once installed, you can use the runmd command to interact with your Markdown fil
 | --file | Name of the markdown file to work with |
 | --env | Pass environment variables |
 
+### Synopsis
 
+```bash
+runmd [COMMAND] [OPTIONS]
+```
 
+### Commands
+
+**`RUN`**
+
+Executes specified code blocks in a Markdown file.
+```bash
+runmd run [blockname] [--file FILE] [--env VAR=value ...]
+```
+* `blockname`: The name of the code block to run, or "all" to run all blocks.
+* `--file FILE`: Specify the path to the Markdown file containing the code blocks.
+* `--env VAR=value ...`: Optional environment variables to set during the execution.
+
+</br>
+
+**`SHOW`**
+
+Displays the content of a specified code block.
+
+```bash
+runmd show [blockname] [--file FILE]
+```
+
+* `blockname`: The name of the code block to display.
+* `--file FILE`: Specify the path to the Markdown file.
+
+</br>
+
+**`LIST`**
+
+Lists all the code blocks in a Markdown file.
+
+```bash
+runmd list [tag] [--file FILE]
+```
+
+* `tag`: Optional tag to filter the list of code blocks.
+* `--file FILE`: Specify the path to the Markdown file.
+
+</br>
+
+**`HIST`**
+
+Displays or clears the history of runmd commands.
+
+```bash
+runmd hist [--clear]
+```
+
+* `--clear`: Clears the stored command history.
 
 ### Add executable code block
 
