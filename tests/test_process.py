@@ -91,7 +91,7 @@ class TestMarkdownProcessing(unittest.TestCase):
         self.config.set('lang.python', 'command', 'python3')
         self.config.set('lang.python', 'options', '-c')
 
-        run_command(blocklist, 'test_block', self.config, env_vars)
+        run_command(blocklist, 'test_block', None, self.config, env_vars)
         
         mock_run_code_block.assert_called_once_with('test_block', 'python', 'print("Hello World")', 'sometag', self.config, env_vars)
         mock_print.assert_not_called()
@@ -106,9 +106,42 @@ class TestMarkdownProcessing(unittest.TestCase):
         self.config.set('lang.python', 'command', 'python3')
         self.config.set('lang.python', 'options', '-c')
 
-        run_command(blocklist, 'fake_block', self.config, env_vars)
+        run_command(blocklist, 'fake_block', None, self.config, env_vars)
         
         mock_print.assert_any_call("Error: Code block with name 'fake_block' not found.")
+
+    @patch('runmd.process.run_code_block')
+    @patch('builtins.print')
+    def test_run_command_with_tag(self, mock_print, mock_run_code_block):
+        blocklist = [{'name': 'test_block1',  'tag': 'sometag1', 'lang': 'python', 'code': 'print("Hello World")', 'exec': True}, 
+                     {'name': 'test_block2',  'tag': 'sometag2', 'lang': 'python', 'code': 'print("Hello World")', 'exec': True}]
+        env_vars = {'MY_ENV': 'value'}
+        
+        self.config.add_section('lang.python')
+        self.config.set('lang.python', 'aliases', 'py, python')
+        self.config.set('lang.python', 'command', 'python3')
+        self.config.set('lang.python', 'options', '-c')
+
+        run_command(blocklist, None, 'sometag1', self.config, env_vars)
+        
+        mock_run_code_block.assert_called_once_with('test_block1', 'python', 'print("Hello World")', 'sometag1', self.config, env_vars)
+        mock_print.assert_not_called()
+
+    @patch('runmd.process.run_code_block')
+    @patch('builtins.print')
+    def test_run_command_invalid_tag(self, mock_print, mock_run_code_block):
+        blocklist = [{'name': 'test_block1',  'tag': 'sometag1', 'lang': 'python', 'code': 'print("Hello World")', 'exec': True}, 
+                     {'name': 'test_block2',  'tag': 'sometag2', 'lang': 'python', 'code': 'print("Hello World")', 'exec': True}]
+        env_vars = {'MY_ENV': 'value'}
+        
+        self.config.add_section('lang.python')
+        self.config.set('lang.python', 'aliases', 'py, python')
+        self.config.set('lang.python', 'command', 'python3')
+        self.config.set('lang.python', 'options', '-c')
+
+        run_command(blocklist, None, 'sometag3', self.config, env_vars)
+        
+        mock_print.assert_any_call("Error: Code block with tag 'sometag3' not found.")
 
     # --------------------------------------------------
     # >> SHOW_CODE_BLOCK

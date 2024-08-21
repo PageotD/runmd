@@ -39,6 +39,7 @@ def cliargs() -> argparse.ArgumentParser:
         'blockname', nargs='?', default=None,
         help='Name of the code block to run or "all" to run all blocks'
     )
+    run_parser.add_argument('--tag', nargs='?', default=None, help='Execute all code blocks with this tag')
     run_parser.add_argument(
         '--env', nargs='*', default=[], help='Environment variables to set during execution (e.g., VAR=value)'
     )
@@ -91,7 +92,7 @@ def execute_command(args: argparse.Namespace, config: configparser.ConfigParser)
     if args.command == RUNCMD and args.blockname:
         # Convert list of 'KEY=value' strings to a dictionary of environment variables
         env_vars = {key: value for env in args.env for key, value in [env.split('=', 1)]}
-        run_command(blocklist, args.blockname, config, env_vars)
+        run_command(blocklist, args.blockname, args.tag, config, env_vars)
         history = update_history(history, histsize, usercmd)
 
     # Handle the 'list' command
