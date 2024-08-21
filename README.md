@@ -65,9 +65,10 @@ runmd [COMMAND] [OPTIONS]
 
 Executes specified code blocks in a Markdown file.
 ```bash
-runmd run [blockname] [--file FILE] [--env VAR=value ...]
+runmd run [blockname] [--tag TAG] [--file FILE] [--env VAR=value ...]
 ```
 * `blockname`: The name of the code block to run, or "all" to run all blocks.
+* `--tag TAG`: Specify the tag of the code blocks to run.
 * `--file FILE`: Specify the path to the Markdown file containing the code blocks.
 * `--env VAR=value ...`: Optional environment variables to set during the execution.
 
@@ -94,7 +95,7 @@ Lists all the code blocks in a Markdown file.
 runmd list [tag] [--file FILE]
 ```
 
-* `tag`: Optional tag to filter the list of code blocks.
+* `--tag`: Optional tag to filter the list of code blocks.
 * `--file FILE`: Specify the path to the Markdown file.
 
 </br>
@@ -104,10 +105,11 @@ runmd list [tag] [--file FILE]
 Displays or clears the history of runmd commands.
 
 ```bash
-runmd hist [--clear]
+runmd hist [id] [--clear]
 ```
 
-* `--clear`: Clears the stored command history.
+* `id`: command line entry in history to execute.
+* `--clear`: Clears definitely all the command line entries in history.
 
 ### Add executable code block
 
