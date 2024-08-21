@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 
 ## Changed
-* add tag flag for the run command instead of @+tagname
+* add tag flag for the run command instead of @+tagname argument
+* add tag flag for the list command instead of @+tagname argument
 
 ## [0.6.0] - 2024-08-19
 

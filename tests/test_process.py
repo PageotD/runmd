@@ -41,7 +41,7 @@ class TestMarkdownProcessing(unittest.TestCase):
         blocklist = [{'name': 'test_block',  'tag': 'sometag','lang': 'python', 'file': Path('test.md')}]
         
         # Call the function to be tested
-        list_command(blocklist, '@sometag')
+        list_command(blocklist, 'sometag')
         
         # Get all print calls
         print_calls = [call[0][0] for call in mock_print.call_args_list]

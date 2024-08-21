@@ -59,13 +59,9 @@ def list_command(blocklist: list, tag: str) -> None:
     # Print separator
     print("-" * (name_width + lang_width + file_width + tag_width))
 
-    tagsearch = None
-    if tag is not None and tag.startswith('@'):
-        tagsearch = tag.replace('@', '')
-
     # Print each block
     for block in blocklist:
-        if tagsearch is None or block['tag'] == tagsearch:
+        if tag is None or block['tag'] == tag:
             # Convert PosixPath to string for formatting
             file_str = str(block['file'])
             print(f"{block['name'].ljust(name_width)} {block['lang'].ljust(lang_width)} {file_str.ljust(file_width)} {block['tag'].ljust(name_width)}")

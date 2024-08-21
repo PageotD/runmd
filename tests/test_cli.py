@@ -41,11 +41,11 @@ class TestCLI(unittest.TestCase):
         Test that the CLI arguments for the 'list' command are parsed correctly.
         """
         parser = cliargs()
-        args = parser.parse_args(['list', '@tag', '--file', 'test.md'])
+        args = parser.parse_args(['list', '--tag', 'sometag', '--file', 'test.md'])
         
         # Check parsed arguments
         self.assertEqual(args.command, 'list')
-        self.assertEqual(args.tag, '@tag')
+        self.assertEqual(args.tag, 'sometag')
         self.assertEqual(args.file, 'test.md')
 
     def test_cliargs_hist_command(self):
