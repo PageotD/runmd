@@ -54,7 +54,7 @@ def write_history(history: list) -> None:
     except IOError as e:
         print(f"Error writing history file: {e}")
 
-def update_history(history: list, histsize: int, command: str) -> list:
+def update_history(history: list, histsize: int, command: str, success: bool) -> list:
     """
     Update the history list with a new command.
 
@@ -70,10 +70,16 @@ def update_history(history: list, histsize: int, command: str) -> list:
     next_id = history[-1]['id'] + 1 if history else 0
 
     # Append the new command to history
+    if success:
+        status = "SUCCESS"
+    else:
+        status = "FAIL"
+
     history.append({
         "id": next_id,
         "date": datetime.datetime.now().isoformat(),  # Store date as ISO formatted string
-        "command": clean_command(command)
+        "command": clean_command(command),
+        "status": status
     })
 
     # Limit the history size
@@ -87,7 +93,7 @@ def print_history(history: list) -> None:
         history(list[dict]): The command history to print.
     """
     for element in history:
-        print(f"{element['id']} {element['date']} {element['command']}")
+        print(f"{element['id']} {element['date']} {element['command']} {element['status']}")
 
 def clean_command(command: str) -> str:
     """

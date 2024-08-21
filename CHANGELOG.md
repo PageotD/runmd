@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Changed
 * add tag flag for the run command instead of @+tagname argument
 * add tag flag for the list command instead of @+tagname argument
-
+* add status for history (success/fail)
 ## [0.6.0] - 2024-08-19
 
 ### Added

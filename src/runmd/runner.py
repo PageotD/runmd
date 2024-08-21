@@ -61,5 +61,9 @@ def run_code_block(name: str, lang: str, code: str, tag: str, config: configpars
             if output:
                 print(output.strip())
 
+        return process.returncode == 0
+    
     except Exception as e:
+
         print(f"Error: Code block '{name}' failed with exception: {e}")
+        return False

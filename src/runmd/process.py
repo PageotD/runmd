@@ -116,10 +116,13 @@ def run_command(blocklist: list, block_name: str, tag: str, config: dict, env_va
     """
 
     block_count = 0
-    for block in blocklist:
+    success = True
+    #for block in blocklist:
+    while blocklist and success:
+        block = blocklist.pop(0)
         if block_name == "all" or block_name == block['name'] or tag == block['tag']:
             if block['exec']:
-                run_code_block(block['name'], block['lang'], block['code'], block['tag'],config, env_vars)
+                success = run_code_block(block['name'], block['lang'], block['code'], block['tag'],config, env_vars)
                 block_count +=1
             else:
                 print(f"Error: Language '{block['lang']}' is not configured. Skipping code block '{block['name']}'.")
@@ -130,3 +133,5 @@ def run_command(blocklist: list, block_name: str, tag: str, config: dict, env_va
             print(f"Error: Code block with tag '{tag}' not found.")
         else:
             print(f"Error: Code block with name '{block_name}' not found.")
+
+    return success

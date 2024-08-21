@@ -92,18 +92,18 @@ def execute_command(args: argparse.Namespace, config: configparser.ConfigParser)
     if args.command == RUNCMD and args.blockname:
         # Convert list of 'KEY=value' strings to a dictionary of environment variables
         env_vars = {key: value for env in args.env for key, value in [env.split('=', 1)]}
-        run_command(blocklist, args.blockname, args.tag, config, env_vars)
-        history = update_history(history, histsize, usercmd)
+        success = run_command(blocklist, args.blockname, args.tag, config, env_vars)
+        history = update_history(history, histsize, usercmd, success)
 
     # Handle the 'list' command
     elif args.command == LISTCMD:
         list_command(blocklist, args.tag)
-        history = update_history(history, histsize, usercmd)
+        #history = update_history(history, histsize, usercmd, True)
 
     # Handle the 'show' command
     elif args.command == SHOWCMD and args.blockname:
         show_command(blocklist, args.blockname)
-        history = update_history(history, histsize, usercmd)
+        #history = update_history(history, histsize, usercmd, True)
 
     # Handle the 'hist' command
     elif args.command == HISTCMD:
