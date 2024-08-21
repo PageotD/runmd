@@ -14,71 +14,96 @@ class TestRunmdConfig(unittest.TestCase):
     # >> COPY_CONFIG
     # --------------------------------------------------
 
-    @patch('pkg_resources.resource_filename')
+    @patch('importlib.resources.files')
+    @patch("runmd.config.get_default_config_path")
     @patch('shutil.copy')
     @patch('pathlib.Path.exists')
     @patch('pathlib.Path.mkdir')
-    @patch('builtins.print')
-    def test_copy_config_success(self, mock_print, mock_mkdir, mock_exists, mock_copy, mock_resource_filename):
+    def test_copy_config_success(self, mock_mkdir, mock_exists, mock_copy, mock_default_config_path, mock_files):
         # Setup mocks
-        mock_resource_filename.return_value = "/mock/source/config.ini"
-        mock_exists.side_effect = [False]  # Simulate the file does not exist
+        mock_exists.return_value = False
+        mock_files.return_value = Path('/mock/source/config.ini')
+        mock_default_config_path.return_value = Path('/mock/source/config.ini')
+
+        # Mock the path object directly
+        mock_source_path = Path('/mock/source') #/config.ini')
+        
+        # Ensure that mock_files returns this path
+        mock_files.return_value = mock_source_path
 
         # Call the function
         copy_config()
 
-        # Verify behavior
-        mock_resource_filename.assert_called_once_with("runmd", "config.ini")
+        # Assert mkdir was called to create directories
         mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
-        mock_copy.assert_called_once_with(Path("/mock/source/config.ini"), get_default_config_path())
-        mock_print.assert_called_once_with(f"Configuration file copied to {get_default_config_path()}.")
 
-    @patch('pkg_resources.resource_filename')
+        # Assert copy was called with the correct source and destination
+        expected_dest = Path('/mock/source/config.ini')
+        mock_copy.assert_called_once_with(Path(mock_source_path) /"config.ini", expected_dest)
+
+    @patch('importlib.resources.files')
+    @patch("runmd.config.get_default_config_path")
     @patch('shutil.copy')
     @patch('pathlib.Path.exists')
     @patch('pathlib.Path.mkdir')
     @patch('builtins.print')
-    def test_copy_config_file_not_exist(self, mock_print, mock_mkdir, mock_exists, mock_copy, mock_resource_filename):
+    def test_copy_config_file_not_exist(self, mock_print, mock_mkdir, mock_exists, mock_copy, mock_default_config_path, mock_files):
         # Setup mocks
-        mock_resource_filename.return_value = "/mock/source/config.ini"
+        mock_files.return_value = "/mock/source/config.ini"
         mock_exists.side_effect = [False]  # Destination file does not exist
+        mock_default_config_path.return_value = Path('/mock/source/config.ini')
+
+        # Mock the path object directly
+        mock_source_path = Path('/mock/source') #/config.ini')
+
+        # Ensure that mock_files returns this path
+        mock_files.return_value = mock_source_path
 
         # Call the function
         copy_config()
 
         # Verify behavior
-        mock_resource_filename.assert_called_once_with("runmd", "config.ini")
+        mock_files.assert_called_once_with("runmd")
         mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
-        mock_copy.assert_called_once_with(Path("/mock/source/config.ini"), get_default_config_path())
-        mock_print.assert_called_once_with(f"Configuration file copied to {get_default_config_path()}.")
+        expected_dest = Path('/mock/source/config.ini')
+        mock_copy.assert_called_once_with(Path(mock_source_path) /"config.ini", expected_dest)
+        mock_print.assert_called_once_with(f"Configuration file copied to /mock/source/config.ini.")
 
-    @patch('pkg_resources.resource_filename')
+    @patch('importlib.resources.files')
+    @patch("runmd.config.get_default_config_path")
     @patch('shutil.copy')
     @patch('pathlib.Path.exists')
     @patch('pathlib.Path.mkdir')
     @patch('builtins.print')
-    def test_copy_config_file_exists(self, mock_print, mock_mkdir, mock_exists, mock_copy, mock_resource_filename):
+    def test_copy_config_file_exists(self, mock_print, mock_mkdir, mock_exists, mock_copy, mock_default_config_path, mock_files):
         # Setup mocks
-        mock_resource_filename.return_value = "/mock/source/config.ini"
+        mock_files.return_value = "/mock/source/config.ini"
         mock_exists.side_effect = [True]  # Destination file already exists
+        mock_default_config_path.return_value = Path('/mock/source/config.ini')
+
+        # Mock the path object directly
+        mock_source_path = Path('/mock/source') #/config.ini')
+
+        # Ensure that mock_files returns this path
+        mock_files.return_value = mock_source_path
 
         # Call the function
         copy_config()
 
         # Verify behavior
-        mock_resource_filename.assert_called_once_with("runmd", "config.ini")
+        mock_files.assert_called_once_with("runmd")
         mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
         mock_copy.assert_not_called()  # Should not copy the file
-        mock_print.assert_called_once_with(f"Configuration file already exists at {get_default_config_path()}.")
+        mock_print.assert_called_once_with(f"Configuration file already exists at /mock/source/config.ini.")
 
-    @patch('pkg_resources.resource_filename', side_effect=Exception("Error locating the config file"))
+    @patch('importlib.resources.files', side_effect=Exception("Error locating the config file"))
     @patch('builtins.print')
     def test_copy_config_error_locating_file(self, mock_print, mock_resource_filename):
         # Call the function
         copy_config()
 
         # Verify behavior
-        mock_resource_filename.assert_called_once_with("runmd", "config.ini")
+        mock_resource_filename.assert_called_once_with("runmd")
         mock_print.assert_called_once_with("Error locating the config file: Error locating the config file")
 
     # --------------------------------------------------

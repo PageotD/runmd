@@ -16,7 +16,7 @@ Functions:
 """
 
 import shutil
-import pkg_resources
+import importlib.resources
 import configparser
 from pathlib import Path
 from typing import List
@@ -34,7 +34,7 @@ def copy_config() -> None:
     """Copy the default config to the user's configuration directory."""
     try:
         # Locate the source configuration file
-        config_source = pkg_resources.resource_filename("runmd", "config.ini")
+        config_source = importlib.resources.files("runmd") / "config.ini"
         config_source_path = Path(config_source)
     except Exception as e:
         print(f"Error locating the config file: {e}")
