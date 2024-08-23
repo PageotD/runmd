@@ -11,7 +11,7 @@ RunMD is a command-line tool designed to extract and execute code blocks from Ma
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
-- Python 3.6 or later
+- Python 3.9 or later
 - pip (Python package installer)
 - Git (for cloning the repository)
 
