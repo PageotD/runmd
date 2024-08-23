@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - 'main'  # Runs for every commit on any branch
-      - '.github/workflows'
     tags:
       - '*.*.*'  # Runs for tag pushes
     paths:
       - 'src/runmd/**'  # Only triggers when files under cmd/taskido/ are modified
       - 'tests/**'
+      - '.github/workflows/**'
   pull_request:
     branches:
       - 'main'
