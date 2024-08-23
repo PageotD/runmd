@@ -47,10 +47,18 @@ jobs:
 
   # Test package
   tests:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    #needs: build
+    #permissions:
+    #  contents: write
+    runs-on: ${{ matrix.os }}
     needs: build
     permissions:
       contents: write
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
     steps:
       - uses: actions/checkout@v4
 
