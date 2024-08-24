@@ -113,6 +113,13 @@ runmd hist [id] [--clear]
 * `id`: command line entry in history to execute.
 * `--clear`: Clears definitely all the command line entries in history.
 
+### Other options
+
+Other options are quite standard:
+* **`--help`**: to show the help message
+* **`--version`**: to get the installed version of runmd
+
+Display the version of 
 ### Add executable code block
 
 To add an executable code block to your Markdown file, use the following syntax:

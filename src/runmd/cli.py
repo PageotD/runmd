@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Optional
 import configparser
 
+from . import __version__
 from .config import load_config, validate_config, get_default_config_path, copy_config
 from .process import process_markdown_files, list_command, show_command, run_command
 from .history import read_history, write_history, update_history, print_history
@@ -29,6 +30,9 @@ def cliargs() -> argparse.ArgumentParser:
         prog='runmd',
         description='A tool to manage and process code blocks in Markdown files.'
     )
+
+    # Argument to show current version
+    parser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')
 
     # Create subparsers for different commands
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
