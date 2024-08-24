@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Added
 * add __version__ in __init__.py
 * add --version command
+* add compile_pattern function (refactoring parser module)
 
 ## Changed
 * add tag flag for the run command instead of @+tagname argument

@@ -1,8 +1,22 @@
 import unittest
-from runmd.parser import parse_markdown
+import re
+from runmd.parser import compile_pattern, parse_markdown
 
 class TestRunmdParser(unittest.TestCase):
 
+    # --------------------------------------------------
+    # >> COMPILE_PATTERN
+    # --------------------------------------------------
+
+    def test_compile_pattern(self):
+        languages = ["python", "ruby"]
+        result = compile_pattern(languages)
+        expected = re.compile('```(python|ruby) \\{name=(.*?)(?:,\\s*tag=(.*?))?\\}\\s*([\\s\\S]*?)\\s*```', re.DOTALL)
+        self.assertEqual(expected, result)
+
+    # --------------------------------------------------
+    # >> PARSE_MARKDOWN
+    # --------------------------------------------------
     def test_parse_markdown(self):
         file_path = "tests/test_markdown.md"
         languages = ["python", "ruby"]

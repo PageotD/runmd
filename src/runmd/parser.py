@@ -1,5 +1,19 @@
 import re
 
+def compile_pattern(languages: list) -> re.Pattern:
+    """
+    Compile the regular expression pattern for matching code blocks.
+
+    Args:
+        languages (List[str]): List of valid languages.
+
+    Returns:
+        re.Pattern: Compiled regex pattern for parsing code blocks.
+    """
+    return re.compile(
+        rf"```({('|').join(languages)}) \{{name=(.*?)(?:,\s*tag=(.*?))?\}}\s*([\s\S]*?)\s*```", re.DOTALL
+    )
+
 def parse_markdown(file_path: str, languages: list, blocklist: list) -> list:
     """
     Parse the Markdown file to extract code blocks with names.
@@ -11,10 +25,7 @@ def parse_markdown(file_path: str, languages: list, blocklist: list) -> list:
     Returns:
         list: List of tuples containing code block information.
     """
-    pattern = re.compile(
-        rf"```({('|').join(languages)}) \{{name=(.*?)(?:,\s*tag=(.*?))?\}}\s*([\s\S]*?)\s*```", re.DOTALL
-    )
-
+    pattern = compile_pattern(languages)
 
     try:
         with open(file_path, "r") as file:
@@ -31,8 +42,8 @@ def parse_markdown(file_path: str, languages: list, blocklist: list) -> list:
                 "code": code.strip(),
                 "exec": lang in languages
             })
-
+    
+        return blocklist
+    
     except Exception as e:
         print(f"Error reading file {file_path}: {e}")
-
-    return blocklist
