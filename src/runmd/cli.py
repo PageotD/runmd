@@ -161,12 +161,10 @@ def execute_command(
     # Handle the 'list' command
     elif args.command == LISTCMD:
         list_command(blocklist, args.tag)
-        # history = update_history(history, histsize, usercmd, True)
 
     # Handle the 'show' command
     elif args.command == SHOWCMD and args.blockname:
         show_command(blocklist, args.blockname)
-        # history = update_history(history, histsize, usercmd, True)
 
     # Handle the 'hist' command
     elif args.command == HISTCMD:
