@@ -18,16 +18,16 @@ This module integrates with the configuration and history modules to provide a c
 """
 
 import argparse
+import configparser
 import os
 import sys
 from pathlib import Path
 from typing import Optional
-import configparser
 
 from . import __version__
-from .config import load_config, validate_config, get_default_config_path, copy_config
-from .process import process_markdown_files, list_command, show_command, run_command
-from .history import read_history, write_history, update_history, print_history
+from .config import copy_config, get_default_config_path, load_config, validate_config
+from .history import print_history, read_history, update_history, write_history
+from .process import list_command, process_markdown_files, run_command, show_command
 
 RUNCMD = "run"
 SHOWCMD = "show"
@@ -62,7 +62,8 @@ def cliargs() -> argparse.ArgumentParser:
     # Common arguments for all subparsers
     common_parser = argparse.ArgumentParser(add_help=False)
     common_parser.add_argument(
-        "-f", "--file",
+        "-f",
+        "--file",
         nargs="?",
         default=None,
         help="Path to the markdown file to process. If not provided, uses the default file from config.",
@@ -81,7 +82,8 @@ def cliargs() -> argparse.ArgumentParser:
         help='Name of the code block to run or "all" to run all blocks',
     )
     run_parser.add_argument(
-        "-t", "--tag",
+        "-t",
+        "--tag",
         nargs="?",
         default=None,
         help="Execute all code blocks with this tag",
@@ -112,7 +114,8 @@ def cliargs() -> argparse.ArgumentParser:
         parents=[common_parser],
     )
     list_parser.add_argument(
-        "-t", "--tag",
+        "-t",
+        "--tag",
         nargs="?",
         default=None,
         help="Optional tag to filter the list of code blocks",

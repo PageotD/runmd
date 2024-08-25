@@ -29,9 +29,11 @@ Usage:
 
 import configparser
 from pathlib import Path
+
 from .config import get_all_aliases
 from .parser import parse_markdown
 from .runner import run_code_block
+
 
 def process_markdown_files(
     inputfilepath: str, config: configparser.ConfigParser

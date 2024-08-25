@@ -22,9 +22,9 @@ This module handles the configuration setup and validation for the 'runmd' CLI t
 users have a correctly configured environment for running and processing code blocks.
 """
 
-import shutil
-import importlib.resources
 import configparser
+import importlib.resources
+import shutil
 from pathlib import Path
 from typing import List
 

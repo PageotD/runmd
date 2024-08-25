@@ -21,11 +21,11 @@ This module handles the persistent storage of command history, ensuring that the
 updated accurately and can be used to track previous commands.
 """
 
-from pathlib import Path
-import json
 import datetime
-import tempfile
+import json
 import re
+import tempfile
+from pathlib import Path
 
 
 def get_history_path() -> Path:

@@ -23,10 +23,10 @@ Error Handling:
     - Any exceptions during the execution of the code block are caught and reported.
 """
 
+import configparser
+import os
 import subprocess
 import sys
-import os
-import configparser
 
 
 def run_code_block(
