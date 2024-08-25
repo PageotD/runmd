@@ -70,8 +70,8 @@ Executes specified code blocks in a Markdown file.
 runmd run [blockname] [--tag TAG] [--file FILE] [--env VAR=value ...]
 ```
 * `blockname`: The name of the code block to run, or "all" to run all blocks.
-* `--tag, -t TAG`: Specify the tag of the code blocks to run.
-* `--file, -f FILE`: Specify the path to the Markdown file containing the code blocks.
+* `-t [TAG], --tag [TAG]`: Specify the tag of the code blocks to run.
+* `-f [FILE], --file [FILE]`: Specify the path to the Markdown file containing the code blocks.
 * `--env VAR=value ...`: Optional environment variables to set during the execution.
 
 </br>
@@ -85,7 +85,7 @@ runmd show [blockname] [--file FILE]
 ```
 
 * `blockname`: The name of the code block to display.
-* `--file, -f FILE`: Specify the path to the Markdown file.
+* `-f [FILE], --file [FILE]`: Specify the path to the Markdown file.
 
 </br>
 
@@ -97,8 +97,8 @@ Lists all the code blocks in a Markdown file.
 runmd list [tag] [--file FILE]
 ```
 
-* `--tag, -t`: Optional tag to filter the list of code blocks.
-* `--file, -f FILE`: Specify the path to the Markdown file.
+* `-t [TAG], --tag [TAG]`: Optional tag to filter the list of code blocks.
+* `-f [FILE], --file [FILE]`: Specify the path to the Markdown file.
 
 </br>
 
