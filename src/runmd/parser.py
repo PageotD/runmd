@@ -38,7 +38,7 @@ def compile_pattern(languages: list) -> re.Pattern:
     )
 
 
-def parse_markdown(file_path: str, languages: list, blocklist: list) -> list:
+def parse_markdown(file_path: str, languages: list) -> list:
     """
     Parse the Markdown file to extract code blocks with names.
 
@@ -50,14 +50,13 @@ def parse_markdown(file_path: str, languages: list, blocklist: list) -> list:
         list: List of tuples containing code block information.
     """
     pattern = compile_pattern(languages)
-
+    blocklist = []
     try:
         with open(file_path, "r") as file:
             content = file.read()
 
         matches = pattern.findall(content)
         for lang, name, tag, code in matches:
-            # code_blocks.append((name.strip(), lang, code.strip(), lang in languages))
             blocklist.append(
                 {
                     "name": name.strip(),

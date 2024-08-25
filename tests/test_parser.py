@@ -25,5 +25,5 @@ class TestRunmdParser(unittest.TestCase):
             {'name': 'hello-python', 'tag': 'sometag', 'file': file_path, 'lang':'python', 'code': '# run with runmd run hello-python\nprint("Hello from Python!")', 'exec': True}, 
             {'name': 'hello-ruby', 'tag': '', 'file': file_path, 'lang': 'ruby', 'code': '# run with runmd run hello-ruby\nputs "Hello from Ruby!"', 'exec': True}
             ]
-        blocklist = parse_markdown(file_path, languages, blocklist)
+        blocklist = parse_markdown(file_path, languages)
         self.assertListEqual(blocklist, expected)

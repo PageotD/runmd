@@ -61,7 +61,7 @@ def process_markdown_files(
     for file_path in directory.rglob("*.md"):
         if inputfilepath is None or inputfilepath == file_path:
             try:
-                blocklist = parse_markdown(file_path, languages, blocklist)
+                blocklist += parse_markdown(file_path, languages)
             except Exception as e:
                 print(f"Error: Failed to parse file '{file_path}' with exception: {e}")
                 continue
