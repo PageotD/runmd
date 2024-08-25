@@ -59,9 +59,20 @@ def cliargs() -> argparse.ArgumentParser:
     # Create subparsers for different commands
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
+    # Common arguments for all subparsers
+    common_parser = argparse.ArgumentParser(add_help=False)
+    common_parser.add_argument(
+        "-f", "--file",
+        nargs="?",
+        default=None,
+        help="Path to the markdown file to process. If not provided, uses the default file from config.",
+    )
+
     # Subparser for the 'run' command
     run_parser = subparsers.add_parser(
-        RUNCMD, help="Run code blocks in the source file"
+        RUNCMD,
+        help="Run code blocks in the source file",
+        parents=[common_parser],
     )
     run_parser.add_argument(
         "blockname",
@@ -70,7 +81,10 @@ def cliargs() -> argparse.ArgumentParser:
         help='Name of the code block to run or "all" to run all blocks',
     )
     run_parser.add_argument(
-        "--tag", nargs="?", default=None, help="Execute all code blocks with this tag"
+        "-t", "--tag",
+        nargs="?",
+        default=None,
+        help="Execute all code blocks with this tag",
     )
     run_parser.add_argument(
         "--env",
@@ -78,44 +92,48 @@ def cliargs() -> argparse.ArgumentParser:
         default=[],
         help="Environment variables to set during execution (e.g., VAR=value)",
     )
-    run_parser.add_argument(
-        "--file", nargs="?", default=None, help="Path to the markdown file to process"
-    )
 
     # Subparser for the 'show' command
     show_parser = subparsers.add_parser(
-        SHOWCMD, help="Show code blocks from the source file"
+        SHOWCMD,
+        help="Show code blocks from the source file",
+        parents=[common_parser],
     )
     show_parser.add_argument(
-        "blockname", nargs="?", help="Name of the code block to show"
-    )
-    show_parser.add_argument(
-        "--file", nargs="?", default=None, help="Path to the markdown file to process"
+        "blockname",
+        nargs="?",
+        help="Name of the code block to show",
     )
 
     # Subparser for the 'list' command
     list_parser = subparsers.add_parser(
-        LISTCMD, help="List code blocks in the source file"
+        LISTCMD,
+        help="List code blocks in the source file",
+        parents=[common_parser],
     )
     list_parser.add_argument(
-        "--tag",
+        "-t", "--tag",
         nargs="?",
         default=None,
         help="Optional tag to filter the list of code blocks",
     )
-    list_parser.add_argument(
-        "--file", nargs="?", default=None, help="Path to the markdown file to process"
-    )
 
     # Subparser for the 'hist' command
     hist_parser = subparsers.add_parser(
-        HISTCMD, help="Display the runmd command history"
+        HISTCMD,
+        help="Display or manage the runmd command history",
     )
-    hist_parser.add_argument(
-        "id", nargs="?", default=None, help="ID of the command to run from history"
+    hist_group = hist_parser.add_mutually_exclusive_group()
+    hist_group.add_argument(
+        "id",
+        nargs="?",
+        default=None,
+        help="ID of the command to run from history",
     )
-    hist_parser.add_argument(
-        "--clear", action="store_true", help="Clear the history list"
+    hist_group.add_argument(
+        "--clear",
+        action="store_true",
+        help="Clear the history list",
     )
 
     return parser
