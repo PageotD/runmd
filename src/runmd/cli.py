@@ -212,12 +212,13 @@ def main(command_line: Optional[list[str]] = None) -> None:
     Args:
         command_line (Optional[list[str]]): The command-line arguments. If None, it uses sys.argv.
     """
-    # Parse the command-line arguments
-    parser = cliargs()
-    args = parser.parse_args(command_line)
 
     # Load and validate configuration
     config = get_configuration()
+    
+    # Parse the command-line arguments
+    parser = cliargs()
+    args = parser.parse_args(command_line)
 
     # Handle case where no command is provided
     if args.command is None:
