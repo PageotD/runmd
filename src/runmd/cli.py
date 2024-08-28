@@ -25,7 +25,7 @@ from pathlib import Path
 from typing import Optional
 
 from . import __version__
-from .config import copy_config, get_default_config_path, load_config, validate_config
+from .config import get_configuration
 from .history import print_history, read_history, update_history, write_history
 from .process import list_command, process_markdown_files, run_command, show_command
 
@@ -217,15 +217,7 @@ def main(command_line: Optional[list[str]] = None) -> None:
     args = parser.parse_args(command_line)
 
     # Load and validate configuration
-    config_path = get_default_config_path()
-
-    # Copy the config if it doesn't exist
-    if not os.path.exists(config_path):
-        copy_config()
-
-    # Load and validate the configuration
-    config = load_config()
-    validate_config(config)
+    config = get_configuration()
 
     # Handle case where no command is provided
     if args.command is None:

@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+
+### Added
+* create get_configuration fonction to simplify the load and validate in cli.py
+
 ## [0.7.0] - 2024-08-25
 
 ## Added

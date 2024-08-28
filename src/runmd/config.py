@@ -24,6 +24,7 @@ users have a correctly configured environment for running and processing code bl
 
 import configparser
 import importlib.resources
+import os
 import shutil
 from pathlib import Path
 from typing import List
@@ -65,7 +66,7 @@ def copy_config() -> None:
 
 def load_config() -> configparser.ConfigParser:
     """
-    Load and validate the configuration file.
+    Load the configuration file.
 
     Returns:
         configparser.ConfigParser: Loaded configuration object.
@@ -161,3 +162,35 @@ def get_all_aliases(config: configparser.ConfigParser) -> List[str]:
                 aliases.extend(alias.strip() for alias in section_aliases.split(","))
 
     return aliases
+
+
+def get_configuration() -> configparser.ConfigParser:
+    """
+    Load and validate the configuration file.
+
+    If the config file doesn't exist, it creates a default one.
+    Then it loads the config and validates it.
+
+    Returns:
+        configparser.ConfigParser: Loaded and validated configuration object.
+
+    Raises:
+        FileNotFoundError: If the config file cannot be created or accessed.
+        ValueError: If the configuration is invalid.
+    """
+    config_path = get_default_config_path()
+
+    if not os.path.exists(config_path):
+        try:
+            copy_config()
+        except Exception as e:
+            raise FileNotFoundError(
+                f"Failed to create config file at {config_path}: {str(e)}"
+            )
+
+    try:
+        config = load_config()
+        validate_config(config)
+        return config
+    except configparser.Error as e:
+        raise ValueError(f"Invalid configuration: {str(e)}")
