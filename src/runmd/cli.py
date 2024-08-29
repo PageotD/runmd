@@ -215,7 +215,7 @@ def main(command_line: Optional[list[str]] = None) -> None:
 
     # Load and validate configuration
     config = get_configuration()
-    
+
     # Parse the command-line arguments
     parser = cliargs()
     args = parser.parse_args(command_line)

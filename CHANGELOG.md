@@ -2,7 +2,7 @@
 # CHANGELOG
 
 All notable changes to this project will be documented in this file.
- 
+
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 * create get_configuration fonction to simplify the load and validate in cli.py
+
+### Changed
+* change print/return with a FileNotFoundError in copy_config()
 
 ## [0.7.0] - 2024-08-25
 
@@ -57,12 +60,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 * move call to valid_config() from load_config() to cli.py
 
-### Fixed 
+### Fixed
 * fix error related to the --file option
 
 ## [0.4.0] - 2024-08-13
 
-### Added 
+### Added
 * add `tag` attribute
 * add the possibility to run all code blocks with a given tag using `runmd run @<tag>`
 
@@ -88,7 +91,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * remove --dir option since it creates too much complexity for very small benefits
 
 ## [0.1.0] - 2024-08-09
- 
+
 ### Added
 * add `show`option to show the code block in terminal
 * show `(<lang>)` or `(<lang>: not configured)` next to the code block name

@@ -27,7 +27,7 @@ class TestRunmdConfig(unittest.TestCase):
 
         # Mock the path object directly
         mock_source_path = Path('/mock/source') #/config.ini')
-        
+
         # Ensure that mock_files returns this path
         mock_files.return_value = mock_source_path
 
@@ -99,12 +99,9 @@ class TestRunmdConfig(unittest.TestCase):
     @patch('importlib.resources.files', side_effect=Exception("Error locating the config file"))
     @patch('builtins.print')
     def test_copy_config_error_locating_file(self, mock_print, mock_resource_filename):
-        # Call the function
-        copy_config()
-
-        # Verify behavior
-        mock_resource_filename.assert_called_once_with("runmd")
-        mock_print.assert_called_once_with("Error locating the config file: Error locating the config file")
+        #mock_print.assert_called_once_with("Error locating the config file: Error locating the config file")
+        with self.assertRaises(FileNotFoundError):
+            copy_config()
 
     # --------------------------------------------------
     # >> LOAD_CONFIG
@@ -146,7 +143,7 @@ class TestRunmdConfig(unittest.TestCase):
         # Simulate config file exists
         mock_exists.return_value = True
         mock_get_default_config_path.return_value = Path("/mock/path/config.ini")
-        
+
         # Simulate an error when reading the config file
         mock_read.side_effect = configparser.Error("Mock parsing error")
 

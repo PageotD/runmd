@@ -14,6 +14,7 @@ Functions:
     - validate_config: Validate the loaded configuration to ensure it contains required sections
       and fields.
     - get_all_aliases: Retrieve a list of all language aliases defined in the configuration.
+    - get_configuratio:  Load and validate the configuration file.
 
 Attributes:
     - None
@@ -28,7 +29,11 @@ import os
 import shutil
 from pathlib import Path
 from typing import List
+from typing import List, Dict
 
+CONFIG_FILE_NAME = "config.ini"
+CONFIG_DIR_NAME = "runmd"
+REQUIRED_LANG_KEYS = ["aliases", "command", "options"]
 
 def get_default_config_path() -> Path:
     """
@@ -37,18 +42,17 @@ def get_default_config_path() -> Path:
     Returns:
         Path: Default configuration file path.
     """
-    return Path.home() / ".config" / "runmd" / "config.ini"
-
+    return Path.home() / ".config" / CONFIG_DIR_NAME / CONFIG_FILE_NAME
 
 def copy_config() -> None:
     """Copy the default config to the user's configuration directory."""
     try:
         # Locate the source configuration file
-        config_source = importlib.resources.files("runmd") / "config.ini"
+        config_source = importlib.resources.files("runmd") / CONFIG_FILE_NAME
         config_source_path = Path(config_source)
+
     except Exception as e:
-        print(f"Error locating the config file: {e}")
-        return
+        raise FileNotFoundError(e)
 
     # Determine the destination configuration file path
     config_dest = get_default_config_path()
