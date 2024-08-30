@@ -38,9 +38,9 @@ def get_history_path() -> Path:
     return Path.home() / ".config" / "runmd" / "history.json"
 
 
-def read_history() -> list:
+def load_history() -> list:
     """
-    Read the command history from the file.
+    Load the command history from the file.
 
     Returns:
         list[dict]: A list of dictionaries representing command history.
@@ -54,7 +54,7 @@ def read_history() -> list:
         with open(hist_path, "r") as fhistory:
             history = json.load(fhistory)
     except (json.JSONDecodeError, IOError) as e:
-        raise ValueError(f"Error reading configuration file: {e}") from e
+        raise ValueError(f"Error reading history file: {e}") from e
 
     return history
 

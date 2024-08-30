@@ -6,7 +6,7 @@ import datetime
 import tempfile
 
 # Import the functions to test
-from runmd.history import get_history_path, read_history, write_history, update_history, print_history, clean_command
+from runmd.history import get_history_path, load_history, write_history, update_history, print_history, clean_command
 
 class TestHistoryFunctions(unittest.TestCase):
 

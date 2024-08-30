@@ -26,7 +26,7 @@ from typing import Optional
 
 from . import __version__
 from .config import get_configuration
-from .history import print_history, read_history, update_history, write_history
+from .history import print_history, load_history, update_history, write_history
 from .process import list_command, process_markdown_files, run_command, show_command
 
 RUNCMD = "run"
@@ -157,7 +157,7 @@ def execute_command(
     """
     # Read history
     histsize = config["DEFAULT"].getint("histsize", 100)
-    history = read_history()
+    history = load_history()
     usercmd = " ".join(sys.argv)
 
     if args.command == HISTCMD and args.id:
