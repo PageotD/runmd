@@ -34,6 +34,7 @@ CONFIG_FILE_NAME = "config.ini"
 CONFIG_DIR_NAME = "runmd"
 REQUIRED_LANG_KEYS = ["aliases", "command", "options"]
 
+
 def get_default_config_path() -> Path:
     """
     Return the path to the default configuration file.

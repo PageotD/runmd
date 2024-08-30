@@ -54,8 +54,7 @@ def read_history() -> list:
         with open(hist_path, "r") as fhistory:
             history = json.load(fhistory)
     except (json.JSONDecodeError, IOError) as e:
-        print(f"Error reading history file: {e}")
-        return []
+        raise ValueError(f"Error reading configuration file: {e}") from e
 
     return history
 

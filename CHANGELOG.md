@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 * change print/return with a FileNotFoundError in copy_config()
 * remove useless variable in copy_config()
+* raise error instead of returining empty list if error reading history file
 
 ## [0.7.0] - 2024-08-25
 
