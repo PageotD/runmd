@@ -28,8 +28,7 @@ import importlib.resources
 import os
 import shutil
 from pathlib import Path
-from typing import List
-from typing import List, Dict
+from typing import Dict, List
 
 CONFIG_FILE_NAME = "config.ini"
 CONFIG_DIR_NAME = "runmd"
@@ -44,28 +43,28 @@ def get_default_config_path() -> Path:
     """
     return Path.home() / ".config" / CONFIG_DIR_NAME / CONFIG_FILE_NAME
 
+
 def copy_config() -> None:
     """Copy the default config to the user's configuration directory."""
     try:
         # Locate the source configuration file
         config_source = importlib.resources.files("runmd") / CONFIG_FILE_NAME
-        config_source_path = Path(config_source)
+
+        # Determine the destination configuration file path
+        config_dest = get_default_config_path()
+
+        # Create the directory if it does not exist
+        config_dest.parent.mkdir(parents=True, exist_ok=True)
+
+        # Copy the configuration file if it does not already exist
+        if not config_dest.exists():
+            shutil.copy(config_source, config_dest)
+            print(f"Configuration file copied to {config_dest}.")
+        else:
+            print(f"Configuration file already exists at {config_dest}.")
 
     except Exception as e:
         raise FileNotFoundError(e)
-
-    # Determine the destination configuration file path
-    config_dest = get_default_config_path()
-
-    # Create the directory if it does not exist
-    config_dest.parent.mkdir(parents=True, exist_ok=True)
-
-    # Copy the configuration file if it does not already exist
-    if not config_dest.exists():
-        shutil.copy(config_source_path, config_dest)
-        print(f"Configuration file copied to {config_dest}.")
-    else:
-        print(f"Configuration file already exists at {config_dest}.")
 
 
 def load_config() -> configparser.ConfigParser:
