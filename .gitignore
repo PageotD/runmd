@@ -1,4 +1,6 @@
 venv/
 build/
 dist/
+sandbox/
+experimental/
 *egg-info
