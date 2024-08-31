@@ -26,7 +26,7 @@ from typing import Optional
 
 from . import __version__
 from .config import get_configuration
-from .history import print_history, load_history, update_history, write_history
+from .history import load_history, print_history, update_history, write_history
 from .process import list_command, process_markdown_files, run_command, show_command
 
 RUNCMD = "run"
@@ -192,7 +192,8 @@ def execute_command(
             print("Error: You must provide a code block name or 'all' to run/show.")
 
     # Write history
-    write_history(history) 
+    write_history(history)
+
 
 def main(command_line: Optional[list[str]] = None) -> None:
     """

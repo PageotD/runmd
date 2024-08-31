@@ -71,36 +71,37 @@ def process_markdown_files(
     return blocklist
 
 
-def list_command(blocklist: list, tag: str) -> None:
+def list_command(blocklist: list, tag: str = None) -> None:
     """
     List all code block names along with their language.
 
     Args:
-        code_blocks (list): List of tuples containing code block information.
+        blocklist (list): List of dictionaries containing code block information.
+        tag (str): Optional tag to filter the blocks.
     """
-    # print("\033[0;31m\u26AC\033[0;0m Available code block names:")
-    # Define column widths
     name_width = 30
     lang_width = 15
     file_width = 40
     tag_width = 15
 
-    # Print header
-    print(
-        f"{'NAME'.ljust(name_width)} {'LANG'.ljust(lang_width)} {'FILE'.ljust(file_width)} {'TAG'.ljust(tag_width)}"
+    # Header
+    header = f"{'NAME'.ljust(name_width)} {'LANG'.ljust(lang_width)} {'FILE'.ljust(file_width)} {'TAG'.ljust(tag_width)}"
+    separator = "-" * len(header)
+
+    # Filter blocklist by tag if specified
+    filtered_blocks = (
+        block for block in blocklist if tag is None or block["tag"] == tag
     )
 
-    # Print separator
-    print("-" * (name_width + lang_width + file_width + tag_width))
+    # Prepare output lines
+    output_lines = [header, separator]
+    output_lines.extend(
+        f"{block['name'].ljust(name_width)} {block['lang'].ljust(lang_width)} {str(block['file']).ljust(file_width)} {block['tag'].ljust(tag_width)}"
+        for block in filtered_blocks
+    )
 
-    # Print each block
-    for block in blocklist:
-        if tag is None or block["tag"] == tag:
-            # Convert PosixPath to string for formatting
-            file_str = str(block["file"])
-            print(
-                f"{block['name'].ljust(name_width)} {block['lang'].ljust(lang_width)} {file_str.ljust(file_width)} {block['tag'].ljust(name_width)}"
-            )
+    # Print all at once
+    print("\n".join(output_lines))
 
 
 def show_command(blocklist: list, block_name: str) -> None:
