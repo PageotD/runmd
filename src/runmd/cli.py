@@ -160,47 +160,39 @@ def execute_command(
     history = load_history()
     usercmd = " ".join(sys.argv)
 
-    if args.command == HISTCMD and args.id:
-        oldcmd = history[int(args.id)]["command"].split(" ")
-        # Reparse
-        parser = cliargs()
-        args = parser.parse_args(oldcmd[1:])
-
-    # Get code block list if the command is one of the recognized commands
-    if args.command in [RUNCMD, SHOWCMD, LISTCMD]:
-        blocklist = process_markdown_files(args.file, config)
-
-    # Handle the 'run' command
-    if args.command == RUNCMD and args.blockname:
-        # Convert list of 'KEY=value' strings to a dictionary of environment variables
-        env_vars = {
-            key: value for env in args.env for key, value in [env.split("=", 1)]
-        }
-        success = run_command(blocklist, args.blockname, args.tag, config, env_vars)
-        history = update_history(history, histsize, usercmd, success)
-
-    # Handle the 'list' command
-    elif args.command == LISTCMD:
-        list_command(blocklist, args.tag)
-
-    # Handle the 'show' command
-    elif args.command == SHOWCMD and args.blockname:
-        show_command(blocklist, args.blockname)
-
-    # Handle the 'hist' command
-    elif args.command == HISTCMD:
-        if args.clear:
+    if args.command == HISTCMD:
+        if args.id:
+            oldcmd = history[int(args.id)]["command"].split(" ")
+            # Reparse
+            parser = cliargs()
+            args = parser.parse_args(oldcmd[1:])
+        elif args.clear:
             history = []
         else:
             print_history(history)
 
-    # If no blockname is provided for 'run' or 'show', raise an error
-    if args.command in [RUNCMD, SHOWCMD] and not args.blockname:
-        print("Error: You must provide a code block name or 'all' to run/show.")
+    if args.command in [RUNCMD, SHOWCMD, LISTCMD]:
+        blocklist = process_markdown_files(args.file, config)
+
+        if args.command == RUNCMD and args.blockname:
+            # Convert list of 'KEY=value' strings to a dictionary of environment variables
+            env_vars = {
+                key: value for env in args.env for key, value in [env.split("=", 1)]
+            }
+            success = run_command(blocklist, args.blockname, args.tag, config, env_vars)
+            history = update_history(history, histsize, usercmd, success)
+
+        elif args.command == SHOWCMD and args.blockname:
+            show_command(blocklist, args.blockname)
+
+        elif args.command == LISTCMD:
+            list_command(blocklist, args.tag)
+
+        else:
+            print("Error: You must provide a code block name or 'all' to run/show.")
 
     # Write history
-    write_history(history)
-
+    write_history(history) 
 
 def main(command_line: Optional[list[str]] = None) -> None:
     """
