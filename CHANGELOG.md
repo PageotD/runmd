@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 * create get_configuration fonction to simplify the load and validate in cli.py
+* add expirimental CLI shell for runmd
 
 ### Changed
 * change print/return with a FileNotFoundError in copy_config()

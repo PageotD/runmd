@@ -21,6 +21,7 @@ Homepage = "https://github.com/pageotd/runmd"
 
 [project.scripts]
 runmd = "runmd.cli:main"
+runmd-shell = "runmd.clishell:main"
 
 [tool.setuptools]
 package-dir = { "" = "src" }
