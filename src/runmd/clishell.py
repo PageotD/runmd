@@ -10,9 +10,14 @@ from .process import list_command, process_markdown_files, run_command, show_com
 class RunMDShell(cmd.Cmd):
     intro = f"Welcome to the RunMD {__version__} CLI shell. Type help or ? to list commands.\n"
     prompt = "\33[0;33mrunmd>\33[0;0m "
-    configuration = get_configuration()
-    inputfilepath = sys.argv[1]
-    blocklist = process_markdown_files(inputfilepath, configuration)
+
+    def __init__(self, inputfilepath=None):
+        super().__init__()
+        self.configuration = get_configuration()
+        self.blocklist = []
+        if inputfilepath:
+            self.inputfilepath = inputfilepath
+            self.blocklist = process_markdown_files(inputfilepath, self.configuration)
 
     def do_list(self, arg):
         """List all code block names along with their language."""
@@ -90,4 +95,10 @@ class RunMDShell(cmd.Cmd):
 
 
 def main():
-    RunMDShell().cmdloop()
+    if len(sys.argv) == 1:
+        print(f"Welcome to the RunMD {__version__} CLI shell. Type help or ? to list commands.")
+        print("You must specify a markdown file to process.")
+        print("Exiting...")
+        return
+        
+    RunMDShell(inputfilepath=sys.argv[1]).cmdloop()

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * add run command to CLI shell (experimental)
 * add show command to CLI shell (experimental)
 * add list command to CLI shell (experimental)
+* add input markdown file handling
 
 ## [0.8.0] 2024-09-02
 
