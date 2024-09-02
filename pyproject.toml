@@ -15,6 +15,18 @@ classifiers=[
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
 ]
+dependencies = [
+    "pygments"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "isort",
+    "flake8",
+    "pytest-cov",
+]
 
 [project.urls]
 Homepage = "https://github.com/pageotd/runmd"

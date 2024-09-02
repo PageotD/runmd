@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * add show command to CLI shell (experimental)
 * add list command to CLI shell (experimental)
 * add input markdown file handling
+* add color to code block displayed with the show command
+* add pygments as a dependency
 
 ## [0.8.0] 2024-09-02
 

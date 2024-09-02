@@ -3,6 +3,12 @@ from unittest.mock import patch, MagicMock
 from pathlib import Path
 from runmd.process import process_markdown_files, list_command, show_code_block, show_command, run_command
 import configparser
+from io import StringIO
+import re
+
+def strip_ansi_sequences(text):
+    ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+    return ansi_escape.sub('', text)
 
 class TestMarkdownProcessing(unittest.TestCase):
 
@@ -147,12 +153,43 @@ class TestMarkdownProcessing(unittest.TestCase):
     # >> SHOW_CODE_BLOCK
     # --------------------------------------------------
 
-    @patch('builtins.print')
-    def test_show_code_block(self, mock_print):
-        show_code_block('test_block', 'python', 'print("Hello World")','sometag')
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_show_code_block(self, mock_stdout):
         
-        mock_print.assert_any_call("\033[1m\u26AC test_block (python) sometag\033[0m")
-        mock_print.assert_any_call("\u0020\u0020\033[90mprint(\"Hello World\")\033[0m")
+        name = "example"
+        lang = "python"
+        code = 'print("Hello, World!")\nfor i in range(5):\n    print(i)'
+        tag = "example-tag"
+
+        show_code_block(name, lang, code, tag)
+
+        actual_output = strip_ansi_sequences(mock_stdout.getvalue())
+
+        expected_output = (
+            "\n    | print(\"Hello, World!\")\n"
+            "    | for i in range(5):\n"
+            "    |     print(i)\n\n"
+        )
+
+        self.assertEqual(actual_output, expected_output)
+
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_show_code_block_with_invalid_lang(self, mock_stdout):
+
+        name = "example"
+        lang = "invalidlang"
+        code = 'print("Hello, World!")\nfor i in range(5):\n    print(i)'
+        tag = "example-tag"
+
+        show_code_block(name, lang, code, tag)
+
+        expected_output = (
+            "Error: Code block 'example' failed with exception: no lexer for alias 'invalidlang' found\n"
+            "Original Code:\n"
+            "print(\"Hello, World!\")\nfor i in range(5):\n    print(i)\n"
+        )
+
+        self.assertEqual(mock_stdout.getvalue(), expected_output)
 
 if __name__ == '__main__':
     unittest.main()
