@@ -7,7 +7,6 @@ from . import __version__
 from .config import get_configuration
 from .process import list_command, process_markdown_files, run_command, show_command
 
-
 class RunMDShell(cmd.Cmd):
     intro = f"Welcome to the RunMD {__version__} CLI shell. Type help or ? to list commands.\n"
     prompt = "\33[0;33mrunmd>\33[0;0m "
@@ -63,8 +62,17 @@ class RunMDShell(cmd.Cmd):
 
     def do_show(self, arg):
         """Show the content of a specific code block."""
-        print(f"Showing code block: {arg}")
-        # Implement your actual show command logic here
+        parser = argparse.ArgumentParser(
+            prog="show", description="Show code blocks from the markdown file"
+        )
+        parser.add_argument(
+            "blockname",
+            nargs="?",
+            help="Name of the code block to show",
+        )
+        args = parser.parse_args(shlex.split(arg))
+        if args.blockname:
+            show_command(self.blocklist, args.blockname)
 
     def do_exit(self, arg):
         """Exit the RunMD shell."""
