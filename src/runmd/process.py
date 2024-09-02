@@ -158,9 +158,10 @@ def run_command(
 
     block_count = 0
     success = True
+    blocklist_copy = blocklist.copy()
     # for block in blocklist:
-    while blocklist and success:
-        block = blocklist.pop(0)
+    while blocklist_copy and success:
+        block = blocklist_copy.pop(0)
         if block_name == "all" or block_name == block["name"] or tag == block["tag"]:
             if block["exec"]:
                 success = run_code_block(

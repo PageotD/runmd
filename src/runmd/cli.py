@@ -174,7 +174,7 @@ def execute_command(
     if args.command in [RUNCMD, SHOWCMD, LISTCMD]:
         blocklist = process_markdown_files(args.file, config)
 
-        if args.command == RUNCMD and args.blockname:
+        if args.command == RUNCMD and (args.blockname or args.tag):
             # Convert list of 'KEY=value' strings to a dictionary of environment variables
             env_vars = {
                 key: value for env in args.env for key, value in [env.split("=", 1)]
