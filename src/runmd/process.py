@@ -30,13 +30,14 @@ Usage:
 import configparser
 from pathlib import Path
 
+from pygments import highlight
+from pygments.formatters import TerminalFormatter
+from pygments.lexers import get_lexer_by_name
+
 from .config import get_all_aliases
 from .parser import parse_markdown
 from .runner import run_code_block
 
-from pygments import highlight
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters import TerminalFormatter
 
 def process_markdown_files(
     inputfilepath: str, config: configparser.ConfigParser
@@ -142,6 +143,7 @@ def show_command(blocklist: list, block_name: str) -> None:
 #     except Exception as e:
 #         print(f"Error: Code block '{name}' failed with exception: {e}")
 
+
 def show_code_block(name, lang, code, tag):
     """
     Display the code block contents with syntax highlighting using Pygments.
@@ -153,18 +155,21 @@ def show_code_block(name, lang, code, tag):
         tag (str): Tag of the code block.
     """
 
-    #print(f"\033[1m\u26AC {name} ({lang}) {tag}\033[0m")
+    # print(f"\033[1m\u26AC {name} ({lang}) {tag}\033[0m")
     try:
         lexer = get_lexer_by_name(lang, stripall=True)
         formatter = TerminalFormatter()
         highlighted_code = highlight(code, lexer, formatter)
-        
-        indented_code = '\n'.join('    | ' + line for line in highlighted_code.splitlines())
-        print(f'\n{indented_code}\n')
+
+        indented_code = "\n".join(
+            "    | " + line for line in highlighted_code.splitlines()
+        )
+        print(f"\n{indented_code}\n")
     except Exception as e:
         print(f"Error: Code block '{name}' failed with exception: {e}")
         print("Original Code:")
         print(code)
+
 
 def run_command(
     blocklist: list, block_name: str, tag: str, config: dict, env_vars: dict

@@ -1,11 +1,13 @@
 import argparse
 import cmd
+import re
 import shlex
 import sys
 
 from . import __version__
 from .config import get_configuration
 from .process import list_command, process_markdown_files, run_command, show_command
+
 
 class RunMDShell(cmd.Cmd):
     intro = f"Welcome to the RunMD {__version__} CLI shell. Type help or ? to list commands.\n"
@@ -40,17 +42,17 @@ class RunMDShell(cmd.Cmd):
             prog="run", description="Run eligible code blocks in the markdown file"
         )
         parser.add_argument(
-        "blockname",
-        nargs="?",
-        default=None,
-        help='Name of the code block to run or "all" to run all blocks',
-        )   
+            "blockname",
+            nargs="?",
+            default=None,
+            help='Name of the code block to run or "all" to run all blocks',
+        )
         parser.add_argument(
-        "-t",
-        "--tag",
-        nargs="?",
-        default="None",
-        help="Execute all code blocks with this tag",
+            "-t",
+            "--tag",
+            nargs="?",
+            default="None",
+            help="Execute all code blocks with this tag",
         )
         parser.add_argument(
             "--env",
@@ -63,7 +65,9 @@ class RunMDShell(cmd.Cmd):
             env_vars = {
                 key: value for env in args.env for key, value in [env.split("=", 1)]
             }
-            _ = run_command(self.blocklist, args.blockname, args.tag, self.configuration, env_vars)
+            _ = run_command(
+                self.blocklist, args.blockname, args.tag, self.configuration, env_vars
+            )
 
     def do_show(self, arg):
         """Show the content of a specific code block."""
@@ -96,9 +100,11 @@ class RunMDShell(cmd.Cmd):
 
 def main():
     if len(sys.argv) == 1:
-        print(f"Welcome to the RunMD {__version__} CLI shell. Type help or ? to list commands.")
+        print(
+            f"Welcome to the RunMD {__version__} CLI shell. Type help or ? to list commands."
+        )
         print("You must specify a markdown file to process.")
         print("Exiting...")
         return
-        
+
     RunMDShell(inputfilepath=sys.argv[1]).cmdloop()
