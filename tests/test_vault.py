@@ -9,6 +9,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 import hashlib
 import os
+import tempfile
 
 from runmd.vault import TextFileVault  # Replace with the actual module name
 
@@ -16,7 +17,20 @@ class TestTextFileVault(unittest.TestCase):
 
     def setUp(self):
         self.vault = TextFileVault()
+        self.input_file = tempfile.NamedTemporaryFile(delete=False, suffix=".txt")
+        self.input_file.write(b'some plain text')
+        self.input_file.close()
 
+    def tearDown(self):
+        try:
+            os.remove(self.input_file.name)
+        except FileNotFoundError:
+            pass
+        
+        vault_file = self.input_file.name + '.vault'
+        if os.path.exists(vault_file):
+            os.remove(vault_file)
+    
     @patch('getpass.getpass', return_value='password')
     def test_get_password(self, mock_getpass):
         password = self.vault._get_password()
