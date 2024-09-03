@@ -26,3 +26,43 @@ class TestTextFileVault(unittest.TestCase):
     def test_get_password_confirmation(self, mock_getpass):
         password = self.vault._get_password()
         self.assertEqual(password, b'password')
+
+    @patch('getpass.getpass', side_effect=['password1', 'password2', 'password', 'password'])
+    def test_get_password_mismatch(self, mock_getpass):
+        password = self.vault._get_password()
+        self.assertEqual(password, b'password')
+
+    def test_derive_key(self):
+        salt = b'some_salt'
+        password = b'password'
+        self.vault.password = password
+        key = self.vault._derive_key(salt)
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=self.vault.KEY_SIZE,
+            salt=salt,
+            iterations=100000,
+        )
+        expected_key = kdf.derive(password)
+        self.assertEqual(key, expected_key)
+
+    def test_pad(self):
+        data = b'some data'
+        padded_data = self.vault._pad(data)
+        padder = padding.PKCS7(self.vault.CIPHER.block_size).padder()
+        expected_padded_data = padder.update(data) + padder.finalize()
+        self.assertEqual(padded_data, expected_padded_data)
+
+    def test_unpad(self):
+        data = b'some data'
+        padder = padding.PKCS7(self.vault.CIPHER.block_size).padder()
+        padded_data = padder.update(data) + padder.finalize()
+        unpadded_data = self.vault._unpad(padded_data)
+        self.assertEqual(unpadded_data, data)
+
+    def test_compute_mac(self):
+        key = b'key'
+        ciphertext = b'ciphertext'
+        mac = self.vault._compute_mac(key, ciphertext)
+        expected_mac = hashlib.sha256(key + ciphertext).digest()
+        self.assertEqual(mac, expected_mac)
