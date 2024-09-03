@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * add color to code block displayed with the show command
 * add pygments as a dependency
 * add vault features to encrypt/decrypt markdown files (experimental)
+* add sandbox dockerfiles for alpine and debian
 
 ## [0.8.0] 2024-09-02
 

@@ -1,0 +1,20 @@
+# Alpine-based Dockerfile
+
+# Use Alpine as the base image
+FROM alpine:latest
+
+# Install required packages
+RUN apk add --no-cache \
+    bash \
+    nodejs \
+    npm \
+    perl \
+    py3-pip \
+    python3 \
+    ruby
+
+# Create a symlink for python3 to python
+RUN ln -sf /usr/bin/python3 /usr/bin/python
+
+# Set bash as the default shell
+CMD ["/bin/bash"]
