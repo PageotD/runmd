@@ -7,7 +7,8 @@ It handles the execution of code using configurations defined for different prog
 Functions:
     - run_code_block: Execute a specific code block using the command and options defined in the
       configuration file.
-
+    - detect_shebang: Check if the first line of the code block contains a shebang #! and return it
+      has `command` else return command from config.ini
 The `run_code_block` function takes the code block's name, language, code, and associated metadata,
 along with a configuration dictionary and environment variables. It then runs the code block using
 the appropriate command for the specified language, capturing and printing the output.
@@ -28,7 +29,7 @@ import os
 import subprocess
 import sys
 
-def detect_shebang(code: str):
+def detect_shebang(code: str, section: str, config: configparser.ConfigParser):
     """
     Check if the first line of the code block contains a shebang #!
 
@@ -36,12 +37,12 @@ def detect_shebang(code: str):
         code(str): The code to execute
     
     Returns:
-        str: The command to execute the code block or None
+        list: The command to execute the code block or None
     """
     split_code = code.split('\n')
     if split_code[0].startswith('#!'):
-        return split_code[0].replace('#!', '')
-    return None
+        return [split_code[0].replace('#!', '')]
+    return config[section].get("command", "").split()
 
 def run_code_block(
     name: str,
@@ -72,9 +73,7 @@ def run_code_block(
         if section.startswith("lang."):
             section_aliases = config[section].get("aliases", "")
             if lang in section_aliases:
-                command = [detect_shebang(code)]
-                if command is None:
-                    command = config[section].get("command", "").split()
+                command = detect_shebang(code, section, config)
                 options = config[section].get("options", "").split()
 
     # Merge the provided environment variables with the current environment
