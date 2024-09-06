@@ -28,6 +28,20 @@ import os
 import subprocess
 import sys
 
+def detect_shebang(code: str):
+    """
+    Check if the first line of the code block contains a shebang #!
+
+    Args:
+        code(str): The code to execute
+    
+    Returns:
+        str: The command to execute the code block or None
+    """
+    split_code = code.split('\n')
+    if split_code[0].startswith('#!'):
+        return split_code[0].replace('#!', '')
+    return None
 
 def run_code_block(
     name: str,
@@ -58,7 +72,9 @@ def run_code_block(
         if section.startswith("lang."):
             section_aliases = config[section].get("aliases", "")
             if lang in section_aliases:
-                command = config[section].get("command", "").split()
+                command = [detect_shebang(code)]
+                if command is None:
+                    command = config[section].get("command", "").split()
                 options = config[section].get("options", "").split()
 
     # Merge the provided environment variables with the current environment
