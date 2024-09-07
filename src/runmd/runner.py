@@ -29,20 +29,22 @@ import os
 import subprocess
 import sys
 
+
 def detect_shebang(code: str, section: str, config: configparser.ConfigParser):
     """
     Check if the first line of the code block contains a shebang #!
 
     Args:
         code(str): The code to execute
-    
+
     Returns:
         list: The command to execute the code block or None
     """
-    split_code = code.split('\n')
-    if split_code[0].startswith('#!'):
-        return [split_code[0].replace('#!', '')]
+    split_code = code.split("\n")
+    if split_code[0].startswith("#!"):
+        return [split_code[0].replace("#!", "")]
     return config[section].get("command", "").split()
+
 
 def run_code_block(
     name: str,
