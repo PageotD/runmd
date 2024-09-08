@@ -1,6 +1,9 @@
 site_name: My site
 site_url: https://mydomain.org/mysite
 
+repo_url: https://github.com/PageotD/runmd
+repo_name: pageotd/runmd
+
 theme:
   logo: static/runmd.svg
   #favicon: static/favicon.png
