@@ -6,7 +6,7 @@ repo_name: pageotd/runmd
 
 theme:
   logo: static/runmd.svg
-  #favicon: static/favicon.png
+  favicon: static/favicon.png
   name: material
   palette:
     # Palette toggle for light mode
