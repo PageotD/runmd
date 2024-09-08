@@ -1,6 +1,10 @@
-[![RunMD CI/CD](https://github.com/PageotD/runmd/actions/workflows/cicd.yaml/badge.svg)](https://github.com/PageotD/runmd/actions/workflows/cicd.yaml)
+<p align="center">
+  <a href="https://changie.dev">
+    <img alt="Changie Logo" src="./docs/static/runmd.svg" height="128" />
+  </a>
+  <h3 align="center">A CLI Tool for Executing Code Blocks in Markdown Files.</h3></br>
+</p>
 
-# RunMD: A CLI Tool for Executing Code Blocks in Markdown Files
 
 RunMD is a command-line tool designed to extract and execute code blocks from Markdown files. It's particularly useful for managing and running code snippets embedded in documentation or notes.
 

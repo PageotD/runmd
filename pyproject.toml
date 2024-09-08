@@ -29,6 +29,10 @@ dev = [
     "pytest-cov",
 ]
 
+docs = [
+    "mkdocs-material",
+]
+
 [project.urls]
 Homepage = "https://github.com/pageotd/runmd"
 
