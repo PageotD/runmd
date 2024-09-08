@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://changie.dev">
+  <a href="">
     <img alt="Changie Logo" src="./docs/static/runmd.svg" height="128" />
   </a>
   <h3 align="center">A CLI Tool for Executing Code Blocks in Markdown Files.</h3></br>
