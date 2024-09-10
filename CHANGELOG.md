@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 * add shebang detection in code blocks
 * add package upload to PYPI
+* add commands module to create the CLI parser
+
+### Removed
+* remove cliargs function from cli module
 
 ## [0.9.0] 2024-09-06
 
