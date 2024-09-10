@@ -6,10 +6,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased] 
+## [0.10.0]  - 2024-09-10
 
 ### Added
 * add shebang detection in code blocks
+* add package upload to PYPI
 
 ## [0.9.0] 2024-09-06
 
