@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
-# Copyright (c) 2024 Your Name (ou le nom de votre organisation)
-#
+# Copyright (c) 2024 Damien Pageot.
+# 
 # This file is part of Your Project Name.
 #
 # Licensed under the MIT License. You may obtain a copy of the License at:
