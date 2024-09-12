@@ -18,3 +18,20 @@ RunMD is a command-line tool designed to extract and execute code blocks from Ma
     <img src="./static/github-mark.svg" />
   </div>
 </div>
+
+## Key Features
+
+- **Run code blocks**: Execute code blocks directly from your Markdown files with a simple command.
+- **View code blocks**: List and display code blocks, helping you manage and organize your scripts.
+- **Tag filtering**: Run or display blocks based on tags for organized and targeted execution.
+- **Command history**: Keep track of your executed commands and even re-run them at will.
+
+## Why `runmd`?
+
+Whether you're documenting your code, preparing interactive tutorials, or keeping a technical journal, `runmd` gives you the power to:
+
+- <img src=static/folder-open.svg width=16/> **Stay organized**: Keep all your scripts and examples in one Markdown file without the hassle of jumping between files.
+- <img src=static/rocket-solid.svg width=16/>  **Increase productivity**: No more copy-pasting code. Just define and run code blocks within the same document.
+- <img src=static/rotate-solid.svg width=16/>  **Maintain consistency**: Run code in different environments while ensuring outputs and behavior are documented right next to the source.
+
+
