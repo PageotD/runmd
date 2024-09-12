@@ -1,3 +1,12 @@
+# -----------------------------------------------------------------------------
+# Copyright (c) 2024 Your Name (ou le nom de votre organisation)
+#
+# This file is part of Your Project Name.
+#
+# Licensed under the MIT License. You may obtain a copy of the License at:
+# https://opensource.org/licenses/MIT
+# -----------------------------------------------------------------------------
+
 """
 Markdown Code Block Processing
 
