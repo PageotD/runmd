@@ -10,6 +10,27 @@ RunMD is a command-line tool designed to extract and execute code blocks from Ma
 >
 > **⚠** RunMD is different from interactive notebooks like [Jupyter](https://jupyter.org/) or [Zepplin](https://zeppelin.apache.org/). Each code block is independent and executed separately.
 
+<div class="grid cards" markdown>
+
+-   :material-clock-fast:{ .lg .middle } __Set up in 5 minutes__
+
+    ---
+
+    Install [`runmd`](#) with [`pip`](#) and get up
+    and running in minutes
+
+    [:octicons-arrow-right-24: Getting started](guide/getting_started.md)
+
+</div>
+
+!!! getting-started note ""
+
+    <figure markdown="1">
+    <h1><b>Open source, MIT License, Python 3.9 to 3.12 with minimal dependencies</b></h1>
+    [Getting started](guide/getting_started.md){ .md-button .getting_started }
+    </figure>
+
+
 <div style="margin: 0 auto; padding: 10px 20px; width: 80%; max-width: 750px;text-align: center; border: 1px solid; border-radius: 5px; border-color: #ff6f00ff; display: flex; align-items: center; justify-content: space-between;">
   <div style="width: 65%; font-size: 1.5em; text-align: left;">
     Open source, MIT License, Python 3.9 to 3.12 with minimal dependencies
@@ -30,8 +51,8 @@ RunMD is a command-line tool designed to extract and execute code blocks from Ma
 
 Whether you're documenting your code, preparing interactive tutorials, or keeping a technical journal, `runmd` gives you the power to:
 
-- <img src=static/folder-open.svg width=16/> **Stay organized**: Keep all your scripts and examples in one Markdown file without the hassle of jumping between files.
-- <img src=static/rocket-solid.svg width=16/>  **Increase productivity**: No more copy-pasting code. Just define and run code blocks within the same document.
-- <img src=static/rotate-solid.svg width=16/>  **Maintain consistency**: Run code in different environments while ensuring outputs and behavior are documented right next to the source.
+- :material-folder-open-outline:{ .orange }  **Stay organized**: Keep all your scripts and examples in one Markdown file without the hassle of jumping between files.
+- :material-rocket-launch:{ .orange }  **Increase productivity**: No more copy-pasting code. Just define and run code blocks within the same document.
+- :material-sync:{ .orange }  **Maintain consistency**: Run code in different environments while ensuring outputs and behavior are documented right next to the source.
 
 
