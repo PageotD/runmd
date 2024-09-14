@@ -10,34 +10,33 @@ RunMD is a command-line tool designed to extract and execute code blocks from Ma
 >
 > **⚠** RunMD is different from interactive notebooks like [Jupyter](https://jupyter.org/) or [Zepplin](https://zeppelin.apache.org/). Each code block is independent and executed separately.
 
-<div class="grid cards" markdown>
+<div class="grid cards" style="grid-template-columns: repeat(3, 1fr); margin: 0 auto; padding: 10px 20px; width: 80%; gap: 32px;" markdown>
 
--   :material-clock-fast:{ .lg .middle } __Set up in 5 minutes__
+  - :material-timer-outline:{ .lg .middle .orange } __Set up in minute__
 
     ---
-
+  
     Install [`runmd`](#) with [`pip`](#) and get up
-    and running in minutes
+    and running in minute
 
-    [:octicons-arrow-right-24: Getting started](guide/getting_started.md)
+    [:material-arrow-right: Getting started](guide/getting_started.md)
 
-</div>
+  - :simple-markdown:{ .lg .middle .orange } __Only Markdown__
+  
+    ---
+  
+    Gather scripts and documentation in one Markdown file
 
-!!! getting-started note ""
+    [:material-arrow-right: See examples](#)
 
-    <figure markdown="1">
-    <h1><b>Open source, MIT License, Python 3.9 to 3.12 with minimal dependencies</b></h1>
-    [Getting started](guide/getting_started.md){ .md-button .getting_started }
-    </figure>
+  - :material-license:{ .lg .middle .orange } __Open Source__
+  
+    ---
+  
+    RunMD is licensed under the MIT license and is available on [GitHub](https://github.com/PageotD/runmd)
 
+    [:material-arrow-right: License](infos/LICENSE.md)
 
-<div style="margin: 0 auto; padding: 10px 20px; width: 80%; max-width: 750px;text-align: center; border: 1px solid; border-radius: 5px; border-color: #ff6f00ff; display: flex; align-items: center; justify-content: space-between;">
-  <div style="width: 65%; font-size: 1.5em; text-align: left;">
-    Open source, MIT License, Python 3.9 to 3.12 with minimal dependencies
-  </div>
-  <div style="width: 25%; font-size: 1.5em; text-align: right;">
-    <img src="./static/github-mark.svg" />
-  </div>
 </div>
 
 ## Key Features
