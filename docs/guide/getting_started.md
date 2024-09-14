@@ -1,25 +1,30 @@
 `runmd` is built for ease of use with a simple, intuitive CLI. Get started with a few simple commands:
 
-### Installation
+### Installation from pip
 
 ```bash
 pip install runmd
 ```
 
-### Basic Usage
+### Install from GitHub release
 
 ```bash
-runmd run -f my_script.md -t python
+pip install git+https://github.com/PageotD/runmd@<version>
 ```
 
-- `runmd run` will execute all code blocks in your Markdown file.
-- Use the `-t` option to run only specific tags like `python`, `bash`, etc.
-  
-### Viewing Code Blocks
+### Installation from source
 
+To build from source you must install `build` and `wheel` packages.
 ```bash
-runmd show -f my_script.md -t shell
+pip install build whell
 ```
 
-- Quickly inspect code blocks with `runmd show`.
-- Filter blocks by tag to narrow your focus.
+Clone the git repository
+```bash
+git clone git@github.com:PageotD/runmd.git
+```
+
+Build and install
+```bash
+python -m build && pip install dist/runmd*.whl
+```

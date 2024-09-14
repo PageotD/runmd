@@ -48,6 +48,15 @@ runmd list
 
 ...output...
 
+```console
+NAME                           LANG            FILE                                     TAG            
+-------------------------------------------------------------------------------------------------------
+hello-python                   python          tests/test_markdown.md                   sometag        
+hello-ruby                     ruby            tests/test_markdown.md                                  
+geo-json                       python          examples/advanced-examples.md            geoloc         
+geo-dist                       python          examples/advanced-examples.md            geoloc
+```
+
 ## Show code block in terminal
 
 ```bash
@@ -56,6 +65,20 @@ runmd show <code block name>
 
 ...output...
 
+```console
+
+    | # run with runmd run hello-python
+    | print("Hello from Python!")
+
+```
+
+!!! note
+
+    If you have [`Pygments`](https://pygments.org/) package installed, the output will appear with syntax highlighting. You can install `Pygments` with:
+    ```bash
+    pip install pygments
+    ```
+
 ## Run code block by name
 
 ```bash
@@ -63,6 +86,11 @@ runmd run <code block name>
 ```
 
 ...output...
+
+```console
+> Running: hello-python (python) hello-examples
+Hello from Python!
+```
 
 ## Run code blocks by tag
 
