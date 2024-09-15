@@ -17,43 +17,43 @@ Before you begin, ensure you have the following installed:
 
 ## Installation
 
-### 1. Clone the repository to your local machine:
+### From Python Package Index
+```console
+pip install runmd
+```
 
-```sh {name=runmd-clone}
+### From GitHub release
+
+```console
+pip install git+https://github.com/PageotD/runmd@0.10.1
+```
+
+### From source
+
+Clone the GitHub repository:
+
+```console
 git clone https://github.com/PageotD/runmd.git
 cd runmd
 ```
 
-### 2. Install Build Dependencies
-```sh {name=runmd-pip}
-pip install build
+Install Build and Wheel Dependencies:
+```console
+pip install build wheel
 ```
 
-### 3. Build and Install RunMD
-```sh {name=runmd-build-install}
+Build and Install RunMD
+```console
 python -m build
 pip install dist/runmd-<version>-py3-none-any.whl
 ```
 
-### 4. Initialize
-```sh {name=runmd-initialize}
+## Initialize
+```console
 runmd init
 ```
 
 ## Usage
-
-Once installed, you can use the runmd command to interact with your Markdown files.
-
-| Command | Description |
-|------|------|
-| run | Run a selected code block |
-| show | Print the content of the selected code block |
-| list | List available code blocks |
-
-| Flag | Description |
-|------|------|
-| --file | Name of the markdown file to work with |
-| --env | Pass environment variables |
 
 ### Synopsis
 
@@ -136,14 +136,14 @@ To add an executable code block to your Markdown file, use the following syntax:
 
 To list all code block names in Markdown files within the current directory:
 
-```sh
+```console
 runmd list
 ```
 
 ### Show a Specific Code Block
 To display the content of a specific code block:
 
-```sh
+```console
 runmd show <code-block-name>
 ```
 
@@ -151,7 +151,7 @@ runmd show <code-block-name>
 
 To execute a specific code block by name:
 
-```sh
+```console
 runmd run <code-block-name>
 ```
 
@@ -159,15 +159,15 @@ runmd run <code-block-name>
 
 To execute a specific code block by name:
 
-```sh
-runmd run @<tag>
+```console
+runmd run -t <tag>
 ```
 
 ### Run all code blocks
 
 To execute a specific code block by name:
 
-```sh
+```console
 runmd run all
 ```
 
@@ -175,7 +175,7 @@ runmd run all
 
 To execute a specific code block by name:
 
-```sh
+```console
 runmd run <code-block-name> --env <KEY1>=<VALUE1> <KEY2=VALUE2>
 ```
 
@@ -183,7 +183,7 @@ runmd run <code-block-name> --env <KEY1>=<VALUE1> <KEY2=VALUE2>
 
 To execute all code blocks in Markdown files within the current directory:
 
-```sh
+```console
 runmd run all
 ```
 
