@@ -22,21 +22,39 @@ The `tag` attribute is optional, it allows to run group of code blocks.
     ```markdown
         # Hello examples
 
-        Using bash
+        Using Bash
 
         ```bash {name=hello-bash,tag=hello-examples}
+        # run with runmd run hello-bash
         echo "Hello from bash!"
         ```
 
-        Using python
+        Using Python
 
         ```python {name=hello-python,tag=hello-examples}
+        # run with runmd run hello-python
         print("Hello from python!")
         ```
 
-        Using nodejs
+        Using NodeJS
+
         ```node {name=hello-node,tag=hello-examples}
-        console.log("Hello from JavaScript!");
+        // run with runmd run hello-node
+        console.log("Hello from nodejs!");
+        ```
+
+        Using Ruby
+
+        ```ruby {name=hello-ruby,tag=hello-examples-2}
+        # run with runmd run hello-ruby
+        puts "Hello from Ruby!"
+        ```
+
+        Using Perl
+
+        ```perl {name=hello-perl, tag=hello-examples-2}
+        # run with runmd run hello-perl
+        print "Hello from Perl!";
         ```
     ```
 
@@ -49,12 +67,14 @@ runmd list
 ...output...
 
 ```console
+$ runmd list
 NAME                           LANG            FILE                                     TAG            
 -------------------------------------------------------------------------------------------------------
-hello-python                   python          tests/test_markdown.md                   sometag        
-hello-ruby                     ruby            tests/test_markdown.md                                  
-geo-json                       python          examples/advanced-examples.md            geoloc         
-geo-dist                       python          examples/advanced-examples.md            geoloc
+hello-bash                     bash            hello-examples.md                        hello-examples 
+hello-python                   python          hello-examples.md                        hello-examples 
+hello-node                     node            hello-examples.md                        hello-examples 
+hello-ruby                     ruby            hello-examples.md                        hello-examples-2
+hello-perl                     perl            hello-examples.md                        hello-examples-2
 ```
 
 ## Show code block in terminal
@@ -63,12 +83,11 @@ geo-dist                       python          examples/advanced-examples.md    
 runmd show <code block name>
 ```
 
-...output...
-
 ```console
+$ runmd show hello-bash
 
-    | # run with runmd run hello-python
-    | print("Hello from Python!")
+    | # run with runmd run hello-bash
+    | echo "Hello from bash!"
 
 ```
 
@@ -85,11 +104,11 @@ runmd show <code block name>
 runmd run <code block name>
 ```
 
-...output...
-
 ```console
+$ runmd run hello-python
+
 > Running: hello-python (python) hello-examples
-Hello from Python!
+Hello from python!
 ```
 
 ## Run code blocks by tag
@@ -98,4 +117,12 @@ Hello from Python!
 runmd run -t <tag name>
 ```
 
-...output...
+```console
+$runmd run -t hello-examples-2
+
+> Running: hello-ruby (ruby) hello-examples-2
+Hello from Ruby!
+
+> Running: hello-perl (perl) hello-examples-2
+Hello from Perl!
+```
