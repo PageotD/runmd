@@ -32,6 +32,7 @@ updated accurately and can be used to track previous commands.
 
 import datetime
 import json
+import os
 import re
 import tempfile
 from pathlib import Path
@@ -99,6 +100,7 @@ def update_history(history: list, histsize: int, command: str, success: bool) ->
         history(list[dict]): The current history list.
         histsize(int): Maximum number of commands to remember.
         command(str): The command to add to the history.
+        success(bool): Whether the command was successful or not.
 
     Returns:
         list[dict]: The updated history list.
@@ -116,6 +118,7 @@ def update_history(history: list, histsize: int, command: str, success: bool) ->
         {
             "id": next_id,
             "date": datetime.datetime.now().isoformat(),  # Store date as ISO formatted string
+            "root": os.getcwd(),
             "command": clean_command(command),
             "status": status,
         }
@@ -134,7 +137,7 @@ def print_history(history: list) -> None:
     """
     for element in history:
         print(
-            f"{element['id']} {element['date']} {element['command']} {element['status']}"
+            f"{element['id']} {element['date']} {element['root']} {element['command']} {element['status']}"
         )
 
 

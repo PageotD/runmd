@@ -6,7 +6,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.10.0]  - 2024-09-10
+## [0.10.1] - 2024-09-15
+
+### Fixed
+* add rootpath to history to locate the original md file
+
+## [0.10.0] - 2024-09-10
 
 ### Added
 * add shebang detection in code blocks
