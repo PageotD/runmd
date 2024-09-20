@@ -10,6 +10,9 @@ nav:
     - guide/getting_started.md
     - guide/examples/hello-world.md
     - guide/examples/docker-example.md
+  - Infos:
+    - infos/CHANGELOG.md
+    - infos/LICENSE.md
 
 theme:
   logo: static/runmd.svg
