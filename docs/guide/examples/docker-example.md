@@ -2,13 +2,14 @@
 
 Create a Dockerfile.apache containing the following;
 
+```dockerfile
+FROM httpd:2.4
+COPY ./public-html/ /usr/local/apache2/htdocs/
+```
+
 !!! example "hello-examples.md"
 
     ```markdown
-        ```dockerfile
-        FROM httpd:2.4
-        COPY ./public-html/ /usr/local/apache2/htdocs/
-        ```
 
         Build image
 
