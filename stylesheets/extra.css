@@ -1,0 +1,201 @@
+/* ===============================
+   Color Palette: Light and Dark Themes
+================================= */
+
+/* Common theme variables (for both light and dark modes) */
+:root {
+    /* Logo colors */
+    --color-orange: #ff6f00;
+    /* Primary logo orange */
+    --color-teal: #56b6c2;
+    /* Primary logo teal */
+    --color-light-gray: #f5f5f5;
+    /* Light gray for light backgrounds */
+    --color-dark-gray: #2d2d2d;
+    /* Dark gray for dark backgrounds */
+    --color-white: #ffffff;
+    --color-black: #000000;
+
+    /* Text Colors */
+    --md-text-color-primary: #ffffff;
+    /* For dark theme */
+    --md-text-color-secondary: #aaaaaa;
+
+    /* Background colors */
+    --md-bg-color-dark: #1e1e1e;
+    /* Dark background */
+    --md-bg-color-light: #ffffff;
+    /* Light background */
+    --md-bg-color-secondary: #2d2d2d;
+    /* Slightly lighter for contrast */
+
+    /* Card background */
+    --md-card-bg-color-dark: #333333;
+    --md-card-bg-color-light: var(--color-light-gray);
+
+    /* Link colors */
+    --md-link-color-light: var(--color-teal);
+    --md-link-color-dark: var(--color-teal);
+
+    /* Admonition colors */
+    --admonition-border-color: var(--color-orange);
+    --admonition-bg-color-light: rgba(255, 111, 0, 0.05);
+    /* Light theme bg */
+    --admonition-bg-color-dark: rgba(255, 111, 0, 0.1);
+    /* Dark theme bg */
+}
+
+/* ===============================
+   Light Theme Customizations
+================================= */
+@media (prefers-color-scheme: light) {
+    :root {
+        --md-default-bg-color: var(--md-bg-color-light);
+        --md-default-fg-color: #333333;
+        --md-primary-bg-color: #f0f0f0;
+        --md-primary-fg-color: var(--color-orange);
+        --md-accent-fg-color: var(--color-teal);
+        --md-default-card-color: var(--md-card-bg-color-light);
+        --md-link-color: var(--md-link-color-light);
+    }
+
+    /* Specific styles for light theme */
+    a:hover,
+    a:focus {
+        color: var(--color-orange) !important;
+        /* Orange on hover */
+    }
+
+    .md-typeset a:hover,
+    .md-typeset a:focus {
+        color: var(--color-orange) !important;
+        /* Orange for content links */
+    }
+
+    button:hover,
+    .md-nav__link:hover {
+        color: var(--color-orange) !important;
+    }
+
+    /* Admonitions in Light Theme */
+    .md-typeset .admonition.getting-started,
+    .md-typeset details.getting-started {
+        border-color: var(--admonition-border-color);
+        background-color: var(--admonition-bg-color-light);
+    }
+}
+
+/* ===============================
+   Dark Theme Customizations
+================================= */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --md-default-bg-color: var(--md-bg-color-dark);
+        --md-default-fg-color: var(--md-text-color-primary);
+        --md-primary-bg-color: var(--md-bg-color-secondary);
+        --md-primary-fg-color: var(--color-orange);
+        --md-accent-fg-color: var(--color-teal);
+        --md-default-card-color: var(--md-card-bg-color-dark);
+        --md-link-color: var(--md-link-color-dark);
+    }
+
+    /* Specific styles for dark theme */
+    a:hover,
+    a:focus {
+        color: var(--color-orange) !important;
+        /* Orange on hover */
+    }
+
+    .md-typeset a:hover,
+    .md-typeset a:focus {
+        color: var(--color-orange) !important;
+        /* Orange for content links */
+    }
+
+    button:hover,
+    .md-nav__link:hover {
+        color: var(--color-orange) !important;
+    }
+
+    /* Admonitions in Dark Theme */
+    .md-typeset .admonition.getting-started,
+    .md-typeset details.getting-started {
+        border-color: var(--admonition-border-color);
+        background-color: var(--admonition-bg-color-dark);
+    }
+}
+
+/* ===============================
+   Global Styles and Color Classes
+================================= */
+
+/* For hover states, borders, or other subtle elements */
+.some-element:hover {
+    background-color: #444444;
+    /* Darker gray for hover states */
+}
+
+/* .orange, .teal, .gray, etc. class for applying color to text */
+.orange {
+    color: var(--color-orange);
+}
+
+.teal {
+    color: var(--color-teal);
+}
+
+.light-gray {
+    color: var(--color-light-gray);
+}
+
+.dark-gray {
+    color: var(--color-dark-gray);
+}
+
+.white {
+    color: var(--color-white);
+}
+
+.black {
+    color: var(--color-black);
+}
+
+/* .bg-orange, .bg-teal, etc. class for applying background color */
+.bg-orange {
+    background-color: var(--color-orange);
+    color: var(--color-white);
+    /* Ensure text is readable on orange background */
+}
+
+.bg-teal {
+    background-color: var(--color-teal);
+    color: var(--color-black);
+    /* Ensure text is readable on teal background */
+}
+
+.bg-light-gray {
+    background-color: var(--color-light-gray);
+    color: var(--color-black);
+}
+
+.bg-dark-gray {
+    background-color: var(--color-dark-gray);
+    color: var(--color-white);
+}
+
+.bg-black {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+.bg-white {
+    background-color: var(--color-white);
+    color: var(--color-black);
+}
+
+/* Admonition title and summary background */
+.md-typeset .getting-started>.admonition-title,
+.md-typeset .getting-started>summary {
+    background-color: var(--admonition-bg-color-dark);
+    /* Slightly translucent orange */
+}

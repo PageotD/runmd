@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://mydomain.org/mysite/</loc>
+         <lastmod>2024-09-20</lastmod>
+    </url>
+    <url>
+         <loc>https://mydomain.org/mysite/guide/getting_started/</loc>
+         <lastmod>2024-09-20</lastmod>
+    </url>
+    <url>
+         <loc>https://mydomain.org/mysite/guide/examples/docker-example/</loc>
+         <lastmod>2024-09-20</lastmod>
+    </url>
+    <url>
+         <loc>https://mydomain.org/mysite/guide/examples/hello-world/</loc>
+         <lastmod>2024-09-20</lastmod>
+    </url>
+    <url>
+         <loc>https://mydomain.org/mysite/infos/CHANGELOG/</loc>
+         <lastmod>2024-09-20</lastmod>
+    </url>
+    <url>
+         <loc>https://mydomain.org/mysite/infos/LICENSE/</loc>
+         <lastmod>2024-09-20</lastmod>
+    </url>
+</urlset>
