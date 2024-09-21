@@ -7,6 +7,44 @@
 # https://opensource.org/licenses/MIT
 # -----------------------------------------------------------------------------
 
+"""
+Class providing a simple text file vault.
+
+The vault encrypts text files using AES-CBC with a key derived from a
+password using PBKDF2. The encrypted data is formatted into 80-character
+lines and encoded to Base64.
+
+The encrypted file contains the following information in the following
+order:
+
+- Metadata in JSON format:
+    + filename: the original filename
+    + type: the original file extension (or "txt" if there was no
+        extension)
+    + cipher: the name of the cipher algorithm used
+    + mode: the name of the cipher mode used
+    + salt_size: the size of the salt used
+    + iv_size: the size of the initialization vector used
+    + mac_size: the size of the MAC used
+- Salt used to derive the key
+- Initialization vector used to encrypt the data
+- MAC of the encrypted data
+- The encrypted data itself
+
+Attributes:
+    SALT_SIZE (int): The size of the salt used to derive the key.
+    IV_SIZE (int): The size of the initialization vector used to encrypt
+        the data.
+    KEY_SIZE (int): The size of the key used to encrypt the data.
+    MAC_SIZE (int): The size of the MAC used to verify the integrity of the
+        encrypted data.
+    CIPHER (cryptography.hazmat.primitives.ciphers.CipherAlgorithm):
+        The cipher algorithm used to encrypt the data.
+    MODE (cryptography.hazmat.primitives.ciphers.Mode):
+        The cipher mode used to encrypt the data.
+    ENCODING (str): The encoding used to encode the encrypted data.
+"""
+
 import argparse
 import base64
 import getpass
@@ -35,6 +73,12 @@ class TextFileVault:
         self.password = None
 
     def _get_password(self):
+        """
+        Get the password from the user.
+
+        If the password has already been set, return it. Otherwise, ask the user
+        to enter the password and confirm it.
+        """
         if self.password is None:
             password = ""
             password_confirm = "*"
@@ -51,6 +95,17 @@ class TextFileVault:
         return self.password
 
     def _derive_key(self, salt: bytes, iterations: int = 100000) -> bytes:
+        """
+        Derive a key from the password using PBKDF2.
+
+        Args:
+            salt (bytes): The salt used to derive the key.
+            iterations (int): The number of iterations to use. Defaults to
+                100000.
+
+        Returns:
+            bytes: The derived key.
+        """
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=self.KEY_SIZE,
@@ -60,26 +115,71 @@ class TextFileVault:
         return kdf.derive(self._get_password())
 
     def _pad(self, data: bytes) -> bytes:
+        """
+        Pad the data using PKCS#7.
+
+        Args:
+            data (bytes): The data to pad.
+
+        Returns:
+            bytes: The padded data.
+        """
         padder = padding.PKCS7(self.CIPHER.block_size).padder()
         return padder.update(data) + padder.finalize()
 
     def _unpad(self, data: bytes) -> bytes:
+        """
+        Unpad the data using PKCS#7.
+
+        Args:
+            data (bytes): The data to unpad.
+
+        Returns:
+            bytes: The unpadded data.
+        """
         unpadder = padding.PKCS7(self.CIPHER.block_size).unpadder()
         return unpadder.update(data) + unpadder.finalize()
 
     def _compute_mac(self, key: bytes, ciphertext: bytes) -> bytes:
+        """
+        Compute the MAC of the encrypted data.
+
+        Args:
+            key (bytes): The key used to encrypt the data.
+            ciphertext (bytes): The encrypted data.
+
+        Returns:
+            bytes: The MAC of the encrypted data.
+        """
         return hashlib.sha256(key + ciphertext).digest()
 
     def _format_encrypted(self, data: str) -> str:
+        """
+        Format the encrypted data into 80-character lines.
+
+        Args:
+            data (str): The encrypted data as a string.
+
+        Returns:
+            str: The formatted encrypted data.
+        """
         """Format the encrypted data into 80-character lines."""
         return "\n".join(textwrap.wrap(data, width=80))
 
     def encrypt_file(
         self, input_path: Union[str, Path], output_path: Union[str, Path] = None
     ) -> None:
+        """
+        Encrypt a text file.
+
+        Args:
+            input_path (Union[str, Path]): The path to the input file.
+            output_path (Union[str, Path]): The path to the output file.
+                Defaults to the input file path with a ".vault" extension.
+        """
         input_path = Path(input_path)
         if output_path is None:
-            output_path = input_path.with_suffix(input_path.suffix + ".vault")
+            output_path = Path(input_path.with_suffix(input_path.suffix + ".vault"))
         else:
             output_path = Path(output_path)
 
@@ -124,6 +224,14 @@ class TextFileVault:
     def decrypt_file(
         self, input_path: Union[str, Path], output_path: Union[str, Path] = None
     ) -> None:
+        """
+        Decrypt a text file.
+
+        Args:
+            input_path (Union[str, Path]): The path to the input file.
+            output_path (Union[str, Path]): The path to the output file.
+                Defaults to the input file path without the ".vault" extension.
+        """
         input_path = Path(input_path)
 
         with input_path.open("r", encoding=self.ENCODING) as infile:
@@ -171,24 +279,3 @@ class TextFileVault:
             outfile.write(plaintext.decode(self.ENCODING))
 
         print(f"File decrypted and saved to {output_path}")
-
-
-def main():
-    parser = argparse.ArgumentParser(description="Text File Vault CLI")
-    parser.add_argument(
-        "action", choices=["encrypt", "decrypt"], help="Action to perform"
-    )
-    parser.add_argument("input_file", help="Path to the input file")
-    parser.add_argument("--output", help="Path to the output file (optional)")
-    args = parser.parse_args()
-
-    vault = TextFileVault()
-
-    if args.action == "encrypt":
-        vault.encrypt_file(args.input_file, args.output)
-    elif args.action == "decrypt":
-        vault.decrypt_file(args.input_file, args.output)
-
-
-if __name__ == "__main__":
-    main()
