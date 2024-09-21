@@ -1,6 +1,6 @@
 import unittest
 import argparse
-from runmd.commands import create_commons, add_run_command, add_show_command, add_list_command, add_hist_command
+from runmd.commands import create_commons, add_run_command, add_show_command, add_list_command, add_hist_command, add_vault_command
 from runmd.commands import RUNCMD, SHOWCMD, LISTCMD, HISTCMD
 
 class TestAddCommands(unittest.TestCase):
@@ -55,6 +55,26 @@ class TestAddCommands(unittest.TestCase):
         args = self.parser.parse_args(['hist', '--clear'])
         self.assertEqual(args.command, HISTCMD)
         self.assertTrue(args.clear)
+
+    def test_vault_command(self):
+        """Test if 'vault' command is correctly added."""
+        add_vault_command(self.subparsers)
+        args = self.parser.parse_args(['vault'])
+        self.assertEqual(args.command, 'vault')
+
+    def test_vault_command_with_encrypt(self):
+        """Test if 'vault' command parses the --encrypt option."""
+        add_vault_command(self.subparsers)
+        args = self.parser.parse_args(['vault', '--encrypt', 'test.md'])
+        self.assertEqual(args.command, 'vault')
+        self.assertEqual(args.encrypt, ['test.md'])
+
+    def test_vault_command_with_decrypt(self):
+        """Test if 'vault' command parses the --decrypt option."""
+        add_vault_command(self.subparsers)
+        args = self.parser.parse_args(['vault', '--decrypt', 'test.md'])
+        self.assertEqual(args.command, 'vault')
+        self.assertEqual(args.decrypt, ['test.md'])
 
 if __name__ == '__main__':
     unittest.main()
