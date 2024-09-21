@@ -171,3 +171,6 @@ def add_hist_command(subparsers: argparse._SubParsersAction) -> None:
         action="store_true",
         help="Clear the history list",
     )
+
+def add_vault_command(subparser: argparse._SubparsersAction) -> None:
+    raise NotImplementedError("Vault command not implemented yet")
