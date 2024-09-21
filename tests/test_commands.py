@@ -76,5 +76,12 @@ class TestAddCommands(unittest.TestCase):
         self.assertEqual(args.command, 'vault')
         self.assertEqual(args.decrypt, ['test.md'])
 
+    def test_vault_command_mutual_exclusion(self):
+        """Test if 'vault' command does not allow both --encrypt and --decrypt options."""
+        add_vault_command(self.subparsers)
+        with self.assertRaises(SystemExit):
+            self.parser.parse_args(['vault', '--encrypt', 'test.md', '--decrypt', 'test.md'])
+        
+
 if __name__ == '__main__':
     unittest.main()

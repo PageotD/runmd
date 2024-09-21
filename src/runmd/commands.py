@@ -173,6 +173,7 @@ def add_hist_command(subparsers: argparse._SubParsersAction) -> None:
         help="Clear the history list",
     )
 
+
 def add_vault_command(subparser: argparse._SubParsersAction) -> None:
     """
     Add the vault command to the argument parser
