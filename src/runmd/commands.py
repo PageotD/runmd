@@ -32,6 +32,7 @@ RUNCMD = "run"
 SHOWCMD = "show"
 LISTCMD = "list"
 HISTCMD = "hist"
+VAULTCMD = "vault"
 
 import argparse
 
@@ -60,7 +61,7 @@ def create_parser() -> argparse.ArgumentParser:
     add_show_command(subparsers, common_parser)
     add_list_command(subparsers, common_parser)
     add_hist_command(subparsers)
-
+    add_vault_command(subparsers)
     return parser
 
 
@@ -170,4 +171,36 @@ def add_hist_command(subparsers: argparse._SubParsersAction) -> None:
         "--clear",
         action="store_true",
         help="Clear the history list",
+    )
+
+
+def add_vault_command(subparser: argparse._SubParsersAction) -> None:
+    """
+    Add the vault command to the argument parser
+    """
+    vault_parser = subparser.add_parser(
+        VAULTCMD,
+        help="Manage markdown file encryption/decryption",
+    )
+    vault_group = vault_parser.add_mutually_exclusive_group()
+    vault_group.add_argument(
+        "--encrypt",
+        "-e",
+        nargs=1,
+        default=None,
+        help="Encrypt the markdown file",
+    )
+    vault_group.add_argument(
+        "--decrypt",
+        "-d",
+        nargs=1,
+        default=None,
+        help="Decrypt the markdown file",
+    )
+    vault_parser.add_argument(
+        "--outfile",
+        "-o",
+        nargs=1,
+        default=None,
+        help="Output file to write the encrypted/decrypted markdown file to",
     )

@@ -38,11 +38,13 @@ from .commands import create_parser
 from .config import get_configuration
 from .history import load_history, print_history, update_history, write_history
 from .process import list_command, process_markdown_files, run_command, show_command
+from .vault import TextFileVault
 
 RUNCMD = "run"
 SHOWCMD = "show"
 LISTCMD = "list"
 HISTCMD = "hist"
+VAULTCMD = "vault"
 
 
 def execute_command(
@@ -74,6 +76,13 @@ def execute_command(
         else:
             print_history(history)
 
+    if args.command == VAULTCMD:
+        mdvault = TextFileVault()
+        if args.decrypt:
+            mdvault.decrypt_file(args.decrypt[0], args.outfile[0])
+        elif args.encrypt:
+            mdvault.encrypt_file(args.encrypt[0], args.outfile[0])
+
     if args.command in [RUNCMD, SHOWCMD, LISTCMD]:
         blocklist = process_markdown_files(args.file, config)
 
@@ -90,7 +99,6 @@ def execute_command(
 
         elif args.command == LISTCMD:
             list_command(blocklist, args.tag)
-
         else:
             print("Error: You must provide a code block name or 'all' to run/show.")
 

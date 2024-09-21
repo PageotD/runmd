@@ -117,6 +117,24 @@ runmd hist [id] [--clear]
 * `id`: command line entry in history to execute.
 * `--clear`: Clears definitely all the command line entries in history.
 
+**`VAULT`**
+
+Encrypt/Decrypt a markdown file using a password.
+
+```console
+runmd vault --encrypt README.md --outfile README.enc
+```
+
+```console
+runmd vault --decrypt README.enc --outfile README.dec
+```
+
+* `-e [FILE], --encrypt [FILE]`: Encrypt the specified markdown file.
+* `-d [FILE], --decrypt [FILE]`: Decrypt the encrypted file.
+* `-o [FILE], --outfile [FILE]`: Optional output file name (default: add `.vault` suffix to input file name).
+
+</br>
+
 ### Other options
 
 Other options are quite standard:
