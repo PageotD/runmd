@@ -43,6 +43,7 @@ RUNCMD = "run"
 SHOWCMD = "show"
 LISTCMD = "list"
 HISTCMD = "hist"
+VAULTCMD = "vault"
 
 
 def execute_command(
@@ -74,6 +75,9 @@ def execute_command(
         else:
             print_history(history)
 
+    if args.command == VAULTCMD:
+        raise NotImplementedError("vault command not yet implemented")
+
     if args.command in [RUNCMD, SHOWCMD, LISTCMD]:
         blocklist = process_markdown_files(args.file, config)
 
@@ -90,7 +94,6 @@ def execute_command(
 
         elif args.command == LISTCMD:
             list_command(blocklist, args.tag)
-
         else:
             print("Error: You must provide a code block name or 'all' to run/show.")
 

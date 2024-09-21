@@ -61,7 +61,7 @@ def create_parser() -> argparse.ArgumentParser:
     add_show_command(subparsers, common_parser)
     add_list_command(subparsers, common_parser)
     add_hist_command(subparsers)
-
+    add_vault_command(subparsers)
     return parser
 
 
