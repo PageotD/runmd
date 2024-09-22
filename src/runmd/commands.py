@@ -28,15 +28,22 @@ Constants:
 
 """
 
-RUNCMD = "run"
-SHOWCMD = "show"
-LISTCMD = "list"
-HISTCMD = "hist"
-VAULTCMD = "vault"
-
 import argparse
+from enum import Enum
 
 from . import __version__
+
+
+class CmdNames(Enum):
+    """
+    Enum class for command names
+    """
+
+    RUNCMD = "run"
+    SHOWCMD = "show"
+    LISTCMD = "list"
+    HISTCMD = "hist"
+    VAULTCMD = "vault"
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -90,7 +97,9 @@ def add_run_command(
     Add the run command to the argument parser
     """
     run_parser = subparsers.add_parser(
-        RUNCMD, help="Run code block in the source file", parents=[common_parser]
+        CmdNames.RUNCMD.value,
+        help="Run code block in the source file",
+        parents=[common_parser],
     )
 
     run_parser.add_argument(
@@ -121,7 +130,7 @@ def add_show_command(
     Add the show command to the argument parser
     """
     show_parser = subparsers.add_parser(
-        SHOWCMD,
+        CmdNames.SHOWCMD.value,
         help="Show code blocks from the source file",
         parents=[common_parser],
     )
@@ -139,7 +148,7 @@ def add_list_command(
     Add the list command to the argument parser
     """
     list_parser = subparsers.add_parser(
-        LISTCMD,
+        CmdNames.LISTCMD.value,
         help="List code blocks in the source file",
         parents=[common_parser],
     )
@@ -157,7 +166,7 @@ def add_hist_command(subparsers: argparse._SubParsersAction) -> None:
     Add the hist command to the argument parser
     """
     hist_parser = subparsers.add_parser(
-        HISTCMD,
+        CmdNames.HISTCMD.value,
         help="Display or manage the runmd command history",
     )
     hist_group = hist_parser.add_mutually_exclusive_group()
@@ -179,7 +188,7 @@ def add_vault_command(subparser: argparse._SubParsersAction) -> None:
     Add the vault command to the argument parser
     """
     vault_parser = subparser.add_parser(
-        VAULTCMD,
+        CmdNames.VAULTCMD.value,
         help="Manage markdown file encryption/decryption",
     )
     vault_group = vault_parser.add_mutually_exclusive_group()

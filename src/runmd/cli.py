@@ -34,17 +34,11 @@ from pathlib import Path
 from typing import Optional
 
 from . import __version__
-from .commands import create_parser
+from .commands import CmdNames, create_parser
 from .config import get_configuration
 from .history import load_history, print_history, update_history, write_history
 from .process import list_command, process_markdown_files, run_command, show_command
 from .vault import TextFileVault
-
-RUNCMD = "run"
-SHOWCMD = "show"
-LISTCMD = "list"
-HISTCMD = "hist"
-VAULTCMD = "vault"
 
 
 def execute_command(
@@ -65,7 +59,7 @@ def execute_command(
     history = load_history()
     usercmd = " ".join(sys.argv)
 
-    if args.command == HISTCMD:
+    if args.command == CmdNames.HISTCMD:
         if args.id:
             oldcmd = history[int(args.id)]["command"].split(" ")
             # Reparse
@@ -76,17 +70,21 @@ def execute_command(
         else:
             print_history(history)
 
-    if args.command == VAULTCMD:
+    if args.command == CmdNames.VAULTCMD.value:
         mdvault = TextFileVault()
         if args.decrypt:
             mdvault.decrypt_file(args.decrypt[0], args.outfile[0])
         elif args.encrypt:
             mdvault.encrypt_file(args.encrypt[0], args.outfile[0])
 
-    if args.command in [RUNCMD, SHOWCMD, LISTCMD]:
+    if args.command in [
+        CmdNames.RUNCMD.value,
+        CmdNames.SHOWCMD.value,
+        CmdNames.LISTCMD.value,
+    ]:
         blocklist = process_markdown_files(args.file, config)
 
-        if args.command == RUNCMD and (args.blockname or args.tag):
+        if args.command == CmdNames.RUNCMD.value and (args.blockname or args.tag):
             # Convert list of 'KEY=value' strings to a dictionary of environment variables
             env_vars = {
                 key: value for env in args.env for key, value in [env.split("=", 1)]
@@ -94,10 +92,10 @@ def execute_command(
             success = run_command(blocklist, args.blockname, args.tag, config, env_vars)
             history = update_history(history, histsize, usercmd, success)
 
-        elif args.command == SHOWCMD and args.blockname:
+        elif args.command == CmdNames.SHOWCMD.value and args.blockname:
             show_command(blocklist, args.blockname)
 
-        elif args.command == LISTCMD:
+        elif args.command == CmdNames.LISTCMD.value:
             list_command(blocklist, args.tag)
         else:
             print("Error: You must provide a code block name or 'all' to run/show.")
