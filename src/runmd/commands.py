@@ -10,7 +10,10 @@
 """
 Command-Line Interface for the 'runmd' CLI Tool
 
-This module defines the command-line interface (CLI) for the 'runmd' tool. It provides functionality to parse command-line arguments, manage commands, and execute actions based on user input. The CLI supports commands for running, showing, listing code blocks, and managing command history.
+This module defines the command-line interface (CLI) for the 'runmd' tool. It provides
+functionality to parse command-line arguments, manage commands, and execute actions based on user
+input. The CLI supports commands for running, showing, listing code blocks, and managing command
+history.
 
 Functions:
     - create_parser: Create and return the argument parser for the CLI interface.
