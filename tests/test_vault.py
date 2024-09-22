@@ -31,6 +31,10 @@ class TestTextFileVault(unittest.TestCase):
         if os.path.exists(vault_file):
             os.remove(vault_file)
     
+    # --------------------------------------------------
+    # >> GET_PASSWARD
+    # --------------------------------------------------
+
     @patch('getpass.getpass', return_value='password')
     def test_get_password(self, mock_getpass):
         password = self.vault._get_password()
@@ -46,6 +50,10 @@ class TestTextFileVault(unittest.TestCase):
         password = self.vault._get_password()
         self.assertEqual(password, b'password')
 
+    # --------------------------------------------------
+    # >> DERIVE_KEY
+    # --------------------------------------------------
+
     def test_derive_key(self):
         salt = b'some_salt'
         password = b'password'
@@ -60,6 +68,10 @@ class TestTextFileVault(unittest.TestCase):
         expected_key = kdf.derive(password)
         self.assertEqual(key, expected_key)
 
+    # --------------------------------------------------
+    # >> PAD
+    # --------------------------------------------------
+
     def test_pad(self):
         data = b'some data'
         padded_data = self.vault._pad(data)
@@ -67,12 +79,20 @@ class TestTextFileVault(unittest.TestCase):
         expected_padded_data = padder.update(data) + padder.finalize()
         self.assertEqual(padded_data, expected_padded_data)
 
+    # --------------------------------------------------
+    # >> UNPAD
+    # --------------------------------------------------
+
     def test_unpad(self):
         data = b'some data'
         padder = padding.PKCS7(self.vault.CIPHER.block_size).padder()
         padded_data = padder.update(data) + padder.finalize()
         unpadded_data = self.vault._unpad(padded_data)
         self.assertEqual(unpadded_data, data)
+
+    # --------------------------------------------------
+    # >> COMPUTE_MAC
+    # --------------------------------------------------
 
     def test_compute_mac(self):
         key = b'key'

@@ -17,6 +17,7 @@ class TestRunmdParser(unittest.TestCase):
     # --------------------------------------------------
     # >> PARSE_MARKDOWN
     # --------------------------------------------------
+    
     def test_parse_markdown(self):
         file_path = "tests/test_markdown.md"
         languages = ["python", "ruby"]
