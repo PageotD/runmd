@@ -37,6 +37,7 @@ import configparser
 import os
 import subprocess
 import sys
+import tempfile
 
 
 def detect_shebang(code: str, section: str, config: configparser.ConfigParser):
@@ -100,10 +101,16 @@ def run_code_block(
         # Prepare command and arguments based on platform
         active_shell = sys.platform == "win32"
 
+        # Keep the solution to put the script in a temporary file
+        # --------------------------------------------------------
+        #with tempfile.NamedTemporaryFile(delete=False, suffix=".sh") as temp_script:
+        #    temp_script.write(code.encode())
+        #    temp_script_path = temp_script.name
+        #command = [command[0], temp_script_path]  # + command[1:]
+
         process = subprocess.Popen(
             command + options + [code],
             env=env,
-            stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             shell=active_shell,
