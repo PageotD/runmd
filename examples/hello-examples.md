@@ -9,6 +9,16 @@ This Markdown file contains examples of executable code blocks for various scrip
 echo "Hello from bash!"
 ```
 
+### Bash
+
+```bash {name=hello-bash-prompt, tag=script}
+# run with runmd run hello-bash
+echo "Your name ?"
+read name
+echo "Hello $name !"
+```
+
+
 ### hello-python
 
 ```python {name=hello-python}
