@@ -15,3 +15,11 @@ cd -
 echo "Get image ID"
 docker images -q $IMAGE_NAME
 ```
+
+```bash {name=bash-echo,tag=keep-env}
+echo "Hello"
+```
+
+```bash {name=get-echo,tag=keep-env}
+echo "Previous output is " $__
+```
