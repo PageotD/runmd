@@ -103,10 +103,10 @@ def run_code_block(
 
         # Keep the solution to put the script in a temporary file
         # --------------------------------------------------------
-        #with tempfile.NamedTemporaryFile(delete=False, suffix=".sh") as temp_script:
+        # with tempfile.NamedTemporaryFile(delete=False, suffix=".sh") as temp_script:
         #    temp_script.write(code.encode())
         #    temp_script_path = temp_script.name
-        #command = [command[0], temp_script_path]  # + command[1:]
+        # command = [command[0], temp_script_path]  # + command[1:]
 
         process = subprocess.Popen(
             command + options + [code],
@@ -122,6 +122,9 @@ def run_code_block(
                 break
             if output:
                 print(output.strip())
+
+            os.environ["__"] = output
+            print("env", os.getenv("__"))
 
         return process.returncode == 0
 
