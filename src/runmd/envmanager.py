@@ -23,11 +23,9 @@ def load_dotenv():
     Returns:
         dict: The contents of the .runenv file
     """
-    runenv = {}
     if os.path.exists(".runenv"):
-        with open(".runenv") as f:
-            runenv = dotenv.dotenv_values(f)
-    return runenv
+        return dotenv.dotenv_values(".runenv")
+    return {}
 
 
 def load_process_env():
@@ -41,29 +39,12 @@ def load_process_env():
     return process_env
 
 
-def update_runenv(runenv, userenv):
+def update_runenv_file(runenv):
     """
-    Update the .runenv file with the user environment variables
-
-    Args:
-        runenv (dict): The contents of the .runenv file
-        userenv (dict): The user environment variables
-
-    Returns:
-        dict: The updated .runenv file
-    """
-    for key, value in userenv.items():
-        runenv[key] = value
-    return runenv
-
-
-def write_runenv(runenv):
-    """
-    Write the .runenv file with the user environment variables
+    Update the .runenv file
 
     Args:
         runenv (dict): The contents of the .runenv file
     """
-    with open(".runenv", "w") as f:
-        for key, value in runenv.items():
-            dotenv.set_key(f, key, value)
+    for key, value in runenv.items():
+        dotenv.set_key(".runenv", key, value)
