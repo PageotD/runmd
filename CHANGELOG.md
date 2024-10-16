@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.13.1] - 2024-10-13
+## [0.13.1] - 2024-10-16
 
 ### Fixed 
 * fix runmd environment variable managment for "__"
