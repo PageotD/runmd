@@ -11,6 +11,7 @@ Functions:
     - write_runenv: Write the .runenv file with the user environment variables
 """
 
+import base64
 import os
 
 import dotenv
@@ -47,4 +48,11 @@ def update_runenv_file(runenv):
         runenv (dict): The contents of the .runenv file
     """
     for key, value in runenv.items():
-        dotenv.set_key(".runenv", key, value)
+        encoded_value = base64.b64encode(value.encode("utf-8"))
+        dotenv.set_key(".runenv", key, encoded_value.decode("utf-8"))
+
+
+def merge_envs(env, runenv):
+    for key, value in runenv.items():
+        decoded_value = base64.b64decode(value).decode("utf-8")
+        env[key] = decoded_value
