@@ -6,7 +6,7 @@
 # Licensed under the MIT License. You may obtain a copy of the License at:
 # https://opensource.org/licenses/MIT
 # -----------------------------------------------------------------------------
- 
+
 """
 Manage the environment variables
 
@@ -66,7 +66,7 @@ def merge_envs(env, runenv):
     Merge the user environment variables with the .runenv file
 
     Args:
-        env (dict): The user environment variables  
+        env (dict): The user environment variables
         runenv (dict): The contents of the .runenv file
     """
     for key, value in runenv.items():

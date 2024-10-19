@@ -96,8 +96,6 @@ def run_code_block(
         env.update(env_vars)
     runenv = load_dotenv()
     merge_envs(env, runenv)
-    # for key, value in runenv.items():
-    #    env[key] = value
 
     if not command:
         print(f"Error: No command specified for language '{lang}'")
