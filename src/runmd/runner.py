@@ -39,7 +39,7 @@ import subprocess
 import sys
 import tempfile
 
-from .envmanager import load_dotenv, update_runenv_file
+from .envmanager import load_dotenv, merge_envs, update_runenv_file
 
 
 def detect_shebang(code: str, section: str, config: configparser.ConfigParser):
@@ -95,9 +95,9 @@ def run_code_block(
     if env_vars:
         env.update(env_vars)
     runenv = load_dotenv()
-
-    for key, value in runenv.items():
-        env[key] = value
+    merge_envs(env, runenv)
+    # for key, value in runenv.items():
+    #    env[key] = value
 
     if not command:
         print(f"Error: No command specified for language '{lang}'")
