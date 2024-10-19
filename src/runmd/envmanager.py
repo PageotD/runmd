@@ -57,12 +57,9 @@ def merge_envs(env, runenv):
     Merge the user environment variables with the .runenv file
 
     Args:
-        env (dict): The user environment variables
+        env (dict): The user environment variables  
         runenv (dict): The contents of the .runenv file
     """
-    for key, value in env.items():
-        if key not in runenv:
-            runenv[key] = value
     for key, value in runenv.items():
         decoded_value = base64.b64decode(value).decode("utf-8")
         env[key] = decoded_value
