@@ -9,17 +9,17 @@ class TestEnvManager(unittest.TestCase):
 
     def setUp(self) -> None:
         self.fake_env = {'VAR1': 'value1', 'VAR2': 'value2'}
-        if os.path.exists(".runenv"):
-            os.remove(".runenv")
+        if os.path.exists(".session"):
+            os.remove(".session")
         for key, value in self.fake_env.items():
-            dotenv.set_key(".runenv", key, value)
+            dotenv.set_key(".session", key, value)
     
     def tearDown(self) -> None:
-        os.remove(".runenv")
+        os.remove(".session")
 
     def test_load_dotenv(self):
         self.setUp()
-        runenv = dotenv.dotenv_values(".runenv") #load_dotenv()
+        runenv = dotenv.dotenv_values(".session") #load_dotenv()
         self.assertIsInstance(runenv, dict)
         self.assertEqual(runenv, self.fake_env)
 
@@ -34,7 +34,7 @@ class TestEnvManager(unittest.TestCase):
         runenv['VAR3'] = 'value3'
         update_runenv_file(runenv)
         self.assertEqual(runenv, self.fake_env)
-        runenv_encoded = dotenv.dotenv_values(".runenv")
+        runenv_encoded = dotenv.dotenv_values(".session")
         benv = {'VAR1': 'dmFsdWUx', 'VAR2': 'dmFsdWUy', 'VAR3': 'dmFsdWUz'}
         self.assertEqual(runenv_encoded, benv)
 
