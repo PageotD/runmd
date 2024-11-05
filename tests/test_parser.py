@@ -1,6 +1,6 @@
 import unittest
 import re
-from runmd.parser import compile_pattern, parse_markdown
+from runmd.parser import compile_pattern, detect_shebang,parse_markdown
 
 class TestRunmdParser(unittest.TestCase):
 
@@ -13,6 +13,25 @@ class TestRunmdParser(unittest.TestCase):
         result = compile_pattern(languages)
         expected = re.compile('```(python|ruby) \\{name=(.*?)(?:,\\s*tag=(.*?))?\\}\\s*([\\s\\S]*?)\\s*```', re.DOTALL)
         self.assertEqual(expected, result)
+
+    # --------------------------------------------------
+    # >> DETECT_SHEBANG
+    # --------------------------------------------------
+
+    def test_detect_shebang(self):
+        code = '```bash{name=echo-toto}\n#!/usr/bin/bash\necho "toto"```'
+        result = detect_shebang(code)
+        self.assertEqual(result, "/usr/bin/bash")
+
+    def test_detect_shebang_env(self):
+        code = '```bash{name=echo-toto}\n#!/usr/bin/env bash\necho "toto"```'
+        result = detect_shebang(code)
+        self.assertEqual(result, "/usr/bin/env bash")
+
+    def test_detect_shebang_none(self):
+        code = '```bash{name=echo-toto}\n#No shebang here\necho "toto"```'
+        result = detect_shebang(code)
+        self.assertEqual(result, None)
 
     # --------------------------------------------------
     # >> PARSE_MARKDOWN

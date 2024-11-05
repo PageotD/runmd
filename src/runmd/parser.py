@@ -47,6 +47,36 @@ def compile_pattern(languages: list) -> re.Pattern:
     )
 
 
+def detect_shebang(content: str) -> str:
+    """
+    Detect the shebang used in the code block.
+
+    Args:
+        content (str): The content of the code block.
+
+    Returns:
+        str: The shebang used in the code block.
+    """
+    lines = content.strip().splitlines()
+
+    for line in lines:
+        if line.startswith("#!"):
+            # if lines and lines[0].startswith("#!"):
+            shebang_line = line
+
+            match = re.match(r"^#!\s*(\/usr\/bin\/env\s+)?(\S+)", shebang_line)
+
+            if match:
+                # If env
+                if match.group(1):
+                    language = f"{match.group(1)}{match.group(2)}"
+                else:
+                    language = match.group(2)
+                return language
+
+    return None
+
+
 def parse_markdown(file_path: str, languages: list) -> list:
     """
     Parse the Markdown file to extract code blocks with names.
@@ -65,10 +95,11 @@ def parse_markdown(file_path: str, languages: list) -> list:
             content = file.read()
 
         matches = pattern.findall(content)
+        shebang = detect_shebang(content)
         for lang, name, tag, code in matches:
             blocklist.append(
                 {
-                    "name": name.strip(),
+                    "name": shebang if (shebang is not None) else name.strip(),
                     "tag": tag,
                     "file": file_path,
                     "lang": lang,
