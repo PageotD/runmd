@@ -1,9 +1,26 @@
 `runmd` is built for ease of use with a simple, intuitive CLI. Get started with a few simple commands:
 
+!!! warning "MS Windows Systems"
+    For Windows users, it is preferable to use Windows Subsystem for Linux 2 (WSL 2) . There is currently no support for MS Windows systems, although the python package should install and run correctly.
+
 ### Installation from pip
 
-```bash
-pip install runmd
+The easiest way to install `RunMD` on UNIX-like system is by using `pip` (the Package Installer for Python).
+First, make sure you have Python and that the expected version (3.9 to 3.12) is available from your command line. You can check this by running:
+
+```console
+python3 --version
+```
+
+Ensure you have pip available. You can check this by running:
+
+```console
+python3 -m pip --version
+```
+
+Finally, you install the latest version of `RunMD` by running:
+```console
+python3 -m pip install runmd
 ```
 
 ### Install from GitHub release
