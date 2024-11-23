@@ -1,124 +1,186 @@
 # Hello World with RunMD
 
-Welcome to the RunMD introduction guide! In this document, we'll walk you through how to use RunMD to execute code blocks in different languages from within a Markdown file.
+Welcome to the `RunMD` introduction guide! This guide will teach you how to use `RunMD` to execute code blocks in different programming languages directly from Markdown files. By embedding runnable code in your documentation, you can bring your Markdown files to life—ideal for tutorials, demonstrations, or dynamic workflows.
 
-To get started with RunMD, you'll need to create a Markdown file containing your code blocks.
+---
 
-## Create a runnable code block
+## Create a Runnable Code Block
 
-A runnable code block is like any other code block in Markdown except it has some extra attributes. 
+A runnable code block in `RunMD` is similar to a standard Markdown code block but includes additional attributes to make it executable. These attributes allow `RunMD` to identify and organize code blocks.
+
+### Syntax Overview
+
+The syntax for a runnable code block is:
 
 ```markdown
-    ```<script language> {name=<block name>,tag=<optional tag>}
-    # some stuff...
+    ```<language> {name=<unique_block_name>, tag=<optional_group_tag>}
+    # Code goes here...
+    ```
 ```
 
-The `name` attribute is mandatory, it allows RunMD to determine if it is a runnable code block.
+- **`<language>`**: Specify the programming language (e.g., `python`, `bash`, `node`, `ruby`, `perl`).
+- **`name`**: A **required** attribute that provides a unique identifier for the code block.
+- **`tag`**: An **optional** attribute to group related blocks under a shared tag for batch execution.
 
-The `tag` attribute is optional, it allows to run group of code blocks.
+### Example Markdown File
+
+Here’s an example Markdown file (`hello-examples.md`) that defines runnable code blocks in multiple programming languages:
 
 !!! example "hello-examples.md"
 
     ```markdown
-        # Hello examples
+        # Hello Examples
 
-        Using Bash
+        Using Bash:
 
-        ```bash {name=hello-bash,tag=hello-examples}
-        # run with runmd run hello-bash
-        echo "Hello from bash!"
+        ```bash {name=hello-bash, tag=hello-examples}
+        # Execute with: runmd run hello-bash
+        echo "Hello from Bash!"
         ```
 
-        Using Python
+        Using Python:
 
-        ```python {name=hello-python,tag=hello-examples}
-        # run with runmd run hello-python
-        print("Hello from python!")
+        ```python {name=hello-python, tag=hello-examples}
+        # Execute with: runmd run hello-python
+        print("Hello from Python!")
         ```
 
-        Using NodeJS
+        Using Node.js:
 
-        ```node {name=hello-node,tag=hello-examples}
-        // run with runmd run hello-node
-        console.log("Hello from nodejs!");
+        ```node {name=hello-node, tag=hello-examples}
+        // Execute with: runmd run hello-node
+        console.log("Hello from Node.js!");
         ```
 
-        Using Ruby
+        Using Ruby:
 
-        ```ruby {name=hello-ruby,tag=hello-examples-2}
-        # run with runmd run hello-ruby
+        ```ruby {name=hello-ruby, tag=hello-examples-2}
+        # Execute with: runmd run hello-ruby
         puts "Hello from Ruby!"
         ```
 
-        Using Perl
+        Using Perl:
 
         ```perl {name=hello-perl, tag=hello-examples-2}
-        # run with runmd run hello-perl
+        # Execute with: runmd run hello-perl
         print "Hello from Perl!";
         ```
     ```
 
-## List your code blocks
+In this example:
+
+- Each block has a unique `name` (e.g., `hello-bash`, `hello-python`).
+- The `tag` attribute groups the blocks (e.g., `hello-examples` for Python, Bash, and Node.js).
+
+---
+
+## List Your Code Blocks
+
+Once you’ve created a Markdown file with runnable blocks, you can use the `list` command to view all available blocks. This is especially useful for verifying block names and tags.
 
 ```bash
 runmd list
 ```
 
-...output...
+### Example Output
 
 ```console
 $ runmd list
-NAME                           LANG            FILE                                     TAG            
--------------------------------------------------------------------------------------------------------
-hello-bash                     bash            hello-examples.md                        hello-examples 
-hello-python                   python          hello-examples.md                        hello-examples 
-hello-node                     node            hello-examples.md                        hello-examples 
-hello-ruby                     ruby            hello-examples.md                        hello-examples-2
-hello-perl                     perl            hello-examples.md                        hello-examples-2
+NAME              LANG        FILE                 TAG               
+-------------------------------------------------------------------
+hello-bash        bash        hello-examples.md    hello-examples  
+hello-python      python      hello-examples.md    hello-examples  
+hello-node        node        hello-examples.md    hello-examples  
+hello-ruby        ruby        hello-examples.md    hello-examples-2
+hello-perl        perl        hello-examples.md    hello-examples-2
 ```
 
-## Show code block in terminal
+### Explanation of Columns:
+- **NAME**: The unique name of the code block.
+- **LANG**: The programming language of the block.
+- **FILE**: The file where the block is defined.
+- **TAG**: The optional tag associated with the block.
+
+---
+
+## Show a Code Block in the Terminal
+
+To preview the content of a specific code block, use the `show` command with the block’s name:
 
 ```bash
 runmd show <code block name>
 ```
 
+### Example
+
+```bash
+runmd show hello-bash
+```
+
+### Output
+
 ```console
 $ runmd show hello-bash
 
-    | # run with runmd run hello-bash
-    | echo "Hello from bash!"
-
+    | # Execute with: runmd run hello-bash
+    | echo "Hello from Bash!"
 ```
 
-!!! note
+This feature is useful for confirming the exact code before execution.
 
-    If you have [`Pygments`](https://pygments.org/) package installed, the output will appear with syntax highlighting. You can install `Pygments` with:
+!!! note
+    If you have the [`Pygments`](https://pygments.org/) package installed, the output will include syntax highlighting. Install it using:
     ```bash
     pip install pygments
     ```
 
-## Run code block by name
+---
+
+## Run a Code Block by Name
+
+To execute a specific code block, use the `run` command with the block’s unique name:
 
 ```bash
 runmd run <code block name>
 ```
 
+### Example
+
+```bash
+runmd run hello-python
+```
+
+### Output
+
 ```console
 $ runmd run hello-python
 
 > Running: hello-python (python) hello-examples
-Hello from python!
+Hello from Python!
 ```
 
-## Run code blocks by tag
+Here, `RunMD` automatically detects the language, runs the block, and displays the output.
+
+---
+
+## Run Code Blocks by Tag
+
+If you want to execute multiple code blocks together, group them using the `tag` attribute and run them with the `-t` option:
 
 ```bash
 runmd run -t <tag name>
 ```
 
+### Example
+
+```bash
+runmd run -t hello-examples-2
+```
+
+### Output
+
 ```console
-$runmd run -t hello-examples-2
+$ runmd run -t hello-examples-2
 
 > Running: hello-ruby (ruby) hello-examples-2
 Hello from Ruby!
@@ -126,3 +188,7 @@ Hello from Ruby!
 > Running: hello-perl (perl) hello-examples-2
 Hello from Perl!
 ```
+
+### Why Tags?
+
+Tags allow you to organize related blocks, enabling batch execution without specifying each block by name. This is particularly useful for workflows with multiple interdependent steps.
