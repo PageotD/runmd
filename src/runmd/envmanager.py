@@ -33,9 +33,7 @@ def load_dotenv():
     Returns:
         dict: The contents of the .session file
     """
-    if os.path.exists(".session"):
-        return dotenv.dotenv_values(".session")
-    return {}
+    return dotenv.dotenv_values(".session") if os.path.exists(".session") else {}
 
 
 def load_process_env():
