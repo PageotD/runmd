@@ -28,12 +28,9 @@ This module integrates with the configuration and history modules to provide a c
 
 import argparse
 import configparser
-import os
 import sys
-from pathlib import Path
 from typing import Optional
 
-from . import __version__
 from .commands import CmdNames, create_parser
 from .config import get_configuration
 from .history import load_history, print_history, update_history, write_history
@@ -66,7 +63,7 @@ def execute_command(
             parser = create_parser()
             args = parser.parse_args(oldcmd[1:])
         elif args.clear:
-            history = []
+            write_history([])
         else:
             print_history(history)
 
@@ -91,6 +88,7 @@ def execute_command(
             }
             success = run_command(blocklist, args.blockname, args.tag, config, env_vars)
             history = update_history(history, histsize, usercmd, success)
+            write_history(history)
 
         elif args.command == CmdNames.SHOWCMD.value and args.blockname:
             show_command(blocklist, args.blockname)
@@ -99,9 +97,6 @@ def execute_command(
             list_command(blocklist, args.tag)
         else:
             print("Error: You must provide a code block name or 'all' to run/show.")
-
-    # Write history
-    write_history(history)
 
 
 def main(command_line: Optional[list[str]] = None) -> None:
