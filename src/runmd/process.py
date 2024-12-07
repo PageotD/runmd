@@ -136,23 +136,6 @@ def show_command(blocklist: list, block_name: str) -> None:
     print(f"Error: Code block with name '{block_name}' not found.")
 
 
-# def show_code_block(name, lang, code, tag):
-#     """
-#     Display the code block contents.
-#     Args:
-#         name (str): Name of the code block.
-#         lang (str): Language of the code block.
-#         code (str): Code block content.
-#     """
-
-#     print(f"\033[1m\u26AC {name} ({lang}) {tag}\033[0m")
-#     try:
-#         for line in code.split("\n"):
-#             print(f"\u0020\u0020\033[90m{line}\033[0m")
-#     except Exception as e:
-#         print(f"Error: Code block '{name}' failed with exception: {e}")
-
-
 def show_code_block(name, lang, code, tag):
     """
     Display the code block contents with syntax highlighting using Pygments.

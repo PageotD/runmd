@@ -53,9 +53,11 @@ def detect_shebang(code: str, section: str, config: configparser.ConfigParser):
         list: The command to execute the code block or None
     """
     split_code = code.split("\n")
-    if split_code[0].startswith("#!"):
-        return [split_code[0].replace("#!", "")]
-    return config[section].get("command", "").split()
+    return (
+        [split_code[0].replace("#!", "")]
+        if split_code[0].startswith("#!")
+        else config[section].get("command", "").split()
+    )
 
 
 def run_code_block(

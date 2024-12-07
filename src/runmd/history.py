@@ -67,6 +67,7 @@ def load_history() -> list:
     except (json.JSONDecodeError, IOError) as e:
         raise ValueError(f"Error reading history file: {e}") from e
 
+
 def write_history(history: list) -> None:
     """
     Write the command history to the history file.
