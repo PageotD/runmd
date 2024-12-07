@@ -57,22 +57,11 @@ def detect_shebang(content: str) -> str:
     Returns:
         str: The shebang used in the code block.
     """
-    lines = content.strip().splitlines()
+    shebang_pattern = r"^#!\s*(\/usr\/bin\/env\s+)?(\S+)"
+    match = re.search(shebang_pattern, content, re.MULTILINE)
 
-    for line in lines:
-        if line.startswith("#!"):
-            # if lines and lines[0].startswith("#!"):
-            shebang_line = line
-
-            match = re.match(r"^#!\s*(\/usr\/bin\/env\s+)?(\S+)", shebang_line)
-
-            if match:
-                # If env
-                if match.group(1):
-                    language = f"{match.group(1)}{match.group(2)}"
-                else:
-                    language = match.group(2)
-                return language
+    if match:
+        return f"{match.group(1)}{match.group(2)}" if match.group(1) else match.group(2)
 
     return None
 
