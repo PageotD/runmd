@@ -65,6 +65,7 @@ def detect_shebang(content: str) -> str:
 
     return None
 
+
 def parse_markdown(file_path: str, languages: list) -> list:
     """
     Parse the Markdown file to extract code blocks with names.

@@ -83,11 +83,10 @@ def write_history(history: list) -> None:
         # Write to a temporary file first to ensure atomic write
         with tempfile.NamedTemporaryFile(
             "w", dir=hist_path.parent, delete=False
-        ) as tmpfile:
-            json.dump(history, tmpfile, indent=2)
-            tempname = tmpfile.name
+        ) as dumpfile:
+            json.dump(history, dumpfile, indent=2)
         # Rename the temporary file to the final file
-        Path(tempname).replace(hist_path)
+        Path(dumpfile.name).replace(hist_path)
     except IOError as e:
         print(f"Error writing history file: {e}")
 
@@ -108,11 +107,7 @@ def update_history(history: list, histsize: int, command: str, success: bool) ->
     # Get the next command ID
     next_id = history[-1]["id"] + 1 if history else 0
 
-    # Append the new command to history
-    if success:
-        status = "SUCCESS"
-    else:
-        status = "FAIL"
+    status = "SUCCESS" if success else "FAIL"
 
     history.append(
         {
@@ -152,6 +147,4 @@ def clean_command(command: str) -> str:
         str: The cleaned commands.
     """
     # Regex to match everything before the last occurrence of 'runmd'
-    cleaned_command = re.sub(r"^.*\b(runmd\b.*)", r"\1", command)
-
-    return cleaned_command
+    return re.sub(r"^.*\b(runmd\b.*)", r"\1", command)
