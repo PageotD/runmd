@@ -66,6 +66,7 @@ def merge_envs(env, runenv):
         env (dict): The user environment variables
         runenv (dict): The contents of the .session file
     """
-    for key, value in runenv.items():
-        decoded_value = base64.b64decode(value).decode("utf-8")
-        env[key] = decoded_value
+    decoded_env = {
+        key: base64.b64decode(value).decode("utf-8") for key, value in runenv.items()
+    }
+    env.update(decoded_env)
