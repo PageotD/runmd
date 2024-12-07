@@ -43,8 +43,7 @@ def load_process_env():
     Returns:
         dict: The process environment variables
     """
-    process_env = os.environ.copy()
-    return process_env
+    return os.environ.copy()
 
 
 def update_runenv_file(runenv):
