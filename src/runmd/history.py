@@ -63,11 +63,9 @@ def load_history() -> list:
     try:
         with open(hist_path, "r") as fhistory:
             history = json.load(fhistory)
+        return history
     except (json.JSONDecodeError, IOError) as e:
         raise ValueError(f"Error reading history file: {e}") from e
-
-    return history
-
 
 def write_history(history: list) -> None:
     """
