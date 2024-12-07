@@ -65,7 +65,6 @@ def detect_shebang(content: str) -> str:
 
     return None
 
-
 def parse_markdown(file_path: str, languages: list) -> list:
     """
     Parse the Markdown file to extract code blocks with names.
@@ -75,29 +74,32 @@ def parse_markdown(file_path: str, languages: list) -> list:
         languages (list): List of valid languages.
 
     Returns:
-        list: List of tuples containing code block information.
+        list: List of dictionaries containing code block information
+            or an empty List if file not found.
     """
     pattern = compile_pattern(languages)
-    blocklist = []
     try:
         with open(file_path, "r") as file:
             content = file.read()
 
         matches = pattern.findall(content)
         shebang = detect_shebang(content)
-        for lang, name, tag, code in matches:
-            blocklist.append(
-                {
-                    "name": shebang if (shebang is not None) else name.strip(),
-                    "tag": tag,
-                    "file": file_path,
-                    "lang": lang,
-                    "code": code.strip(),
-                    "exec": lang in languages,
-                }
-            )
+
+        blocklist = [
+            {
+                "name": shebang if (shebang is not None) else name.strip(),
+                "tag": tag,
+                "file": file_path,
+                "lang": lang,
+                "code": code.strip(),
+                "exec": lang in languages,
+            }
+            for lang, name, tag, code in matches
+        ]
+
+        return blocklist
 
     except Exception as e:
         print(f"Error reading file {file_path}: {e}")
 
-    return blocklist
+    return []
