@@ -37,11 +37,14 @@ import os
 import subprocess
 import sys
 from configparser import ConfigParser
+from typing import List
 
 from .envmanager import load_dotenv, merge_envs, update_runenv_file
 
 
-def detect_shebang(code: str, section: str, config: ConfigParser):
+def detect_shebang(
+    code: str,
+) -> List[str] | None:  # , section: str, config: ConfigParser):
     """
     Check if the first line of the code block contains a shebang #!
 
@@ -52,11 +55,9 @@ def detect_shebang(code: str, section: str, config: ConfigParser):
         list: The command to execute the code block or None
     """
     split_code = code.split("\n")
-    return (
-        [split_code[0].replace("#!", "")]
-        if split_code[0].startswith("#!")
-        else config[section].get("command", "").split()
-    )
+    return [split_code[0].replace("#!", "")] if split_code[0].startswith("#!") else None
+    #    else config[section].get("command", "").split()
+    # )
 
 
 def run_code_block(
@@ -98,11 +99,13 @@ def run_code_block(
         return None
 
     # Detect command and parse options
-    command = detect_shebang(code, lang_section, config)
+    shebang = detect_shebang(code)
+    command = shebang if shebang else lang  # detect_shebang(code, lang_section, config)
     options = config[lang_section].get("options", "").split()
 
     # Merge the provided environment variables with the current environment
     env = os.environ.copy()
+
     if env_vars:
         env.update(env_vars)
     runenv = load_dotenv()

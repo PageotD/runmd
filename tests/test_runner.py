@@ -13,21 +13,13 @@ class TestRunmdRunner(unittest.TestCase):
     # --------------------------------------------------
 
     def test_detect_shebang(self):
-        self.config.add_section('lang.bash')
-        self.config.set('lang.bash', 'aliases', 'sh, bash')
-        self.config.set('lang.bash', 'command', 'bash')
-        self.config.set('lang.bash', 'options', '-c')
 
         code = '#!/bin/bash\necho "toto"'
-        result = detect_shebang(code, "lang.bash", self.config)
+        result = detect_shebang(code)
         self.assertEqual(result, ["/bin/bash"])
 
     def test_detect_shebang_none(self):
-        self.config.add_section('lang.bash')
-        self.config.set('lang.bash', 'aliases', 'sh, bash')
-        self.config.set('lang.bash', 'command', 'bash')
-        self.config.set('lang.bash', 'options', '-c')
-    
+
         code = '#No shebang here\necho "toto"'
-        result = detect_shebang(code, "lang.bash", self.config)
-        self.assertEqual(result, ["bash"])
+        result = detect_shebang(code)
+        self.assertIsNone(result)
