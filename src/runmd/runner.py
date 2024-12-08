@@ -33,16 +33,15 @@ Error Handling:
     - Any exceptions during the execution of the code block are caught and reported.
 """
 
-import configparser
 import os
 import subprocess
 import sys
-import tempfile
+from configparser import ConfigParser
 
 from .envmanager import load_dotenv, merge_envs, update_runenv_file
 
 
-def detect_shebang(code: str, section: str, config: configparser.ConfigParser):
+def detect_shebang(code: str, section: str, config: ConfigParser):
     """
     Check if the first line of the code block contains a shebang #!
 
@@ -65,7 +64,7 @@ def run_code_block(
     lang: str,
     code: str,
     tag: str,
-    config: configparser.ConfigParser,
+    config: ConfigParser,
     env_vars: dict,
 ):
     """
@@ -82,15 +81,25 @@ def run_code_block(
     """
     print(f"\n\033[1;33m> Running: {name} ({lang}) {tag}\033[0;0m")
 
-    command = None
-    options = None
+    # Find the appropriate language configuration
+    lang_section = next(
+        (
+            section
+            for section in config.sections()
+            if section.startswith("lang.")
+            and lang in config[section].get("aliases", "").split(",")
+        ),
+        None,
+    )
 
-    for section in config.sections():
-        if section.startswith("lang."):
-            section_aliases = config[section].get("aliases", "")
-            if lang in section_aliases:
-                command = detect_shebang(code, section, config)
-                options = config[section].get("options", "").split()
+    # If no matching language configuration is found, return None
+    if not lang_section:
+        print(f"\033[1;31mNo configuration found for language: {lang}\033[0;0m")
+        return None
+
+    # Detect command and parse options
+    command = detect_shebang(code, lang_section, config)
+    options = config[lang_section].get("options", "").split()
 
     # Merge the provided environment variables with the current environment
     env = os.environ.copy()

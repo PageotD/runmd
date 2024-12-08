@@ -36,7 +36,7 @@ Usage:
     - Use `run_command` to execute code blocks, optionally filtered by name or tag.
 """
 
-import configparser
+from configparser import ConfigParser
 from pathlib import Path
 
 from pygments import highlight
@@ -48,9 +48,7 @@ from .parser import parse_markdown
 from .runner import run_code_block
 
 
-def process_markdown_files(
-    inputfilepath: str, config: configparser.ConfigParser
-) -> list:
+def process_markdown_files(inputfilepath: str, config: ConfigParser) -> list:
     """
     Process all Markdown files in the given directory.
 
