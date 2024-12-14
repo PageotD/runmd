@@ -30,77 +30,90 @@ Usage:
 
 import re
 
+class CodeBlock:
 
-def compile_pattern(languages: list) -> re.Pattern:
-    """
-    Compile the regular expression pattern for matching code blocks.
-
-    Args:
-        languages (List[str]): List of valid languages.
-
-    Returns:
-        re.Pattern: Compiled regex pattern for parsing code blocks.
-    """
-    return re.compile(
-        rf"```({('|').join(languages)}) \{{name=(.*?)(?:,\s*tag=(.*?))?\}}\s*([\s\S]*?)\s*```",
-        re.DOTALL,
-    )
+    def __init__(self, language: str, name: str, tag: str, code: str):
+        self.language = language
+        self.name = name
+        self.tag = tag
+        self.code = code
+        self.command = None
+        self.options = None
 
 
-def detect_shebang(content: str) -> str:
-    """
-    Detect the shebang used in the code block.
+    def instruction(self) -> str:
+        return f"{self.command} {self.options} {self.code}"
 
-    Args:
-        content (str): The content of the code block.
+class MarkdownParser:
 
-    Returns:
-        str: The shebang used in the code block.
-    """
-    shebang_pattern = r"^#!\s*(\/usr\/bin\/env\s+)?(\S+)"
-    match = re.search(shebang_pattern, content, re.MULTILINE)
+    def __init__(self):
+        pass
 
-    if match:
-        return f"{match.group(1)}{match.group(2)}" if match.group(1) else match.group(2)
+    def compile_pattern(self, languages: list) -> re.Pattern:
+        """
+        Compile the regular expression pattern for matching code blocks.
 
-    return None
+        Args:
+            languages (List[str]): List of valid languages.
+
+        Returns:
+            re.Pattern: Compiled regex pattern for parsing code blocks.
+        """
+        return re.compile(
+            rf"```({('|').join(languages)}) \{{name=(.*?)(?:,\s*tag=(.*?))?\}}\s*([\s\S]*?)\s*```",
+            re.DOTALL,
+        )
 
 
-def parse_markdown(file_path: str, languages: list) -> list:
-    """
-    Parse the Markdown file to extract code blocks with names.
+    def detect_shebang(self,content: str) -> str|None:
+        """
+        Detect the shebang used in the code block.
 
-    Args:
-        file_path (str): Path to the Markdown file.
-        languages (list): List of valid languages.
+        Args:
+            content (str): The content of the code block.
 
-    Returns:
-        list: List of dictionaries containing code block information
-            or an empty List if file not found.
-    """
-    pattern = compile_pattern(languages)
-    try:
-        with open(file_path, "r") as file:
-            content = file.read()
+        Returns:
+            str: The shebang used in the code block.
+        """
+        shebang_pattern = r"^#!\s*(\/usr\/bin\/env\s+)?(\S+)"
+        match = re.search(shebang_pattern, content, re.MULTILINE)
 
-        matches = pattern.findall(content)
-        shebang = detect_shebang(content)
+        if match:
+            return f"{match.group(1)}{match.group(2)}" if match.group(1) else match.group(2) if match else None
 
-        blocklist = [
-            {
-                "name": shebang if (shebang is not None) else name.strip(),
-                "tag": tag,
-                "file": file_path,
-                "lang": lang,
-                "code": code.strip(),
-                "exec": lang in languages,
-            }
-            for lang, name, tag, code in matches
-        ]
+        return None
 
-        return blocklist
 
-    except Exception as e:
-        print(f"Error reading file {file_path}: {e}")
+    def parse(self, file_path: str, languages: list) -> list:
+        """
+        Parse the Markdown file to extract code blocks with names.
 
-    return []
+        Args:
+            file_path (str): Path to the Markdown file.
+            languages (list): List of valid languages.
+
+        Returns:
+            list: List of CodeBlock objects containing code block information
+                or an empty List if file not found.
+        """
+        pattern = self.compile_pattern(languages)
+        try:
+            with open(file_path, "r") as file:
+                content = file.read()
+
+            matches = pattern.findall(content)
+
+            code_blocks = []
+            for lang, name, tag, code in matches:
+                shebang = self.detect_shebang(code)
+                code_block = CodeBlock(lang, name.strip(), tag, code.strip())
+                if shebang:
+                    code_block.name = shebang
+                code_blocks.append(code_block)
+
+            return code_blocks
+
+        except Exception as e:
+            print(f"Error reading file {file_path}: {e}")
+
+        return []

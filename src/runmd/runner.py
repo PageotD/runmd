@@ -56,8 +56,6 @@ def detect_shebang(
     """
     split_code = code.split("\n")
     return [split_code[0].replace("#!", "")] if split_code[0].startswith("#!") else None
-    #    else config[section].get("command", "").split()
-    # )
 
 
 def run_code_block(
