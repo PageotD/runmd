@@ -27,19 +27,17 @@ This module integrates with the configuration and history modules to provide a c
 """
 
 import argparse
-import configparser
 import sys
 from typing import Optional
 
 from .commands import CmdNames, create_parser
-from .config import get_configuration
 from .history import load_history, print_history, update_history, write_history
 from .process import list_command, process_markdown_files, run_command, show_command
 from .vault import TextFileVault
-
+from .config import ConfigLoader
 
 def execute_command(
-    args: argparse.Namespace, config: configparser.ConfigParser
+    args: argparse.Namespace, config: ConfigLoader
 ) -> None:
     """
     Execute the appropriate command based on parsed arguments.
@@ -111,7 +109,7 @@ def main(command_line: Optional[list[str]] = None) -> None:
     """
 
     # Load and validate configuration
-    config = get_configuration()
+    config = ConfigLoader #get_configuration()
 
     # Parse the command-line arguments
     parser = create_parser()  # cliargs()

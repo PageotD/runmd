@@ -37,6 +37,7 @@ import os
 import subprocess
 import sys
 from configparser import ConfigParser
+from .config import ConfigLoader
 
 from .envmanager import load_dotenv, merge_envs, update_runenv_file
 
@@ -64,7 +65,7 @@ def run_code_block(
     lang: str,
     code: str,
     tag: str,
-    config: ConfigParser,
+    config: ConfigLoader,
     env_vars: dict,
 ):
     """
@@ -82,15 +83,7 @@ def run_code_block(
     print(f"\n\033[1;33m> Running: {name} ({lang}) {tag}\033[0;0m")
 
     # Find the appropriate language configuration
-    lang_section = next(
-        (
-            section
-            for section in config.sections()
-            if section.startswith("lang.")
-            and lang in config[section].get("aliases", "").split(",")
-        ),
-        None,
-    )
+    lang_section = config.find_language(lang)
 
     # If no matching language configuration is found, return None
     if not lang_section:
@@ -98,8 +91,8 @@ def run_code_block(
         return None
 
     # Detect command and parse options
-    command = detect_shebang(code, lang_section, config)
-    options = config[lang_section].get("options", "").split()
+    command = detect_shebang(code, lang_section, config.config)
+    options = config.get_language_options(lang)
 
     # Merge the provided environment variables with the current environment
     env = os.environ.copy()
