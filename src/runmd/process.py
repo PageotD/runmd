@@ -42,9 +42,10 @@ from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import get_lexer_by_name
 
+from .config import ConfigLoader
 from .parser import parse_markdown
 from .runner import run_code_block
-from .config import ConfigLoader
+
 
 def process_markdown_files(inputfilepath: str, config: ConfigLoader) -> list:
     """

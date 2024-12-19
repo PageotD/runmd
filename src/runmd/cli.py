@@ -31,14 +31,13 @@ import sys
 from typing import Optional
 
 from .commands import CmdNames, create_parser
+from .config import ConfigLoader
 from .history import load_history, print_history, update_history, write_history
 from .process import list_command, process_markdown_files, run_command, show_command
 from .vault import TextFileVault
-from .config import ConfigLoader
 
-def execute_command(
-    args: argparse.Namespace, config: ConfigLoader
-) -> None:
+
+def execute_command(args: argparse.Namespace, config: ConfigLoader) -> None:
     """
     Execute the appropriate command based on parsed arguments.
 

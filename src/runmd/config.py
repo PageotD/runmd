@@ -33,20 +33,23 @@ users have a correctly configured environment for running and processing code bl
 """
 
 import configparser
+import functools
 import importlib.resources
 import os
 import shutil
 from pathlib import Path
 from typing import Dict, List
-import functools
 
 CONFIG_FILE_NAME = "config.ini"
 CONFIG_DIR_NAME = "runmd"
 REQUIRED_LANG_KEYS = ["aliases", "command", "options"]
 
+
 class ConfigLoader:
     def __init__(self):
-        self.default_config_path = Path.home() / ".config" / CONFIG_DIR_NAME / CONFIG_FILE_NAME
+        self.default_config_path = (
+            Path.home() / ".config" / CONFIG_DIR_NAME / CONFIG_FILE_NAME
+        )
         self.config = self._get_config()
 
     @functools.cache
@@ -78,7 +81,6 @@ class ConfigLoader:
             return config
         except configparser.Error as e:
             raise ValueError(f"Invalid configuration: {str(e)}")
-
 
     def _load_config(self) -> configparser.ConfigParser:
         """
@@ -124,7 +126,6 @@ class ConfigLoader:
         except Exception as e:
             raise FileNotFoundError(e)
 
-
     def get_all_aliases(self) -> List[str]:
         """
         Retrieve a list of all language aliases from the configuration.
@@ -144,7 +145,9 @@ class ConfigLoader:
                 section_aliases = self.config[section].get("aliases", "")
                 if section_aliases:
                     # Split aliases by comma and strip whitespace
-                    aliases.extend(alias.strip() for alias in section_aliases.split(","))
+                    aliases.extend(
+                        alias.strip() for alias in section_aliases.split(",")
+                    )
 
         return aliases
 
@@ -163,7 +166,7 @@ class ConfigLoader:
                 section
                 for section in self.config.sections()
                 if section.startswith("lang.")
-                   and alias in self.config[section].get("aliases", "").split(",")
+                and alias in self.config[section].get("aliases", "").split(",")
             ),
             None,
         )
@@ -213,7 +216,6 @@ class ConfigLoader:
             raise ValueError(
                 f"Section '{section}' has an invalid 'options' field. It should be a string."
             )
-
 
     def _validate_config(self, config: configparser.ConfigParser) -> None:
         """
