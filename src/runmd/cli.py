@@ -109,7 +109,7 @@ def main(command_line: Optional[list[str]] = None) -> None:
     """
 
     # Load and validate configuration
-    config = ConfigLoader #get_configuration()
+    config = ConfigLoader()
 
     # Parse the command-line arguments
     parser = create_parser()  # cliargs()
