@@ -54,7 +54,7 @@ def test_load_config(temp_config_dir):
 
 def test_load_config_file_not_found(temp_config_dir):
     config_loader = ConfigLoader()
-    config_loader.default_config_path = Path(temp_config_dir) / CONFIG_DIR_NAME / CONFIG_FILE_NAME
+    config_loader.default_config_path = Path(temp_config_dir) / "SOMEDIR" #CONFIG_DIR_NAME / CONFIG_FILE_NAME
     with pytest.raises(FileNotFoundError):
         config_loader._load_config()
 
@@ -109,13 +109,13 @@ def test_validate_lang_section_missing_options(config_loader):
     with open(config_loader.default_config_path, 'w') as f:
         f.write('[lang.python]\naliases = py, python\ncommand = python')
     with pytest.raises(ValueError):
-        config_loader._validate_lang_section(config_loader.config['lang.python'])
+        config_loader._validate_lang_section('lang.python')
 
 def test_validate_lang_section_invalid_options(config_loader):
     with open(config_loader.default_config_path, 'w') as f:
         f.write('[lang.python]\naliases = py, python\ncommand = python\noptions = \n')
     with pytest.raises(ValueError):
-        config_loader._validate_lang_section(config_loader.config['lang.python'])
+        config_loader._validate_lang_section('lang.python')
 
 #
 # class TestRunmdConfig(unittest.TestCase):
