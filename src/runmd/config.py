@@ -50,7 +50,13 @@ class ConfigLoader:
         self.default_config_path = (
             Path.home() / ".config" / CONFIG_DIR_NAME / CONFIG_FILE_NAME
         )
-        self.config = self._get_config()
+        self._config = None
+
+    @property
+    def config(self):
+        if self._config is None:
+            self._config = self._get_config()
+        return self._config
 
     @functools.cache
     def _get_config(self) -> configparser.ConfigParser:
@@ -77,7 +83,7 @@ class ConfigLoader:
 
         try:
             config = self._load_config()
-            validate_config(config)
+            self._validate_config(config)
             return config
         except configparser.Error as e:
             raise ValueError(f"Invalid configuration: {str(e)}")

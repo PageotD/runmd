@@ -1,16 +1,22 @@
 import unittest
 from unittest.mock import patch, mock_open
 import json
-from runmd.config import ConfigLoader
+from runmd.config import ConfigLoader, CONFIG_DIR_NAME, CONFIG_FILE_NAME
 import configparser
 from pathlib import Path
 import pytest
 import tempfile
+from configparser import ConfigParser
+import os
 
 @pytest.fixture
 def temp_config_dir():
     """Creates a temporary directory for testing"""
     with tempfile.TemporaryDirectory() as temp_dir:
+        config_dir = Path(temp_dir) / CONFIG_DIR_NAME
+        config_dir.mkdir()
+        config_file = config_dir / CONFIG_FILE_NAME
+        config_file.touch()
         yield temp_dir
 
 @pytest.fixture
@@ -18,6 +24,98 @@ def config_loader(temp_config_dir):
     config_loader = ConfigLoader()
     config_loader.default_config_path = Path(temp_config_dir) / CONFIG_DIR_NAME / CONFIG_FILE_NAME
     return config_loader
+
+def test_get_config(temp_config_dir):
+    config_loader = ConfigLoader()
+    config_loader.default_config_path = Path(temp_config_dir) / CONFIG_DIR_NAME / CONFIG_FILE_NAME
+    config = config_loader._get_config()
+    assert isinstance(config, ConfigParser)
+
+def test_get_config_file_not_found(temp_config_dir):
+    config_loader = ConfigLoader()
+    config_loader.default_config_path = Path(temp_config_dir) / CONFIG_DIR_NAME / CONFIG_FILE_NAME
+    with patch.object(config_loader, '_copy_config') as mock_copy_config:
+        config_loader._get_config()
+
+def test_copy_config(temp_config_dir):
+    config_loader = ConfigLoader()
+    config_loader.default_config_path = Path(temp_config_dir) / CONFIG_DIR_NAME / CONFIG_FILE_NAME
+    config_loader._copy_config()
+    assert os.path.exists(config_loader.default_config_path)
+
+def test_load_config(temp_config_dir):
+    config_loader = ConfigLoader()
+    config_loader.default_config_path = Path(temp_config_dir) / CONFIG_DIR_NAME / CONFIG_FILE_NAME
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\naliases = py, python\ncommand = python\noptions =')
+
+    config_loader = ConfigLoader()  # Reload the class
+    assert isinstance(config_loader.config, ConfigParser)
+
+def test_load_config_file_not_found(temp_config_dir):
+    config_loader = ConfigLoader()
+    config_loader.default_config_path = Path(temp_config_dir) / CONFIG_DIR_NAME / CONFIG_FILE_NAME
+    with pytest.raises(FileNotFoundError):
+        config_loader._load_config()
+
+def test_get_all_aliases(config_loader):
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\naliases = py, python\ncommand = python\noptions =')
+    aliases = config_loader.get_all_aliases()
+    assert aliases == ['py', 'python']
+
+def test_find_language(config_loader):
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\naliases = py, python\ncommand = python\noptions =')
+    language = config_loader.find_language('py')
+    assert language == 'python'
+
+def test_get_language_options(config_loader):
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\naliases = py, python\ncommand = python\noptions = -v')
+    options = config_loader.get_language_options('python')
+    assert options == ['-v']
+
+def test_validate_lang_section(config_loader):
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\naliases = py, python\ncommand = python\noptions =')
+    config_loader._validate_lang_section(config_loader.config['lang.python'])
+
+def test_validate_lang_section_missing_aliases(config_loader):
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\ncommand = python\noptions =')
+    with pytest.raises(ValueError):
+        config_loader._validate_lang_section(config_loader.config['lang.python'])
+
+def test_validate_lang_section_invalid_aliases(config_loader):
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\naliases = \ncommand = python\noptions =')
+    with pytest.raises(ValueError):
+        config_loader._validate_lang_section(config_loader.config['lang.python'])
+
+def test_validate_lang_section_missing_command(config_loader):
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\naliases = py, python\noptions =')
+    with pytest.raises(ValueError):
+        config_loader._validate_lang_section(config_loader.config['lang.python'])
+
+def test_validate_lang_section_invalid_command(config_loader):
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\naliases = py, python\ncommand = \noptions =')
+    with pytest.raises(ValueError):
+        config_loader._validate_lang_section(config_loader.config['lang.python'])
+
+def test_validate_lang_section_missing_options(config_loader):
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\naliases = py, python\ncommand = python')
+    with pytest.raises(ValueError):
+        config_loader._validate_lang_section(config_loader.config['lang.python'])
+
+def test_validate_lang_section_invalid_options(config_loader):
+    with open(config_loader.default_config_path, 'w') as f:
+        f.write('[lang.python]\naliases = py, python\ncommand = python\noptions = \n')
+    with pytest.raises(ValueError):
+        config_loader._validate_lang_section(config_loader.config['lang.python'])
 
 #
 # class TestRunmdConfig(unittest.TestCase):
