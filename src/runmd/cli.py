@@ -49,7 +49,7 @@ def execute_command(args: argparse.Namespace, config: ConfigLoader) -> None:
         config (dict): The configuration object loaded from the config file.
     """
     # Read history
-    histsize = config["DEFAULT"].getint("histsize", 100)
+    histsize = config.get_histsize()
     history = load_history()
     usercmd = " ".join(sys.argv)
 

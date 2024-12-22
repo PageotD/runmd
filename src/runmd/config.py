@@ -132,6 +132,15 @@ class ConfigLoader:
         except Exception as e:
             raise FileNotFoundError(e)
 
+    def get_histsize(self) -> int:
+        """
+        Retrieve the history size from the configuration.
+
+        Returns:
+            int: The history size.
+        """
+        return self.config["DEFAULT"].getint("histsize", 100)
+
     def get_all_aliases(self) -> List[str]:
         """
         Retrieve a list of all language aliases from the configuration.

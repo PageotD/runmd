@@ -54,7 +54,7 @@ def test_load_config(temp_config_dir):
 
 def test_load_config_file_not_found(temp_config_dir):
     config_loader = ConfigLoader()
-    config_loader.default_config_path = Path(temp_config_dir) / "SOMEDIR" #CONFIG_DIR_NAME / CONFIG_FILE_NAME
+    config_loader.default_config_path = Path(temp_config_dir) / "SOMEDIR"
     with pytest.raises(FileNotFoundError):
         config_loader._load_config()
 
