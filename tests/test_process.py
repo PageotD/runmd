@@ -18,22 +18,25 @@ class TestMarkdownProcessing(unittest.TestCase):
     # --------------------------------------------------
     # >> PROCESS_MARKDOWN_FILE
     # --------------------------------------------------
-
     @patch('runmd.parser.parse_markdown')
-    @patch('runmd.config.get_all_aliases')
-    def test_process_markdown_files(self, mock_get_languages, mock_parse_markdown):
+    @patch('runmd.config.ConfigLoader.get_all_aliases')
+    @patch('runmd.config.ConfigLoader', autospec=True)
+    def test_process_markdown_files(self, MockConfigLoader, mock_get_languages, mock_parse_markdown):
         # Setup mock
+        mock_instance = MockConfigLoader.return_value
+        mock_instance.config = configparser.ConfigParser()
+        mock_instance.get_all_aliases = mock_get_languages
         mock_get_languages.return_value = ["python"]
-        mock_parse_markdown.return_value = [{'name': 'hello-python', 'tag': 'sometag','lang': 'python', 'file': Path('tests/test_markdown.md'), 'code': 'print("Hello World")', 'exec': True}]
-        
-        self.config.add_section('lang.python')
-        self.config.set('lang.python', 'aliases', 'py, python')
-        self.config.set('lang.python', 'command', 'python3')
-        self.config.set('lang.python', 'options', '-c')
+        mock_parse_markdown.return_value = [{'name': 'hello-python', 'tag': 'sometag', 'lang': 'python', 'file': Path('tests/test_markdown.md'), 'code': 'print("Hello World")', 'exec': True}]
+
+        mock_instance.config.add_section('lang.python')
+        mock_instance.config.set('lang.python', 'aliases', 'py, python')
+        mock_instance.config.set('lang.python', 'command', 'python3')
+        mock_instance.config.set('lang.python', 'options', '-c')
 
         # Test function
-        result = process_markdown_files('tests/test_markdown.md', self.config)
-        
+        result = process_markdown_files('tests/test_markdown.md', mock_instance)
+
         # Assertions
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0]['name'], 'hello-python')

@@ -36,19 +36,18 @@ Usage:
     - Use `run_command` to execute code blocks, optionally filtered by name or tag.
 """
 
-from configparser import ConfigParser
 from pathlib import Path
 
 from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import get_lexer_by_name
 
-from .config import get_all_aliases
+from .config import ConfigLoader
 from .parser import parse_markdown
 from .runner import run_code_block
 
 
-def process_markdown_files(inputfilepath: str, config: ConfigParser) -> list:
+def process_markdown_files(inputfilepath: str, config: ConfigLoader) -> list:
     """
     Process all Markdown files in the given directory.
 
@@ -61,7 +60,7 @@ def process_markdown_files(inputfilepath: str, config: ConfigParser) -> list:
     """
 
     # Extract configured languages
-    languages = get_all_aliases(config)
+    languages = config.get_all_aliases()
 
     # Initialize blocklist
     blocklist = []
@@ -162,7 +161,7 @@ def show_code_block(name, lang, code, tag):
 
 
 def run_command(
-    blocklist: list, block_name: str, tag: str, config: dict, env_vars: dict
+    blocklist: list, block_name: str, tag: str, config: ConfigLoader, env_vars: dict
 ) -> None:
     """
     Handle the 'run' command to execute code blocks.

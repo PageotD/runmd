@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [0.16.0] - 2024-12-22
+
+### Added
+* add get_histsize method to config.py
+
+### Changed
+* Full refactoring of the config module
+
 ## [0.15.1] - 2024-12-07
 
 ### Changed
