@@ -91,7 +91,7 @@ def run_code_block(
         return None
 
     # Detect command and parse options
-    command = detect_shebang(code, lang_section, config.config)
+    command = detect_shebang(code, f"lang.{lang_section}", config.config)
     options = config.get_language_options(lang)
 
     # Merge the provided environment variables with the current environment

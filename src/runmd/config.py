@@ -176,16 +176,24 @@ class ConfigLoader:
         Returns:
             str: The language associated with the alias, or None if not found.
         """
-        lang_section = next(
-            (
-                section
-                for section in self.config.sections()
-                if section.startswith("lang.")
-                and alias in self.config[section].get("aliases", "").split(",")
-            ),
-            None,
-        )
-        return lang_section.split(".")[1]
+        for section in self.config.sections():
+            if section.startswith("lang.") and alias in self.config[section].get(
+                "aliases", ""
+            ):
+                return section.split(".")[1]
+        return None
+
+        # Does not work for python for a reason or another...
+        # lang_section = next(
+        #    (
+        #        section
+        #        for section in self.config.sections()
+        #        if section.startswith("lang.")
+        #        and alias in self.config[section].get("aliases", "").split(",")
+        #    ),
+        #    None,
+        # )
+        # return lang_section.split(".")[1]
 
     def get_language_options(self, language: str) -> List[str]:
         """
